@@ -1,16 +1,16 @@
 - name: Define uri with Credential ID
   set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/nodes/{{ id }}"
+    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/credentials/{{ id }}"
   when: id  | default('', true) | trim != ''
 - name: Define uri without Credential id
   set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/nodes"
+    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/credentials"
   when: id  | default('', false) | trim == ''
 - name: Rewrite uri with filter
   set_fact: 
     uri: "{{ uri }}?filter={{ filter | string | urlencode }}" 
   when: filter   
-- name: Get PPDM nodes with filter {{ filter }}
+- name: Get PPDM Credentials with filter {{ filter }}
   uri:
     method: GET
     url: "{{ uri }}"
@@ -23,12 +23,12 @@
   register: result
   when: not ansible_check_mode 
 - set_fact:
-    nodes: "{{ result.json.content }}"
+    credentials: "{{ result.json.content }}"
   when: result.json.content[0].id is defined and result.status == 200  
 #- set_fact:
-#    nodes: "{{ result.json }}"
+#    credentials: "{{ result.json }}"
 #  when: result.json.consumersCount is defined and result.status == 200    
 - debug:
-    msg: "{{ nodes }}"     
+    msg: "{{ credentials }}"     
     verbosity: 1     
-  when: nodes is defined  
+  when: credentials is defined  
