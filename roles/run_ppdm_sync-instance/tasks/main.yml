@@ -1,0 +1,26 @@
+- name: Run PPDM sync
+  uri:
+    method: POST
+    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/sync-instance"
+    body_format: json
+    body: 
+      directions:
+      - src:
+          id: "{{ srcSystemId }}"
+        dst:
+          id: "{{ dstSystemId }}"
+        mode: ONE_WAY
+      owner:
+        id: "{{srcSystemId}}"
+      type: REPLICA
+      level: FULL
+      since: '2024-01-07T09:00:00Z'
+    headers:
+      accept: application/json
+      authorization: "Bearer {{ access_token }}"    
+    status_code: 200,201,202
+    validate_certs: false
+  register: result  
+  when: not ansible_check_mode 
+- set_fact:
+    protection_policy_run: "{{ result.json }}"
