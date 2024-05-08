@@ -11,10 +11,10 @@
           id: "{{ dstSystemId }}"
         mode: ONE_WAY
       owner:
-        id: "{{srcSystemId}}"
+        id: "{{ srcSystemId }}"
       type: REPLICA
       level: FULL
-      since: '2024-01-07T09:00:00Z'
+      since: "{{ since }}"
     headers:
       accept: application/json
       authorization: "Bearer {{ access_token }}"    
@@ -23,4 +23,4 @@
   register: result  
   when: not ansible_check_mode 
 - set_fact:
-    protection_policy_run: "{{ result.json }}"
+    sync_instance_run: "{{ result.json }}"

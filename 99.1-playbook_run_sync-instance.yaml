@@ -5,6 +5,8 @@
   connection: local
   vars_files: 
     - ./vars/main.yml
+  vars:
+      isoformat: '%Y-%m-%dT%H:%M:%S.%fZ'
   tasks:
   - name: Setting Base URL
     set_fact: 
@@ -19,7 +21,6 @@
       verbosity: 1
     name: do we have a token ?  
 
-
   - name: get srcSystemId
     include_role:
       name: get_ppdm_nodes
@@ -27,7 +28,6 @@
       msg: "{{ nodes }}"     
       verbosity: 0     
     when: nodes is defined                 
-
 
   - name: Get dstSystemId inventory
     include_role: 
@@ -37,10 +37,16 @@
   - debug:
       msg: "{{ inventorysources  | json_query('[*].{name: name,id: id,type: type}') }}"
       verbosity: 0   
-
+    when:  inventorysources is defined
   - name: run sync-instance
     include_role: 
       name: run_ppdm_sync-instance
     vars:
       srcSystemId: "{{ nodes[0].systemId }}" 
       dstSystemId: "{{ inventorysources[0].details.ppdm.systemId }}"
+      since: "{{ '%Y-%m-%dT%H:%M:%S.0000Z' | strftime((ansible_date_time.epoch | int)  - ( 86400 ))  }}"  
+    when: ( nodes[0] is defined )  and ( inventorysources[0] is defined )
+  - debug:
+      msg: "{{ sync_instance_run }}"
+      verbosity: 0  
+    when: sync_instance_run is defined    
