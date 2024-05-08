@@ -28,5 +28,5 @@
 - set_fact:
     storagesystems: "{{ result.json.content }}"
 - debug:
-    msg: "{{ sync-instance }}"
+    msg: "{{ syncinstance }}"
     verbosity: 0    

@@ -23,5 +23,5 @@
       name: get_ppdm_sync-instance
   - name: Current sync-instance 
     debug: 
-      msg: "{{ sync-instance }}"
+      msg: "{{ syncinstance }}"
       verbosity: 0 
