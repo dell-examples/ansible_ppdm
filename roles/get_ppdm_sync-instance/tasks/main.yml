@@ -1,0 +1,31 @@
+- name: Define uri with sync-instance ID
+  set_fact: 
+    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/sync-instance/{{ id }}"
+  when: id  | default('', true) | trim != ''
+- name: Define uri without sync-instance id
+  set_fact: 
+    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/sync-instance"
+  when: id  | default('', false) | trim == ''
+- name: Rewrite uri with filter
+  set_fact: 
+    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"  
+- name: Get PPDM sync-instance with status
+  uri:
+    method: GET
+    url: "{{ uri }}"
+    body_format: json 
+    headers:
+      accept: application/json
+      authorization: "Bearer {{ access_token }}"    
+    status_code: 200,500
+    validate_certs: false
+  register: result
+#  until: "{{ condition }}"    
+  retries: "{{ retries }}"
+  delay: "{{ delay }}"
+  when: not ansible_check_mode 
+- set_fact:
+    storagesystems: "{{ result.json.content }}"
+- debug:
+    msg: "{{ sync-instance }}"
+    verbosity: 0    
