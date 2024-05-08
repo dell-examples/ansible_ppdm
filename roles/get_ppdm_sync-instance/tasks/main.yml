@@ -26,7 +26,8 @@
   delay: "{{ delay }}"
   when: not ansible_check_mode 
 - set_fact:
-    storagesystems: "{{ result.json.content }}"
+    syncinstance: "{{ result.json.content }}"
 - debug:
     msg: "{{ syncinstance }}"
-    verbosity: 0    
+    verbosity: 0
+  when: syncinstance is defined       
