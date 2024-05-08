@@ -29,14 +29,11 @@
     name: do we have a token ?  
 
   - name: Get  Nodes from PPDM
-    vars:
-      filter: "" # name eq "{{ credential_name }}" and type eq "KUBERNETES"
     include_role:
       name: get_ppdm_nodes
-  - set_fact:
-     credentials: "{{ credentials[0] }}"
-    when: credentials[0].id is defined                     
-
-
+  - debug:
+      msg: "{{ nodes }}"     
+      verbosity: 0     
+    when: nodes is defined                 
 
      
