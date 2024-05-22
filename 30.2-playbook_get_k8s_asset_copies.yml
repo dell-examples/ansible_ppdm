@@ -48,6 +48,6 @@
         id: "{{ assets[0].id }}" 
   - name: Copies Result
     debug: 
-      msg: "{{ copies[0] }}"
+      msg: "{{ copies }}"
       verbosity: 0         
 
