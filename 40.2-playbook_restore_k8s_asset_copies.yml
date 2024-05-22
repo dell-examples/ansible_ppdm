@@ -58,6 +58,14 @@
       msg: "{{ copies[0] }}"
       verbosity: 0         
 
+  - name: Add new PVC Class
+    vars:
+      patch:
+        persistentVolumeClaims:
+          alternateStorageClass: thin-csi-immediate
+    debug:
+      msg: "{{ copies[0].restoredCopiesDetails.persistentVolumeClaims | combine(patch, recursive=True) }}"
+
   - name: Restore K8S Assetcopies
     include_role: 
       name: restore_ppdm_k8s_copies
