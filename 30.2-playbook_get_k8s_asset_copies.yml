@@ -39,7 +39,7 @@
         #filter: type eq "KUBERNETES" and protectionStatus eq "PROTECTED" and details.k8s.namespac eq "{{ namespace_name }}"
   - name: Assets Result
     debug: 
-      msg: "{{ assets | json_query('[*].{name: name,id: id,type: type,protectionStatus: protectionStatus }') }}"
+      msg: "{{ assets | json_query('[*].{name: name,id: id,type: type,protectionStatus: protectionStatus , details: details}') }}"
       verbosity: 0 
   - name: Get PPDM Assetcopies
     include_role: 
