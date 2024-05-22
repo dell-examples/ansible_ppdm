@@ -24,7 +24,8 @@
           namespace: "{{ target_namespace }}"
           skipNamespaceResources: false
           targetInventorySourceId: "{{ asset.details.k8s.inventorySourceId }}"
-          persistentVolumeClaims: "{{ copy.details.k8sBackup.persistentVolumeClaims   | combine(patch, recursive=True) }}"
+          persistentVolumeClaims: 
+            - "{{ copy.details.k8sBackup.persistentVolumeClaims | reject('search','storageClass')  | combine(patch, recursive=True) }}"
           overwritePersistentVolumeClaim: true
       options:
         includeClusterResources: false
