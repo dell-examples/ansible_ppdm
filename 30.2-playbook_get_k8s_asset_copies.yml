@@ -48,6 +48,6 @@
         id: "{{ assets[0].id }}" 
   - name: Copies Result
     debug: 
-      msg: "{{ copies }}"
+      msg: "{{ copies | json_query('[*].{assetName: assetName,id: id,assetType: assetType,createTime: createTime }') }}"
       verbosity: 0         
 
