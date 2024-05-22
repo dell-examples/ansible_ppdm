@@ -49,5 +49,10 @@
   - name: Copies Result
     debug: 
       msg: "{{ copies | json_query('[*].{assetName: assetName,id: id,assetType: assetType,createTime: createTime }') }}"
-      verbosity: 0         
+      verbosity: 0 
+  - name: Copies Result
+    debug: 
+      msg: "{{ copies }}"
+      verbosity: 1         
+
 
