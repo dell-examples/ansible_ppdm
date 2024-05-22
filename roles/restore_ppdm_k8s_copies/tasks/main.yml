@@ -7,6 +7,10 @@
   when: filter  | default('', true) | trim != ''
 
 - name: restore asset copies to a namespace
+  vars:
+    patch:
+      persistentVolumeClaims:
+        alternateStorageClass: thin-csi-immediate
   uri:
     method: POST
     url: "{{ uri }}"
@@ -21,7 +25,7 @@
           namespace: "{{ target_namespace }}"
           skipNamespaceResources: false
           targetInventorySourceId: "{{ asset.details.k8s.inventorySourceId }}"
-          persistentVolumeClaims: "{{ copy.details.k8sBackup.persistentVolumeClaims }}"
+          persistentVolumeClaims: "{{ copy.details.k8sBackup.persistentVolumeClaims   | combine(patch, recursive=True) }}"
           overwritePersistentVolumeClaim: true
       options:
         includeClusterResources: false
