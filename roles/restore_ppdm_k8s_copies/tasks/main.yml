@@ -6,11 +6,10 @@
     uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
   when: filter  | default('', true) | trim != ''
 
-- name: restore asset copies to a namespace
+- name: restore asset copies to a namespace with alternate class
   vars:
     patch:
-      persistentVolumeClaims:
-        alternateStorageClass: thin-csi-immediate
+      alternateStorageClass: thin-csi-immediate
   uri:
     method: POST
     url: "{{ uri }}"
