@@ -9,7 +9,8 @@
 - name: restore asset copies to a namespace with alternate class
   vars:
     patch:
-      alternateStorageClass: thin-csi-immediate
+      persistentVolumeClaim:
+        alternateStorageClass: thin-csi-immediate
   uri:
     method: POST
     url: "{{ uri }}"
