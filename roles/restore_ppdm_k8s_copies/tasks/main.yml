@@ -38,11 +38,11 @@
   until: "{{ condition }}"    
   retries: "{{ retries }}"
   delay: "{{ delay }}"
-  when: not ansible_check_mode and alternate_storageclass is defined
+  when: not ansible_check_mode and alternate_storageclass is not defined
 - name: restore asset copies to a namespace with alternate class
   vars:
     patch:
-      alternateStorageClass: {{ alternate_storageclass }}
+      alternateStorageClass: "{{ alternate_storageclass }}"
       name: "*"
   uri:
     method: POST
@@ -72,7 +72,7 @@
   until: "{{ condition }}"    
   retries: "{{ retries }}"
   delay: "{{ delay }}"
-  when: not ansible_check_mode and alternate_storageclass is not defined  
+  when: not ansible_check_mode and alternate_storageclass is defined  
 - set_fact:
     restore: "{{ result.json }}"
 - debug:
