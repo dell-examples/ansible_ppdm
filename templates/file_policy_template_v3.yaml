@@ -15,10 +15,10 @@ data_template:
   assetType: FILE_SYSTEM
   disabled: false
   objectives:
-    - id: 2edf9362-43e1-9b00-21bc-87c6e09af2b6
+    - id: "{{ operationId }}"
       type: BACKUP
       operations:
-        - id: "{{ operationId }}"
+        - id: "{{ 1000 | random | to_uuid | upper }}"
           backupLevel: SYNTHETIC_FULL
           schedule:
             recurrence:
