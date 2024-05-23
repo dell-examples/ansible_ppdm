@@ -1,0 +1,14 @@
+# Example Playbok to deploy agents
+- name: Prepare hosts for App Agent vi DNS
+  hosts: windows
+  vars:
+   agent_src: /tmp
+  vars_files: 
+    - ./vars/main.yml
+  
+  tasks:
+  - name: Ensure all name resolution is handled by DNS
+    community.windows.win_hosts:
+      state: absent
+      
+
