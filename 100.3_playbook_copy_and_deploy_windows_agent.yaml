@@ -71,7 +71,7 @@
       - EnableSSMS={{ enable_ssms | default(0) }}
       - InstallPPDMAgentCheckBox=1
       - EnableScriptRequests=1
-    when: app_agent == msapp_agent_windows  
+    when: "'databasehosts' in group_names"   
   - name: "Install with mexchangeagent {{ find_file.files[0].path }} on {{ ansible_fqdn }}"
     vars:
       preferred_address: |-
@@ -95,5 +95,5 @@
       - EnableItemPoint={{ enable_itempoint | default(0) }}
       - InstallPPDMAgentCheckBox=1
       - EnableScriptRequests=1
-    when: app_agent == exchange_agent_windows      
+    when: "'exchangehosts' in group_names"    
 
