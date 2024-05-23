@@ -9,7 +9,7 @@
   tasks:
   - name: Ensure all name resolution is handled by DNS
     community.windows.win_hosts:
-      canonical_name: bar
+      canonical_name: vmware-plugin
       state: absent
       
 
