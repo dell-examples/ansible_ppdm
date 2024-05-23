@@ -31,8 +31,8 @@ data_template:
           triggerType: ON_SCHEDULE
       target:
         storageTargetId: null
-        preferredInterfaceId: ethV1
-        storageContainerId: "{{ preferredInterfaceId }}"
+        preferredInterfaceId: "{{ preferredInterfaceId }}"
+        storageContainerId: "{{ storageSystemId }}"
       retentions:
         - id: "{{ 1000 | random | to_uuid | upper }}"
           time:
