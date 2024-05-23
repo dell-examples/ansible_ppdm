@@ -4,6 +4,8 @@ ignoreMissingSystemStateFiles: true
 excludeNonCriticalDynamicDisks: false
 ignoreThirdPartyServices: false
 indexingEnabled: false
+backupStartTime: '2024-05-23T20:00:00.000Z'
+backupDuration: PT1"0H
 operationsId: "{{ 1000 | random | to_uuid | upper }}"
 debugEnabled: "false"
 name: "{{ policy_name }}"
@@ -23,8 +25,8 @@ objectives:
               type: DAILY
               interval: null
           window:
-            startTime: '2024-05-23T20:00:00.000Z'
-            duration: PT10H
+            startTime: "{{ backupStartTime }}"
+            duration: "{{ backupDuration }}"
         triggerType: ON_SCHEDULE
     target:
       storageTargetId: null
