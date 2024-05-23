@@ -11,5 +11,11 @@
     community.windows.win_hosts:
       canonical_name: vmware-plugin
       state: absent
+      ip_address: '::1'
       
-
+  - name: Ensure all name resolution is handled by DNS
+    community.windows.win_hosts:
+      canonical_name: vmware-plugin
+      state: absent
+      ip_address: 127.0.0.1
+      
