@@ -5,7 +5,7 @@ excludeNonCriticalDynamicDisks: False
 ignoreThirdPartyServices: False
 indexingEnabled: False
 backupStartTime: '2024-05-23T20:00:00.000Z'
-backupDuration: PT1"0H
+backupDuration: "PT10H"
 operationId: "{{ 1000 | random | to_uuid | upper }}"
 debugEnabled: False
 data_template:
