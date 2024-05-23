@@ -55,7 +55,7 @@
 
   - name: define Operations id
     set_fact:
-      operationId: "{{ 1000 | random | to_uuid | upper }}" 
+      operationId: 1000 | random | to_uuid | upper 
     when: protection_policy.id is not defined and (storagesystems[0] is defined)
   - name: Create New Protection Policy
     vars:
