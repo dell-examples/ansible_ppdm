@@ -62,7 +62,7 @@
       ignoreMissingSystemStateFiles: true
       excludeNonCriticalDynamicDisks: false
       ignoreThirdPartyServices: false
-      debugEnabled: "false"    
+      debugEnabled: false   
       storageSystemId: "{{ storagesystems[0].id }}"
       preferredInterfaceId: "{{ storagesystems[0].details.dataDomain.preferredInterfaces[0].networkName }}"
       new_protection_policy: "{{ data_template }}"  
