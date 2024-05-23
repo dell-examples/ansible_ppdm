@@ -54,7 +54,7 @@ data_template:
         backupMechanism: AUTO
         connectionsDetails: []
       options:
-        debugEnabled: "{{ debugEnabled }}"
+        debugEnabled: {{ debugEnabled }}
         indexingEnabled: "{{ indexingEnabled }}"
         systemStateRecoveryOnly: "{{ systemStateRecoveryOnly }}"
         ignoreMissingSystemStateFiles: "{{ ignoreThirdPartyServices }}"
