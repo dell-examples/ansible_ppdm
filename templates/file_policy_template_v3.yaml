@@ -7,7 +7,7 @@ indexingEnabled: false
 backupStartTime: '2024-05-23T20:00:00.000Z'
 backupDuration: PT1"0H
 operationId: "{{ 1000 | random | to_uuid | upper }}"
-debugEnabled: "false"
+debugEnabled: false
 data_template:
   name: "{{ policy_name }}"
   description: "{{ description }}"
