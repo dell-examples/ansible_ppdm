@@ -1,5 +1,5 @@
 # Example Playbok to deploy agents
-- name: Prepare hosts for App Agent vi DNS
+- name: Prepare hosts for App Agent via DNS
   hosts: windows
   vars:
    agent_src: /tmp
@@ -7,13 +7,13 @@
     - ./vars/main.yml
   
   tasks:
-  - name: Ensure all name resolution is handled by DNS
+  - name: Remove vmware-plugin on ::1
     community.windows.win_hosts:
       canonical_name: vmware-plugin
       state: absent
       ip_address: '::1'
       
-  - name: Ensure all name resolution is handled by DNS
+  - name: Remove vmware-plugin on 172.0.0.1 
     community.windows.win_hosts:
       canonical_name: vmware-plugin
       state: absent
