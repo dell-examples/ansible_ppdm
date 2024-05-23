@@ -1,0 +1,59 @@
+
+systemStateRecoveryOnly: false
+ignoreMissingSystemStateFiles: true
+excludeNonCriticalDynamicDisks: false
+ignoreThirdPartyServices: false
+indexingEnabled: false
+operationsId: "{{ 1000 | random | to_uuid | upper }}"
+debugEnabled: "false"
+name: "{{ policy_name }}"
+description: "{{ description }}"
+purpose: CENTRALIZED
+assetType: FILE_SYSTEM
+disabled: false
+objectives:
+  - id: 2edf9362-43e1-9b00-21bc-87c6e09af2b6
+    type: BACKUP
+    operations:
+      - id: "{{ operationId }}"
+        backupLevel: SYNTHETIC_FULL
+        schedule:
+          recurrence:
+            pattern:
+              type: DAILY
+              interval: null
+          window:
+            startTime: '2024-05-23T20:00:00.000Z'
+            duration: PT10H
+        triggerType: ON_SCHEDULE
+    target:
+      storageTargetId: null
+      preferredInterfaceId: ethV1
+      storageContainerId: "{{ preferredInterfaceId }}"
+    retentions:
+      - id: "{{ 1000 | random | to_uuid | upper }}"
+        time:
+          - unitValue: 3
+            unitType: DAY
+            type: RETENTION_AND_LOCK
+        copySelector:
+          backupLevel: SYNTHETIC_FULL
+          operationId: "{{ operationId }}"
+      - id: 8952b89c-e4ff-091e-40ab-a21523a5475f
+        time:
+          - unitValue: 3
+            unitType: DAY
+            type: RETENTION_AND_LOCK
+    config:
+      dataConsistency: CRASH_CONSISTENT
+      forceFull: false
+      excludeFilterIds: []
+      backupMechanism: AUTO
+      connectionsDetails: []
+    options:
+      debugEnabled: "{{ debugEnabled }}"
+      indexingEnabled: "{{ indexingEnabled }}"
+      systemStateRecoveryOnly: "{{ systemStateRecoveryOnly }}"
+      ignoreMissingSystemStateFiles: "{{ ignoreThirdPartyServices }}"
+      excludeNonCriticalDynamicDisks: "{{ excludeNonCriticalDynamicDisks }}"
+      ignoreThirdPartyServices: "{{ ignoreMissingSystemStateFiles }}"

@@ -3,6 +3,7 @@ systemStateRecoveryOnly: false
 ignoreMissingSystemStateFiles: true
 excludeNonCriticalDynamicDisks: false
 ignoreThirdPartyServices: false
+indexingEnabled: false
 debugEnabled: "false"
 name: "{{ 1000 | random | to_uuid | upper }}"
 storage: 
@@ -54,5 +55,6 @@ data_template:
       ignoreMissingSystemStateFiles: "{{ ignoreMissingSystemStateFiles }}"
       excludeNonCriticalDynamicDisks: "{{ excludeNonCriticalDynamicDisks }}"
       ignoreThirdPartyServices: "{{ ignoreThirdPartyServices }}"
+      indexingEnabled: "{{ indexingEnabled }}"
   filterIds: []
   slaId: ''
