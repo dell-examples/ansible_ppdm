@@ -5,7 +5,7 @@
   connection: local
   vars_files: 
     - ./vars/main.yml
-    - ./templates/exchange_policy_template.yaml
+    - ./templates/exchange_policy_template_v3.yaml
   vars:  
     policy_name: "Exchange_Bob"
     app_credentials_username: 'bob exchange demouser'
