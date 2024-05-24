@@ -1,0 +1,86 @@
+
+debug_enabled: false
+excludeSystemDatabase: true
+autoPromote: false
+skipUnprotectableState: true
+skipSimpleDatabase: true
+promotionType: ALL  
+backupStartTime: '2024-05-23T20:00:00.000Z'
+backupDuration: "PT10H"
+dataConsistency: "APPLICATION_CONSISTENT"
+# operationId: "{{ (1000 | random | to_uuid | upper) }}"
+debugEnabled: False
+name: "{{ 1000 | random | to_uuid | upper }}"
+description: " SQL Policy"
+data_template:
+  name: "{{ name }}"
+  description: "{{ description}}"
+  purpose: CENTRALIZED
+  assetType: MICROSOFT_SQL_DATABASE
+  disabled: false
+  objectives:
+    - id: "{{ 1000 | random | to_uuid | upper }}"
+      type: BACKUP
+      operations:
+        - id: "{{ operationId }}"
+          backupLevel: FULL
+          schedule:
+            recurrence:
+              pattern:
+                type: DAILY
+                interval: null
+            window:
+              startTime: "{{ backupStartTime}}"
+              duration: "{{ backupDuration }}"
+          triggerType: ON_SCHEDULE
+        - id: "{{ operationIdLog }}"
+          backupLevel: LOG
+          schedule:
+            recurrence:
+              pattern:
+                type: HOURLY
+                interval: 1
+            window:
+              startTime: "{{ backupStartTime}}"
+              duration: "{{ backupDuration }}"
+          triggerType: ON_SCHEDULE
+      target:
+        storageTargetId: null
+        preferredInterfaceId:  "{{ preferredInterfaceId }}"
+        storageContainerId: "{{ storageSystemId }}"
+      retentions:
+        - id: "{{ (1000 | random | to_uuid | upper) }}"
+          time:
+            - unitValue: 3
+              unitType: DAY
+              type: RETENTION_AND_LOCK
+          copySelector:
+            backupLevel: FULL
+            operationId: "{{ operationIdLog }}"
+        - id: "{{ (1000 | random | to_uuid | upper) }}"
+          time:
+            - unitValue: 3
+              unitType: DAY
+              type: RETENTION_AND_LOCK
+          copySelector:
+            backupLevel: LOG
+            operationId: "{{ operationIdLog }}"
+        - id: "{{ (1000 | random | to_uuid | upper) }}"
+          time:
+            - unitValue: 3
+              unitType: DAY
+              type: RETENTION_AND_LOCK
+      config:
+        dataConsistency: "{{ dataConsistency }}"
+        forceFull: false
+        excludeFilterIds: []
+        connectionsDetails:
+          - credentialId: "{{ credentials_id }}"
+            type: OS
+      options:
+        debugEnabled: "{{ debugEnabled }}"
+        excludeSystemDatabase: "{{  excludeSystemDatabase }}"
+        autoPromote: "{{ autoPromote }}"
+        skipUnprotectableState: "{{ skipUnprotectableState }}"
+        skipSimpleDatabase: "{{ skipSimpleDatabase }}"
+        promotionType: "{{ promotionType }}"  
