@@ -53,10 +53,14 @@
       filter: type eq "DATA_DOMAIN_SYSTEM" and details.dataDomain.preferredInterfaces.ipAddress eq "{{ ddve_fqdn }}" 
     when: protection_policy.id is not defined
 
-  - name: define Operations id
+  - name: New operationId
     set_fact:
-      operationId: 1000 | random | to_uuid | upper 
-    when: protection_policy.id is not defined and (storagesystems[0] is defined)
+      newOperationID: "{{ 1000 | random | to_uuid | upper }}"  
+  - debug: 
+      msg: "{{ newOperationId }}"
+      verbosity: 0     
+
+
   - name: Create New Protection Policy
     vars:
       ppdm_api_ver: /api/v3
@@ -67,7 +71,7 @@
       excludeNonCriticalDynamicDisks: false
       ignoreThirdPartyServices: false
       debugEnabled: false 
-      operationId: "{{ operationId }}"  
+      operationId: "{{ newOperationId }}"  
       storageSystemId: "{{ storagesystems[0].id }}"
       preferredInterfaceId: "{{ storagesystems[0].details.dataDomain.preferredInterfaces[0].networkName }}"
       new_protection_policy: "{{ data_template }}"  
