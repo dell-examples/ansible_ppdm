@@ -1,18 +1,16 @@
-
-systemStateRecoveryOnly: False
-ignoreMissingSystemStateFiles: True
-excludeNonCriticalDynamicDisks: False
-ignoreThirdPartyServices: False
-indexingEnabled: False
-backupStartTime: '2024-05-23T20:00:00.000Z'
-backupDuration: "PT10H"
-# operationId: "{{ (1000 | random | to_uuid | upper) }}"
 debugEnabled: False
+forceFull: False
+consistencyCheck: "ALL"
+dataConsistency: "APPLICATION_CONSISTENT"
+name: "{{ 1000 | random | to_uuid | upper }}"
+backupStartTime: '2024-05-23T21:00:00.000Z'
+backupDuration: "PT10H"
+operationId: "{{ 99999 | to_uuid(namespace='11111111-2222-3333-4444-555555555555') }}"
 data_template:
-  name: "{{ policy_name }}"
+  name: "{{ name }}"
   description: "{{ description }}"
   purpose: CENTRALIZED
-  assetType: FILE_SYSTEM
+  assetType: MICROSOFT_EXCHANGE_DATABASE
   disabled: false
   objectives:
     - id: "{{ 1000 | random | to_uuid | upper }}"
@@ -31,7 +29,7 @@ data_template:
           triggerType: ON_SCHEDULE
       target:
         storageTargetId: null
-        preferredInterfaceId: "{{ preferredInterfaceId }}"
+        preferredInterfaceId:  "{{ preferredInterfaceId }}"
         storageContainerId: "{{ storageSystemId }}"
       retentions:
         - id: "{{ 1000 | random | to_uuid | upper }}"
@@ -48,15 +46,10 @@ data_template:
               unitType: DAY
               type: RETENTION_AND_LOCK
       config:
-        dataConsistency: CRASH_CONSISTENT
-        forceFull: false
+        dataConsistency: "{{ dataConsistency }}"
+        forceFull: "{{ forceFull }}"
         excludeFilterIds: []
-        backupMechanism: AUTO
         connectionsDetails: []
       options:
-        debugEnabled: "{{ debugEnabled }}"
-        indexingEnabled: "{{ indexingEnabled }}"
-        systemStateRecoveryOnly: "{{ systemStateRecoveryOnly }}"
-        ignoreMissingSystemStateFiles: "{{ ignoreThirdPartyServices }}"
-        excludeNonCriticalDynamicDisks: "{{ excludeNonCriticalDynamicDisks }}"
-        ignoreThirdPartyServices: "{{ ignoreMissingSystemStateFiles }}"
+        debugEnabled: "{{ debugEnabled}}"
+        consistencyCheck: "{{ consistencyCheck}}"
