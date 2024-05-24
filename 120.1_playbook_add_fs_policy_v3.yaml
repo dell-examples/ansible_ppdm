@@ -55,7 +55,7 @@
 
   - name: New operationId
     set_fact:
-      newOperationID: "{{ 1000 | random | to_uuid | upper }}"  
+      newOperationID: "{{ (1000 | random | to_uuid | upper) }}"  
   - debug: 
       msg: "{{ newOperationId }}"
       verbosity: 0     
