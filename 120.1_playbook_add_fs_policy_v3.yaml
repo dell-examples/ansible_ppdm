@@ -55,7 +55,7 @@
 
   - name: New operationId
     set_fact:
-      newOperationID: "{{ string | to_uuid(namespace='11111111-2222-3333-4444-555555555555') }}"  
+      newOperationId: "{{ string | to_uuid(namespace='11111111-2222-3333-4444-555555555555') }}"  
   - debug: 
       msg: "{{ newOperationId }}"
       verbosity: 0     
