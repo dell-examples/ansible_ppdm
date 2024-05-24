@@ -78,7 +78,7 @@
       ppdm_api_ver: "/api/v3"
       name: "{{ policy_name }}"
       description: "Demo SQL Policy for Bob 2024"
-      debugEnabled: false"
+      debugEnabled: false
       operationId: "{{ newOperationId }}"   
       storageSystemId: "{{ storagesystems[0].id }}"
       preferredInterfaceId: "{{ storagesystems[0].details.dataDomain.preferredInterfaces[0].networkName }}"
