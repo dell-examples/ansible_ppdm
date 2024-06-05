@@ -10,8 +10,8 @@
   - name: Run PowerShell script with parameters
     ansible.windows.win_powershell:
       script: |
-        ipmo .\EMCExchangeBackupRestore\EMCExchangeBackupRestore.psd1
         $Config=Import-ExchangeBackupConfigFile -Restore
+        write-host $Config
     register: pwsh_output
   - debug:
      msg:
