@@ -100,5 +100,5 @@
     ansible.windows.win_service:
       name: AgentService
       start_mode: auto
-      state: started      
+      state: delayed   
 
