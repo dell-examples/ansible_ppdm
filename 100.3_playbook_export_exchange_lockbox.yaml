@@ -1,8 +1,10 @@
 # Example Export Exchange Lockbox
-- name: Ensure AgentSerive Running
+- name: Create Lockbox
   hosts: windows
   vars:
    agent_src: /tmp
+   exchange_source: exchange1
+   exchange_proxy: launchpad
   vars_files: 
     - ./vars/main.yml
     - ./vars/agents_vars.yaml
@@ -13,6 +15,13 @@
         $Config=Import-ExchangeBackupConfigFile -Restore
         write-output $Config
     register: pwsh_output
+    when: ansible_hostname ex "{{ exchange_source }}"
   - debug:
      msg:
        "{{ pwsh_output.output }}"
+    when: pwsh_output.output is defined   
+  - ansible.builtin.set_fact:
+      lockbox: "{{ pwsh_output.output }}"
+    when: pwsh_output.output is defined  
+
+
