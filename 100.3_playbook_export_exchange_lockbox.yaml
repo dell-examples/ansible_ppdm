@@ -15,4 +15,4 @@
     register: pwsh_output
   - debug:
      msg:
-       "{{ pwsh_output }}"
+       "{{ pwsh_output.output }}"
