@@ -14,5 +14,5 @@
         $Config=Import-ExchangeBackupConfigFile -Restore
     register: pwsh_output
   - debug:
-    - msg:
+     msg:
        "{{ pwsh_output }}"
