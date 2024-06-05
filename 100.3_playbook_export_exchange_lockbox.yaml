@@ -11,7 +11,7 @@
     ansible.windows.win_powershell:
       script: |
         $Config=Import-ExchangeBackupConfigFile -Restore
-        write-host $Config
+        write-output $Config
     register: pwsh_output
   - debug:
      msg:
