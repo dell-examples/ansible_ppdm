@@ -88,7 +88,9 @@
     vars:
       name: "{{ policy_name }}"
       description: "Demo SQL Policy for Bob 2024"
-      debugEnabled: "false"    
+      debugEnabled: "false"
+      operationId: "{{ newOperationId }}"
+      operationIdLog: "{{ newLogOperationId }}"    
       storageSystemId: "{{ storagesystems[0].id }}"
       preferredInterfaceId: "{{ storagesystems[0].details.dataDomain.preferredInterfaces[0].networkName }}"
       new_protection_policy: "{{ data_template }}"

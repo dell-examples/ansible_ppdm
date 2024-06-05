@@ -7,6 +7,8 @@ skipSimpleDatabase: true
 promotionType: ALL  
 backupStartTime: '2024-05-23T20:00:00.000Z'
 backupDuration: "PT10H"
+backupStartTimeLog: '2024-05-23T00:01:00.000Z'
+backupDurationLog: "PT11H"
 dataConsistency: "APPLICATION_CONSISTENT"
 # operationId: "{{ (1000 | random | to_uuid | upper) }}"
 debugEnabled: False
@@ -41,8 +43,8 @@ data_template:
                 type: HOURLY
                 interval: 1
             window:
-              startTime: "{{ backupStartTime}}"
-              duration: "{{ backupDuration }}"
+              startTime: "{{ backupStartTimeLog}}"
+              duration: "{{ backupDurationLog }}"
           triggerType: ON_SCHEDULE
       target:
         storageTargetId: null
