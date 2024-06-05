@@ -15,7 +15,7 @@
         $Config=Import-ExchangeBackupConfigFile -Restore
         write-output $Config
     register: pwsh_output
-    when: ansible_hostname ex "{{ exchange_source }}"
+    when: ansible_hostname == "{{ exchange_source }}"
   - debug:
      msg:
        "{{ pwsh_output.output }}"
