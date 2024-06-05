@@ -96,7 +96,7 @@
       - InstallPPDMAgentCheckBox=1
       - EnableScriptRequests=1
     when: "'exchangehosts' in group_names"
-  - name: Set service startup mode to auto and ensure it is started
+  - name: Set service startup mode to auto and ensure it is started 
     ansible.windows.win_service:
       name: AgentService
       start_mode: auto
