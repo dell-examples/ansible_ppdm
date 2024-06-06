@@ -1,0 +1,48 @@
+
+systemStateRecoveryOnly: False
+ignoreMissingSystemStateFiles: True
+excludeNonCriticalDynamicDisks: False
+ignoreThirdPartyServices: False
+indexingEnabled: False
+backupStartTime: '2024-05-23T20:00:00.000Z'
+backupDuration: "PT10H"
+# operationId: "{{ (1000 | random | to_uuid | upper) }}"
+debugEnabled: False
+data_template:
+  name: "{{ policy_name }}"
+  description: "{{ description }}"
+  assetType: VMWARE_VIRTUAL_MACHINE
+  purpose: CENTRALIZED
+  disabled: false
+  objectives:
+    - config:
+        forceFull: false
+        protectionEngine: VMDIRECT
+        dataConsistency: CRASH_CONSISTENT
+        backupMechanism: VADP
+      id: "{{ 1000 | random | to_uuid | upper }}"
+      type: BACKUP
+      options:
+        excludeSwapFiles: false
+        disableQuiescing: false
+        backupMode: FSS
+      target:
+        storageTargetId: null
+        preferredInterfaceId: "{{ preferredInterfaceId }}"
+        storageContainerId: "{{ storageSystemId }}"
+      operations:
+        - id: "{{ 1000 | random | to_uuid | upper }}"
+          backupLevel: SYNTHETIC_FULL
+          schedule:
+            recurrence:
+              pattern:
+                type: DAILY
+            window:
+              startTime: "{{ backupStartTime }}"
+              duration: "{{ backupDuration }}"
+      retentions:
+        - id: "{{ 1000 | random | to_uuid | upper }}"
+          time:
+            - unitValue: 3
+              unitType: WEEK
+              type: RETENTION_AND_LOCK

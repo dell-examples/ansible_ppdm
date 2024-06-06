@@ -5,12 +5,9 @@
   connection: local
   vars_files: 
     - ./vars/main.yml
-    - ./templates/sql_policy_template_v3.yaml
+    - ./templates/vm_policy_template_v3.yaml
   vars:  
-    policy_name: "SQL_Bob"
-    app_credentials_username: 'sql_service_local'
-    app_credentials_name: 'bob demouser sql'
-    app_credentials_password: 'Password123!'    
+    policy_name: "VM_Bob"   
   tasks:
   - name: Checking Required Variable ppdm_fqdn
     fail: 
@@ -47,15 +44,6 @@
   - debug: 
       msg: "{{ protection_policy }}"
       verbosity: 0 
-  - name: "Ensure ApplicationCredentials {{ app_credentials_name }}"
-    vars:
-      data:
-        name: "{{ app_credentials_name }}"
-        type: "OS"        
-        password: "{{ app_credentials_password }}"
-        username: "{{ app_credentials_username }}"
-    include_role:
-      name: create_ppdm_credentials  
 
   - name: Get DataDomain Storage Systems
     include_role: 
@@ -64,38 +52,15 @@
       filter: type eq "DATA_DOMAIN_SYSTEM" and details.dataDomain.preferredInterfaces.ipAddress eq "{{ ddve_fqdn }}" 
     when: protection_policy.id is not defined
 
-  - name: New operationId
-    set_fact:
-      newOperationId: "{{ 99999 | to_uuid(namespace='11111111-2222-3333-4444-555555555555') }}"  
-    when: protection_policy.id is not defined and (storagesystems[0] is defined)
-
-  - debug: 
-      msg: "{{ newOperationId }}"
-      verbosity: 0     
-    when: protection_policy.id is not defined and (storagesystems[0] is defined)
-
-  - name: New LogoperationId
-    set_fact:
-      newLogOperationId: "{{ 99999 | to_uuid(namespace='11111111-2222-3333-4444-555555555555') }}"  
-    when: protection_policy.id is not defined and (storagesystems[0] is defined)
-
-  - debug: 
-      msg: "{{ newLogOperationId }}"
-      verbosity: 0     
-    when: protection_policy.id is not defined and (storagesystems[0] is defined)
 
   - name: Create New Protection Policy
     vars:
-      ppdm_api_ver: /api/v3    
       name: "{{ policy_name }}"
-      description: "Demo SQL Policy for Bob 2024"
+      ppdm_api_ver: /api/v3      
+      description: "Demo VM Policy for Bob 2024"
       debugEnabled: "false"
-      operationId: "{{ newOperationId }}"
-      operationIdLog: "{{ newLogOperationId }}"    
-      storageSystemId: "{{ storagesystems[0].id }}"
       preferredInterfaceId: "{{ storagesystems[0].details.dataDomain.preferredInterfaces[0].networkName }}"
       new_protection_policy: "{{ data_template }}"
-      credentials_id: "{{ credentials.id }}"  
     include_role:
       name: new_ppdm_protection_policy
     when: protection_policy.id is not defined and (storagesystems[0] is defined)
