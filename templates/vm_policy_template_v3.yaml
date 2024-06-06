@@ -19,7 +19,7 @@ data_template:
         forceFull: false
         dataConsistency: CRASH_CONSISTENT
         backupMechanism: VADP
-      id: "{{ lookup( 'password', '/dev/null length=32' ) | to_uuid }}"
+      id: "{{ 1000 | random | to_uuid }}"
       type: BACKUP
       options:
         excludeSwapFiles: false
@@ -30,7 +30,7 @@ data_template:
         preferredInterfaceId: "{{ preferredInterfaceId }}"
         storageContainerId: "{{ storageSystemId }}"
       operations:
-        - id: "{{ lookup( 'password', '/dev/null length=32' ) | to_uuid }}"
+        - id: "{{ 1000 | random | to_uuid  }}"
           backupLevel: SYNTHETIC_FULL
           schedule:
             recurrence:
@@ -40,7 +40,7 @@ data_template:
               startTime: "{{ backupStartTime }}"
               duration: "{{ backupDuration }}"
       retentions:
-        - id: "{{ lookup( 'password', '/dev/null length=32' ) | to_uuid }}"
+        - id: "{{ 1000 | random | to_uuid  }}"
           time:
             - unitValue: 3
               unitType: WEEK
