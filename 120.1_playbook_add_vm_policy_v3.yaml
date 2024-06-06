@@ -59,6 +59,7 @@
       ppdm_api_ver: /api/v3      
       description: "Demo VM Policy for Bob 2024"
       debugEnabled: "false"
+      storageSystemId: "{{ storagesystems[0].id }}"
       preferredInterfaceId: "{{ storagesystems[0].details.dataDomain.preferredInterfaces[0].networkName }}"
       new_protection_policy: "{{ data_template }}"
     include_role:
