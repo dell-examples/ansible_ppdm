@@ -13,7 +13,7 @@ data_template:
   assetType: MICROSOFT_EXCHANGE_DATABASE
   disabled: false
   objectives:
-    - id: "{{ 1000 | random | to_uuid | upper }}"
+    - id: "{{ 1000 | random | to_uuid }}"
       type: BACKUP
       operations:
         - id: "{{ operationId }}"
@@ -32,7 +32,7 @@ data_template:
         preferredInterfaceId:  "{{ preferredInterfaceId }}"
         storageContainerId: "{{ storageSystemId }}"
       retentions:
-        - id: "{{ 1000 | random | to_uuid | upper }}"
+        - id: "{{ 1000 | random | to_uuid  }}"
           time:
             - unitValue: 3
               unitType: DAY
@@ -40,7 +40,7 @@ data_template:
           copySelector:
             backupLevel: SYNTHETIC_FULL
             operationId: "{{ operationId }}"
-        - id: "{{ 1000 | random | to_uuid | upper }}"
+        - id: "{{ 1000 | random | to_uuid  }}"
           time:
             - unitValue: 3
               unitType: DAY

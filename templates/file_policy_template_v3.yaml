@@ -15,10 +15,10 @@ data_template:
   assetType: FILE_SYSTEM
   disabled: false
   objectives:
-    - id: "{{ 1000 | random | to_uuid | upper }}"
+    - id: "{{ 1000 | random | to_uuid  }}"
       type: BACKUP
       operations:
-        - id: "{{ 1000 | random | to_uuid | upper }}" # "{{ operationId }}"
+        - id: "{{ 1000 | random | to_uuid  }}" # "{{ operationId }}"
           backupLevel: SYNTHETIC_FULL
           schedule:
             recurrence:
@@ -34,15 +34,15 @@ data_template:
         preferredInterfaceId: "{{ preferredInterfaceId }}"
         storageContainerId: "{{ storageSystemId }}"
       retentions:
-#        - id: "{{ 1000 | random | to_uuid | upper }}"
-#          time:
-#            - unitValue: 3
-#              unitType: DAY
-#              type: RETENTION_AND_LOCK
-#          copySelector:
-#            backupLevel: SYNTHETIC_FULL
-#            operationId: "{{ operationId }}"
-        - id: "{{ 1000 | random | to_uuid | upper }}"
+        - id: "{{ 1000 | random | to_uuid }}"
+          time:
+            - unitValue: 3
+              unitType: DAY
+              type: RETENTION_AND_LOCK
+          copySelector:
+            backupLevel: SYNTHETIC_FULL
+            operationId: "{{ operationId }}"
+        - id: "{{ 1000 | random | to_uuid }}"
           time:
             - unitValue: 3
               unitType: DAY

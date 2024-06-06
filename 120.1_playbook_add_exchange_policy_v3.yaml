@@ -67,7 +67,7 @@
 
   - name: New operationId
     set_fact:
-      newOperationId: "{{ 99999 | to_uuid(namespace='11111111-2222-3333-4444-555555555555') }}"
+      newOperationId: "{{ 1000 | random | to_uuid  }}"
     when: protection_policy.id is not defined and (storagesystems[0] is defined)    
   - debug: 
       msg: "{{ newOperationId }}"

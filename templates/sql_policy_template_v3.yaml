@@ -12,7 +12,7 @@ backupDurationLog: "PT11H"
 dataConsistency: "APPLICATION_CONSISTENT"
 # operationId: "{{ (1000 | random | to_uuid | upper) }}"
 debugEnabled: False
-name: "{{ 1000 | random | to_uuid | upper }}"
+name: "{{ 1000 | random | to_uuid }}"
 description: " SQL Policy"
 data_template:
   name: "{{ name }}"
@@ -21,7 +21,7 @@ data_template:
   assetType: MICROSOFT_SQL_DATABASE
   disabled: false
   objectives:
-    - id: "{{ 1000 | random | to_uuid | upper }}"
+    - id: "{{ 1000 | random | to_uuid }}"
       type: BACKUP
       operations:
         - id: "{{ operationId }}"
@@ -51,7 +51,7 @@ data_template:
         preferredInterfaceId:  "{{ preferredInterfaceId }}"
         storageContainerId: "{{ storageSystemId }}"
       retentions:
-        - id: "{{ (1000 | random | to_uuid | upper) }}"
+        - id: "{{ 1000 | random | to_uuid }}"
           time:
             - unitValue: 3
               unitType: DAY
@@ -59,7 +59,7 @@ data_template:
           copySelector:
             backupLevel: FULL
             operationId: "{{ operationIdLog }}"
-        - id: "{{ (1000 | random | to_uuid | upper) }}"
+        - id: "{{ 1000 | random | to_uuid  }}"
           time:
             - unitValue: 3
               unitType: DAY
@@ -67,7 +67,7 @@ data_template:
           copySelector:
             backupLevel: LOG
             operationId: "{{ operationIdLog }}"
-        - id: "{{ (1000 | random | to_uuid | upper) }}"
+        - id: "{{ 1000 | random | to_uuid  }}"
           time:
             - unitValue: 3
               unitType: DAY
