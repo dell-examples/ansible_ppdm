@@ -18,7 +18,7 @@ data_template:
     - id: "{{ 1000 | random | to_uuid | upper }}"
       type: BACKUP
       operations:
-        - id: "{{ operationId }}"
+        - id: "{{ 1000 | random | to_uuid | upper }}" # "{{ operationId }}"
           backupLevel: SYNTHETIC_FULL
           schedule:
             recurrence:
@@ -34,14 +34,14 @@ data_template:
         preferredInterfaceId: "{{ preferredInterfaceId }}"
         storageContainerId: "{{ storageSystemId }}"
       retentions:
-        - id: "{{ 1000 | random | to_uuid | upper }}"
-          time:
-            - unitValue: 3
-              unitType: DAY
-              type: RETENTION_AND_LOCK
-          copySelector:
-            backupLevel: SYNTHETIC_FULL
-            operationId: "{{ operationId }}"
+#        - id: "{{ 1000 | random | to_uuid | upper }}"
+#          time:
+#            - unitValue: 3
+#              unitType: DAY
+#              type: RETENTION_AND_LOCK
+#          copySelector:
+#            backupLevel: SYNTHETIC_FULL
+#            operationId: "{{ operationId }}"
         - id: "{{ 1000 | random | to_uuid | upper }}"
           time:
             - unitValue: 3
