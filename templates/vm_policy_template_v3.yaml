@@ -17,7 +17,6 @@ data_template:
   objectives:
     - config:
         forceFull: false
-        protectionEngine: VMDIRECT
         dataConsistency: CRASH_CONSISTENT
         backupMechanism: VADP
       id: "{{ 1000 | random | to_uuid | upper }}"
