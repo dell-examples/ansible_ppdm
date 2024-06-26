@@ -1,8 +1,8 @@
 # Example Playbok to deploy agentzs
 - name: Download Agents from PPDM
-  hosts: localhost
+  hosts: "{{ task_host | default('localhost') }}"
   gather_facts: no
-  connection: local
+  # connection: local
   vars_files: 
     - ./vars/main.yml
     - ./vars/agents_vars.yaml
