@@ -16,7 +16,7 @@
     ansible.windows.win_copy:
       src: "{{ agent_src }}/{{ app_agent }}"
       dest: C:/Temp/
-      delegate_to: "{{ task_host }}"
+    delegate_to: "{{ task_host }}"
   - name: Unzip Agents
     community.windows.win_unzip:
       src: "C:/Temp/{{ app_agent | basename }}"
