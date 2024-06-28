@@ -48,12 +48,13 @@
       agent_branch: "{{ agent_major }}.{{ agent_minor }}-{{agent_patch}}"
       agent_release: "{{ agent_major }}.{{ agent_minor }}.0.{{agent_patch}}"    
   - delegate_to: "{{ task_host }}"
-      module: copy 
+      # module: copy 
+    copy: 
       content: "{{ agents }}"
       dest: "{{ download_destination }}/agents-{{ agents.agent_branch }}.yaml"
      
   - delegate_to: "{{ task_host }}"
-      module: copy 
+    copy: 
       content: "{{ agents }}"
       dest: "{{ download_destination }}/agents.yaml"      
   - name: Download FS Agents Windows
