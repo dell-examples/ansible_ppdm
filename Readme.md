@@ -7,20 +7,12 @@ You can find the Roles in the Roles Directory.
 In the main directory, you can find several Playbooks for example workflows.  
 The vars/main.yaml essentially represents an interpolation from environment variables to ansible vars  
 
-
-
-
-## calling the playbooks directly with an external vars file.
-```bash
-ansible-playbook ansible_dps/ppdm/2.3-playbook_configure_cloud_dr_account.yml --extra-vars "@ppdm-prod/vars.yaml"
-```
-
 ## Documentation
 the modules have been forked from a larger repo I maintain personally, so they start here as a Version 1 and Documentation if not inline is WIP :-(
 
 You can find a good Documentation and Examples from our "BOB" CLass at [Ansible Labs](https://bob-builds-labs.github.io/)
 
-However, usecases are described from [terraforming DPS](https://github.com/bottkars/terraforming-dps)
+Also, usecases are described from [terraforming DPS](https://github.com/bottkars/terraforming-dps)
 
 
 
@@ -143,7 +135,9 @@ create a kubernetes policy and rule ...
 ansible-playbook ~/workspace/ansible_ppdm/playbook_add_k8s_policy_and_rule.yml 
 ```
 
-## Some advanced K8S
+##Advanced Thingy´s
+
+### Some advanced K8S
 ```json
 {"details":{"k8s":{"configurations":[{"type":"CONTROLLER_CONFIG","key":"k8s.ppdm.vspherecsi.use.fsagent","value":"true"},{"type":"CONTROLLER_CONFIG","key":"k8s.docker.registry","value":"harbor.pks.home.labbuildr.com"},{"type":"CONTROLLER_CONFIG","key":"ppdm.backup.concurrency","value":"2"},{"type":"POD_CONFIG","key":"VELERO","value":"c3BlYzoKICB0ZW1wbGF0ZToKICAgIG1ldGFkYXRhOgogICAgICBsYWJlbHM6CiAgICAgICAgYXBwLmt1YmVybmV0ZXMuaW8vbmFtZTogdmVsZXJvLXBwZG0KICAgIHNwZWM6CiAgICAgIGltYWdlUHVsbFNlY3JldHM6CiAgICAgICAtIG5hbWU6IHJlZ2NyZWQ="},{"type":"CONTROLLER_CONFIG","key":"k8s.image.pullsecrets","value":"regcred"}]}}}
 ```
@@ -155,5 +149,8 @@ ansible-playbook ../ansible_ppdm/playbook_rbac_add_k8s_to_ppdm_reg_cred.yml \
 -e="dockerconfigjson=eyJhdXRocyI6eyJoYXJib3IucGtzLmhvbWUubGFiYnVpbGRyLmNvbSI6eyJ1c2VybmFtZSI6InJvYm90JHBwZG1fYWNjb3VudCIsInBhc3N3b3JkIjoiTnJVU2ZWMGVPVFFmVGN0RHVienhNblV1a3IwRDBXbnkiLCJhdXRoIjoiY205aWIzUWtjSEJrYlY5aFkyTnZkVzUwT2s1eVZWTm1WakJsVDFSUlpsUmpkRVIxWW5wNFRXNVZkV3R5TUVRd1YyNTUifX19" \
 -e='{"details":{"k8s":{"configurations":[{"type":"CONTROLLER_CONFIG","key":"k8s.ppdm.vspherecsi.use.fsagent","value":"true"},{"type":"CONTROLLER_CONFIG","key":"k8s.docker.registry","value":"harbor.pks.home.labbuildr.com"},{"type":"CONTROLLER_CONFIG","key":"k8s.image.pullsecrets","value":"regcred"},{"type":"POD_CONFIG","key":"VELERO","value":"c3BlYzoKICB0ZW1wbGF0ZToKICAgIG1ldGFkYXRhOgogICAgICBsYWJlbHM6CiAgICAgICAgYXBwLmt1YmVybmV0ZXMuaW8vbmFtZTogdmVsZXJvLXBwZG0KICAgIHNwZWM6CiAgICAgIGltYWdlUHVsbFNlY3JldHM6CiAgICAgICAtIG5hbWU6IHJlZ2NyZWQ="}]}}}'
 ```
-
+### calling the playbooks directly with an external vars file.
+```bash
+ansible-playbook ansible_dps/ppdm/2.3-playbook_configure_cloud_dr_account.yml --extra-vars "@ppdm-prod/vars.yaml"
+```
 kubectl patch serviceaccount default  -p '{"imagePullSecrets": [{"name": "regcred"}]}'
