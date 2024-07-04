@@ -16,7 +16,9 @@ ansible-playbook ansible_dps/ppdm/2.3-playbook_configure_cloud_dr_account.yml --
 ```
 
 ## Documentation
-the modules have been forked from a larger repo i maintain personally, so i start here as a Version 1 and Documentation if not inline is Pending :-(
+the modules have been forked from a larger repo I maintain personally, so they start here as a Version 1 and Documentation if not inline is WIP :-(
+
+You can find a good Documentation and Examples from our "BOB" CLass at [Ansible Labs](https://bob-builds-labs.github.io/)
 
 However, usecases are described from [terraforming DPS](https://github.com/bottkars/terraforming-dps)
 
