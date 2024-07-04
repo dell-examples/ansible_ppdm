@@ -20,6 +20,26 @@ the modules have been forked from a larger repo i maintain personally, so i star
 
 However, usecases are described from [terraforming DPS](https://github.com/bottkars/terraforming-dps)
 
+
+
+## Playbooks
+
+### PPDM Configuration ( 1.x - 10.x )
+
+
+
+Runbook | Usage  | Parameters   
+------|---------------------|---  
+1.0-playbook_configure_ppdm.yml | Initial configuration of ppdm | ppdm_timeZone, the timezone config for ppdm<br> ppdm_setup_password, the setup only password, depend on environment <br> ppdm_fqdn, url /fqdn of ppdm <br> ppdm_new_password, the actual (admin) password 
+1.0-playbook_wait_ready.yml | Wait for API to accept requests  |  ppdm_fqdn, url /fqdn of ppdm <br> ppdm_new_password, the actual (admin) password
+1.1-playbook_get_ppdm_config.yml  |    |  ppdm_fqdn, url /fqdn of ppdm <br> ppdm_new_password, the actual (admin) password
+1.2-playbook_disable_api_enforcement.yml  |  Disable / Enable Strict API Validation  | string status,true or false  default false  ppdm_fqdn, url /fqdn of ppdm <br> ppdm_new_password, the actual (admin) password
+2.0-playbook_set_csm.yml  | Add Cloud Snapshot Manager to PPDM   |  ppdm_fqdn, url /fqdn of ppdm <br> ppdm_new_password, the actual (admin) password <br>csm_tenant, tenant id of csm <br> csm_credentials, csm api token 
+  |    |  
+  |    |  
+  |    |  
+
+
 ## Examples:
 
 
