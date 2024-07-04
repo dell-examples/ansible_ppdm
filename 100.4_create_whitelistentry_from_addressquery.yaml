@@ -5,10 +5,6 @@
   connection: local
   vars_files: 
     - ./vars/main.yml
-    - ./vars/agents_vars.yaml
-  vars:
-   agent_ver: "1915"
-   agent_branch: "19.15-69"  
   tasks:
   - name: Checking Required Variable ppdm_fqdn
     fail: 
@@ -18,7 +14,10 @@
     fail: 
       msg: "We do not have ppdm_new_password  set !"
     when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)  
- 
+  - name: Checking Required Variable ppdm_new_password
+    fail: 
+      msg: "We do not have host_list set !"
+    when: (host_list is not defined) or (host_list|length == 0)  
   - name: Setting Base URL
     set_fact: 
       ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"   

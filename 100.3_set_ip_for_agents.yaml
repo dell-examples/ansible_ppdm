@@ -8,7 +8,8 @@
     - ./vars/agents_vars.yaml
   vars:
    agent_ver: "1915"
-   agent_branch: "19.15-69"  
+   agent_branch: "19.15-69"
+   state: "false"  
   tasks:
   - name: Checking Required Variable ppdm_fqdn
     fail: 
@@ -40,7 +41,7 @@
         id: APP_AGENT_SETTING
         properties:
         - name: enableLookups
-          value: 'false'
+          value: "{{ state  }}"
           type: BOOLEAN
       
 
