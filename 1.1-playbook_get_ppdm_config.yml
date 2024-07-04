@@ -1,4 +1,4 @@
-# Example Playbok to configure PPSM
+# Example Playbok to configure PPDM
 - name: Configure PPDM
   hosts: localhost
   gather_facts: no

@@ -12,4 +12,4 @@
   register: result  
   when: not ansible_check_mode 
 - set_fact:
-    asset_setting: "{{ result.json }}"
+    common_setting: "{{ result.json }}"
