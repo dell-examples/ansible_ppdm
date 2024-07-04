@@ -6,7 +6,7 @@
   vars_files: 
     - ./vars/main.yml
   vars: 
-    state: false  
+    state: "false"  
   tasks:
   - name: Checking Required Variables
     fail: 
