@@ -46,7 +46,8 @@
         agent_release: "{{ agent_major }}.{{ agent_minor }}.0.{{agent_patch}}"
       agent_ver: "{{ agent_major }}{{ agent_minor }}"
       agent_branch: "{{ agent_major }}.{{ agent_minor }}-{{agent_patch}}"
-      agent_release: "{{ agent_major }}.{{ agent_minor }}.0.{{agent_patch}}"    
+      agent_release: "{{ agent_major }}.{{ agent_minor }}.0.{{agent_patch}}"
+      release: "{{ agent_major }}"    
   - local_action: 
       module: copy 
       content: "{{ agents }}"

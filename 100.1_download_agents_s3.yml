@@ -51,7 +51,8 @@
         agent_release: "{{ agent_major }}.{{ agent_minor }}.0.{{agent_patch}}"
       agent_ver: "{{ agent_major }}{{ agent_minor }}"
       agent_branch: "{{ agent_major }}.{{ agent_minor }}-{{agent_patch}}"
-      agent_release: "{{ agent_major }}.{{ agent_minor }}.0.{{agent_patch}}"    
+      agent_release: "{{ agent_major }}.{{ agent_minor }}.0.{{agent_patch}}"
+      release: "{{ agent_major }}"     
   - local_action: 
       module: copy 
       content: "{{ agents }}"
@@ -102,7 +103,7 @@
   - name: "create {{ s3_container }}}"
     amazon.aws.aws_s3:
       bucket: "{{ s3_bucket}}"
-      object: "{{ s3_container }}/{{ agent_major }}"
+      object: "{{ s3_container }}/{{ release }}"
       mode: create
       encrypt: false
       endpoint_url: "{{ s3_host }}"
@@ -112,8 +113,8 @@
   - name: Copy Agents to S3
     amazon.aws.aws_s3:
       bucket: "{{ s3_bucket }}"
-      object: "{{ s3_container }}/{{ agent_major }}"
-      src: "{{ download_destination }}/{{ agent_major }}.{{ agent_minor }}-{{agent_patch}}"
+      object: "{{ s3_container }}/{{ release }}"
+      src: "{{ download_destination }}/{{ agent_branch }}"
       mode: put
       encrypt: false
       endpoint_url: "{{ s3_host }}"
