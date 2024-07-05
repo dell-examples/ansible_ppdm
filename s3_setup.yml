@@ -10,7 +10,7 @@
   vars_files: 
     - ./vars/main.yml
   vars:
-    bucket: dps-products
+    s3_bucket: dps-products
     s3_host: http://ansible.demo.local:9000
     access_key: minioadmin
     secret_key: Password123!
