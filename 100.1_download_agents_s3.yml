@@ -103,7 +103,7 @@
   - name: Copy Agents to S3
     community.aws.s3_sync:
       bucket: "{{ s3_bucket }}"
-      key_prefix: "{{ s3_container }}/{{ release }}/agents/{{ agent_branch }}"
+      key_prefix: "{{ s3_container }}/{{ release }}/agents/{{ agent_branch }}/"
       file_root: "{{ download_destination }}/{{ agent_branch }}"
       endpoint_url: "{{ s3_host }}"
       access_key: "{{ access_key }}"      
