@@ -11,7 +11,7 @@
     access_key: minioadmin
     secret_key: Password123!
     s3_container: powerprotect
-    release: 19.17
+    release: 19.16
     local_directory: /tmp
     package:  
   tasks:
@@ -29,7 +29,7 @@
     name: do we have a token ?
   - name: Get Upgrade from S3
     amazon.aws.aws_s3:
-      bucket: "{{ s3_bucket}}/{{ release }}"
+      bucket: "{{ s3_bucket}}"
       object: "{{ s3_container }}/{{ release }}{{ package }}"
       dest: "{{ local_directory }}/{{ package }}"
       mode: get
