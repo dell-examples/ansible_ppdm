@@ -21,7 +21,7 @@
     amazon.aws.s3_bucket:
       state: present
       name: "{{ s3_bucket}}"
-      s3_url: "{{ s3_host }}"
+      endpoint_url: "{{ s3_host }}"
       versioning: false
       access_key: "{{ access_key }}"
       secret_key: "{{ secret_key }}"
@@ -32,6 +32,6 @@
       object: "{{ s3_container }}/{{ release }}"
       mode: create
       encrypt: false
-      s3_url: "{{ s3_host }}"
+      endpoint_url: "{{ s3_host }}"
       access_key: "{{ access_key }}"      
       secret_key: "{{ secret_key }}"
