@@ -100,16 +100,6 @@
       access_key: "{{ access_key }}"
       secret_key: "{{ secret_key }}"
 
-  - name: "create {{ s3_container }}}"
-    amazon.aws.aws_s3:
-      bucket: "{{ s3_bucket}}"
-      object: "{{ s3_container }}"
-      mode: create
-      encrypt: false
-      endpoint_url: "{{ s3_host }}"
-      access_key: "{{ access_key }}"      
-      secret_key: "{{ secret_key }}"
-
   - name: Copy Agents to S3
     community.aws.s3_sync:
       bucket: "{{ s3_bucket }}"
