@@ -27,14 +27,17 @@
       msg: "{{ access_token }}"
       verbosity: 1
     name: do we have a token ?
+
   - name: Get Upgrade from S3
     amazon.aws.aws_s3:
       bucket: "{{ s3_bucket}}"
-      object: "{{ s3_container }}/{{ release }}{{ package }}"
+      object: "{{ s3_container }}/{{ release }}/{{ package }}"
       dest: "{{ local_directory }}/{{ package }}"
       mode: get
       encrypt: false
-      s3_url: "{{ s3_host }}"
+      endpoint_url: "{{ s3_host }}"
+      access_key: "{{ access_key }}"      
+      secret_key: "{{ secret_key }}"
 
   - name: find PowerProtect upgrade software at input mapping
     find:
