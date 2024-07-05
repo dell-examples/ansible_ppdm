@@ -39,23 +39,12 @@
       access_key: "{{ access_key }}"      
       secret_key: "{{ secret_key }}"
 
-  - name: find PowerProtect upgrade software at input mapping
-    find:
-      paths: "{{ upgrade_source| default(lookup('env','PWD')) }}"
-      patterns: 'dellemc-ppdm-upgrade-sw-*.pkg'
-    register: result
-  - name: Setting Upload Filename
-    set_fact:
-      upgrade_file: "{{ result.files[0].path }}"
-    when: result.files is defined     
-  - name: parsed upload file
-    debug: 
-      msg: "{{ upgrade_file }}"
+
   - name: Uploading Update
     include_role: 
       name: upload_update_curl
     vars: 
-      upload_file: "{{ upgrade_file }}"        
+      upload_file: "{{ local_directory }}/{{ package }}"        
   - name: Upload Result
     debug:
       msg: "{{ upload_result }}"
