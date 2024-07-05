@@ -1,0 +1,59 @@
+# Example Playbook to Upload PPDM Upgrade
+- name: Upload PPDM upgrade
+  hosts: localhost
+  gather_facts: no
+  connection: local
+  vars_files: 
+    - ./vars/main.yml
+  vars:
+    s3_bucket: dps-products
+    s3_host: http://ansible.demo.local:9000
+    access_key: minioadmin
+    secret_key: Password123!
+    s3_container: powerprotect
+    release: 19.17
+    local_directory: /tmp
+    package:  
+  tasks:
+  - name: Setting Base URL
+    set_fact: 
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"     
+  - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
+    include_role: 
+      name: get_ppdm_token
+    vars: 
+      ppdm_password: "{{ ppdm_new_password }}"
+  - debug: 
+      msg: "{{ access_token }}"
+      verbosity: 1
+    name: do we have a token ?
+  - name: Get Upgrade from S3
+    amazon.aws.aws_s3:
+      bucket: "{{ s3_bucket}}/{{ release }}"
+      object: "{{ s3_container }}/{{ release }}{{ package }}"
+      dest: "{{ local_directory }}/{{ package }}"
+      mode: get
+      encrypt: false
+      s3_url: "{{ s3_host }}"
+
+  - name: find PowerProtect upgrade software at input mapping
+    find:
+      paths: "{{ upgrade_source| default(lookup('env','PWD')) }}"
+      patterns: 'dellemc-ppdm-upgrade-sw-*.pkg'
+    register: result
+  - name: Setting Upload Filename
+    set_fact:
+      upgrade_file: "{{ result.files[0].path }}"
+    when: result.files is defined     
+  - name: parsed upload file
+    debug: 
+      msg: "{{ upgrade_file }}"
+  - name: Uploading Update
+    include_role: 
+      name: upload_update_curl
+    vars: 
+      upload_file: "{{ upgrade_file }}"        
+  - name: Upload Result
+    debug:
+      msg: "{{ upload_result }}"
+      verbosity: 0
