@@ -19,7 +19,7 @@
     fail: 
       msg: "We do not have ppdm fqdn set !"
     when: (ppdm_fqdn is not defined) or (ppdm_fqdn|length <= 8)   
-
+    delegate_to: localhost
   - name: Copy Agents from S3
     amazon.aws.aws_s3:
       bucket: "{{ s3_bucket}}"
