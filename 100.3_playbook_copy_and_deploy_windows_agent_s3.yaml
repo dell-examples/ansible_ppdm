@@ -23,7 +23,7 @@
   - name: Copy Agents from S3
     amazon.aws.aws_s3:
       bucket: "{{ s3_bucket}}"
-      object: "{{ s3_container }}/{{ release }}/agents/{{ agent_branch }}/{{ app_agent }}"
+      object: "{{ s3_container }}/{{ release }}/agents/{{ app_agent }}"
       dest: "{{ agent_src }}/{{ app_agent }}"
       mode: get
       encrypt: false
