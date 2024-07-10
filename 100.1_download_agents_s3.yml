@@ -110,7 +110,7 @@
       access_key: "{{ access_key }}"      
       secret_key: "{{ secret_key }}"
 
-  - name: Copy Agents to S3
+  - name: Sync Agents to S3
     community.aws.s3_sync:
       bucket: "{{ s3_bucket }}"
       key_prefix: "{{ s3_container }}/{{ release }}/agents/{{ agent_branch }}"
@@ -119,6 +119,33 @@
       access_key: "{{ access_key }}"      
       secret_key: "{{ secret_key }}"
     when: not ansible_check_mode  
+
+  - name: Copy Agent Version to S3
+    amazon.aws.aws_s3:
+      bucket: "{{ s3_bucket}}"
+      object: "{{ s3_container }}/{{ release }}/agents"
+      src: "{{ download_destination }}/agents-{{ agents.agent_branch }}.yaml" 
+      mode: put
+      encrypt: false
+      endpoint_url: "{{ s3_host }}"
+      access_key: "{{ access_key }}"      
+      secret_key: "{{ secret_key }}"
+    when: not ansible_check_mode  
+    delegate_to: localhost
+  - name: Copy Latest Agent Version to S3
+    amazon.aws.aws_s3:
+      bucket: "{{ s3_bucket}}"
+      object: "{{ s3_container }}/{{ release }}/agents"
+      src: "{{ download_destination }}/agents.yaml" 
+      mode: put
+      encrypt: false
+      endpoint_url: "{{ s3_host }}"
+      access_key: "{{ access_key }}"      
+      secret_key: "{{ secret_key }}"
+    when: not ansible_check_mode  
+    delegate_to: localhost         
+
+
           
 
      
