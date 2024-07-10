@@ -123,7 +123,7 @@
   - name: Copy Agent Version to S3
     amazon.aws.aws_s3:
       bucket: "{{ s3_bucket}}"
-      object: "{{ s3_container }}/{{ release }}/agents/"
+      object: "{{ s3_container }}/{{ release }}/agents/agents-{{ agents.agent_branch }}.yaml"
       src: "{{ download_destination }}/agents-{{ agents.agent_branch }}.yaml" 
       mode: put
       encrypt: false
@@ -135,7 +135,7 @@
   - name: Copy Latest Agent Version to S3
     amazon.aws.aws_s3:
       bucket: "{{ s3_bucket}}"
-      object: "{{ s3_container }}/{{ release }}/agents/"
+      object: "{{ s3_container }}/{{ release }}/agents/agents.yaml"
       src: "{{ download_destination }}/agents.yaml" 
       mode: put
       encrypt: false
