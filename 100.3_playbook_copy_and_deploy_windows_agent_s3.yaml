@@ -25,7 +25,7 @@
     ansible.builtin.file:
       path: "{{ agent_src }}"
       state: directory
-      # mode: '0755'     
+      #mode: '0755'     
     delegate_to: localhost
 
 
@@ -37,7 +37,7 @@
       mode: get
       encrypt: false
       endpoint_url: "{{ s3_host }}"
-      access_key: "{{ access_key }}"      
+      access_key: "{{ access_key  }}"      
       secret_key: "{{ secret_key }}"
     when: not ansible_check_mode  
     delegate_to: localhost  
