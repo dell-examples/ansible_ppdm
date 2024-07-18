@@ -9,7 +9,7 @@
   vars:
    agent_ver: "1915"
    agent_branch: "19.15-69"
-   state: "TRUE"  
+   state: true  
   tasks:
   - name: Checking Required Variable ppdm_fqdn
     fail: 
