@@ -41,7 +41,7 @@
         id: APP_AGENT_SETTING
         properties:
         - name: enableLookups
-          value: "{{ state }}"
+          value: "{{ state | bool }}"
           type: BOOLEAN
       
 
