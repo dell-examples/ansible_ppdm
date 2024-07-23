@@ -17,7 +17,7 @@
       password: '{{ vcenter_password }}'
       datacenter: '{{ datacenter }}'
       datastore: '{{ datastore }}'
-      ovf: /home/a
+      ovf: '{{ ovf }}'
       wait_for_ip_address: true
       networks: '{{ networks }}'
     delegate_to: localhost
