@@ -9,6 +9,7 @@
     datacenter: democenter
     datastore: nfs-datastore
     disk_provisioning: thin
+    networks: '{"VM Network": "prod vm network"}'
   tasks:
   - vmware_deploy_ovf:
       hostname: '{{ vcenter_hostname }}'
@@ -18,5 +19,5 @@
       datastore: '{{ datastore }}'
       ovf: /home/a
       wait_for_ip_address: true
-      networks: {"VM Network": "prod vm network"}
+      networks: '{{ networks }}'
     delegate_to: localhost
