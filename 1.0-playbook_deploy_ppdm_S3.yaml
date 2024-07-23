@@ -27,7 +27,7 @@
     release: 19.16
     local_directory: /tmp    
   tasks:
-  - load_image_from_s3:
+  - name: load_image_from_s3
     amazon.aws.aws_s3:
       bucket: "{{ s3_bucket}}"
       object: "{{ s3_container }}/{{ release }}/{{ ovf }}"
@@ -37,7 +37,8 @@
       endpoint_url: "{{ s3_host }}"
       access_key: "{{ access_key }}"      
       secret_key: "{{ secret_key }}"  
-  - vmware_deploy_ovf:
+  - name: Deploy ovf
+    vmware_deploy_ovf:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
