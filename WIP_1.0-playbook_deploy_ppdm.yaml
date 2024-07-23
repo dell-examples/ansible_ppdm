@@ -20,4 +20,22 @@
       ovf: '{{ ovf }}'
       wait_for_ip_address: true
       networks: '{{ networks }}'
+      properties:
+        - Key: vami.ip0.brs
+          Value: ''
+        - Key: vami.gateway.brs
+          Value: ''
+        - Key: vami.netmask0.brs
+          Value: ''
+        - Key: vami.ip0.ipv6.brs
+          Value: ''
+        - Key: vami.gateway.ipv6.brs
+          Value: ''
+        - Key: vami.netmask0.ipv6.brs
+          Value: ''
+        - Key: vami.DNS.brs
+          Value: ''
+        - Key: vami.fqdn.brs
+          Value: ''
+
     delegate_to: localhost
