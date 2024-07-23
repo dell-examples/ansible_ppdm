@@ -39,9 +39,6 @@
       secret_key: "{{ secret_key }}"  
   - name: Deploy ovf
     vmware_deploy_ovf:
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
       datacenter: '{{ datacenter }}'
       datastore: '{{ datastore }}'
       ovf: '{{ local_directory }}/{{ ovf }}'
