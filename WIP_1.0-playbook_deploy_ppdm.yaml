@@ -17,7 +17,8 @@
     gateway_ipv6: ''
     netmask0_ipv6: ''
     DNS: '192.168.1.2'
-    fqdn: 'ppdm-2.demo.local' 
+    fqdn: 'ppdm-2.demo.local'
+    name: 'ppdm-2' 
   tasks:
   - vmware_deploy_ovf:
       hostname: '{{ vcenter_hostname }}'
@@ -28,6 +29,7 @@
       ovf: '{{ ovf }}'
       wait_for_ip_address: true
       networks: '{{ networks }}'
+      name: '{{ name }}'
       properties:
         vami.ip0.brs: '{{ ip0 }}'
         vami.gateway.brs: '{{ gateway }}'
