@@ -5,7 +5,7 @@
   vars_files: 
     - ./vars/main.yml
   vars: 
-    ovf:  /home/admin/dellemc-ppdm-sw-19.16.0-15.ova
+    ovf: dellemc-ppdm-sw-19.16.0-15.ova
     datacenter: democenter
     datastore: nfs-datastore
     disk_provisioning: thin
