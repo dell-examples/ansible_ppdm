@@ -18,5 +18,5 @@
       datastore: '{{ datastore }}'
       ovf: /home/a
       wait_for_ip_address: true
-      networks: {"VM Network": "VM Network"}
+      networks: {"VM Network": "prod vm network"}
     delegate_to: localhost
