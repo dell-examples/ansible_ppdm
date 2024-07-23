@@ -9,7 +9,7 @@
   vars:
    agent_ver: "1915"
    agent_branch: "19.15-69"
-   state: true  
+   state: "true"  
   tasks:
   - name: Checking Required Variable ppdm_fqdn
     fail: 
@@ -41,7 +41,7 @@
         id: APP_AGENT_SETTING
         properties:
         - name: enableLookups
-          value: "{{ state | bool }}"
+          value: "{{ state }}"
           type: BOOLEAN
       
 
