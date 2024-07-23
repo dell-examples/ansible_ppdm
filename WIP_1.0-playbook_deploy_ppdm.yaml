@@ -7,12 +7,16 @@
   vars: 
     ovf:  /home/admin/dellemc-ppdm-sw-19.16.0-15.ova
     datacenter: democenter
+    datastore: nfs-datastore
+    disk_provisioning: thin
   tasks:
   - vmware_deploy_ovf:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
       datacenter: '{{ datacenter }}'
+      datastore: '{{ datastore }}'
       ovf: /home/a
       wait_for_ip_address: true
+      networks: {"VM Network": "VM Network"}
     delegate_to: localhost
