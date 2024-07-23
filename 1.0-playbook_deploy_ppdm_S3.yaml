@@ -18,7 +18,7 @@
     netmask0_ipv6: ''
     DNS: '192.168.1.2'
     fqdn: 'ppdm-2.demo.local'
-    name: 'ppdm-2'
+    vm_name: 'ppdm-2'
     s3_bucket: dps-products
     s3_host: http://ansible.demo.local:9000
     access_key: minioadmin
@@ -44,7 +44,7 @@
       ovf: '{{ local_directory }}/{{ ovf }}'
       wait_for_ip_address: true
       networks: '{{ networks }}'
-      name: '{{ name }}'
+      name: '{{ vm_name }}'
       properties:
         vami.ip0.brs: '{{ ip0 }}'
         vami.gateway.brs: '{{ gateway }}'
