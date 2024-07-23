@@ -10,6 +10,14 @@
     datastore: nfs-datastore
     disk_provisioning: thin
     networks: '{"VM Network": "prod vm network"}'
+    ip0: '192.168.1.53'
+    gateway: '192.168.1.1'
+    netmask0: '255.255.255.0'
+    ip0_ipv6: ''
+    gateway_ipv6: ''
+    netmask0_ipv6: ''
+    DNS: '192.168.1.2'
+    fqdn: 'ppdm-2.demo.local' 
   tasks:
   - vmware_deploy_ovf:
       hostname: '{{ vcenter_hostname }}'
@@ -21,21 +29,12 @@
       wait_for_ip_address: true
       networks: '{{ networks }}'
       properties:
-        - Key: vami.ip0.brs
-          Value: ''
-        - Key: vami.gateway.brs
-          Value: ''
-        - Key: vami.netmask0.brs
-          Value: ''
-        - Key: vami.ip0.ipv6.brs
-          Value: ''
-        - Key: vami.gateway.ipv6.brs
-          Value: ''
-        - Key: vami.netmask0.ipv6.brs
-          Value: ''
-        - Key: vami.DNS.brs
-          Value: ''
-        - Key: vami.fqdn.brs
-          Value: ''
-
+        vami.ip0.brs: '{{ ip0 }}'
+        vami.gateway.brs: '{{ gateway }}'
+        vami.netmask0.brs: '{{ netmask0 }}'
+        vami.ip0.ipv6.brs: '{{ ip0_ipv6 }}'
+        vami.gateway.ipv6.brs: '{{ gateway_ipv6 }}'
+        vami.netmask0.ipv6.brs: '{{ netmask0_ipv6 }}'
+        vami.DNS.brs: '{{ DNS }}'
+        vami.fqdn.brs: '{{ fqdn }}' 
     delegate_to: localhost
