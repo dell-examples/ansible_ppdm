@@ -55,3 +55,7 @@
         vami.DNS.brs: '{{ DNS }}'
         vami.fqdn.brs: '{{ fqdn }}' 
     delegate_to: localhost
+    register: result
+  - name: display_result
+    debug: 
+      msg: "{{ result }}"    
