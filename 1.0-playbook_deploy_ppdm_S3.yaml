@@ -39,6 +39,7 @@
       secret_key: "{{ secret_key }}"  
   - name: Deploy ovf
     vmware_deploy_ovf:
+      allow_duplicates: no
       datacenter: '{{ datacenter }}'
       datastore: '{{ datastore }}'
       ovf: '{{ local_directory }}/{{ ovf }}'
