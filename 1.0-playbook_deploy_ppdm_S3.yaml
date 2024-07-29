@@ -29,9 +29,6 @@
   tasks:
   - name: Check  '{{ vm_name }}' already exists
     community.vmware.vmware_vm_info:
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
       vm_name: '{{ vm_name }}'
     delegate_to: localhost
     register: vm_info
