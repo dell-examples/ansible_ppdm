@@ -73,4 +73,8 @@
   - name: display_result
     debug: 
       msg: "{{ result }}"
-    when: vm_info is not defined          
+    when: vm_info is not defined    
+  - name: Fail when VM already exists
+    fail: 
+      msg: VM '{{ vm_name }}' already deployed
+    when: vm_info is defined         
