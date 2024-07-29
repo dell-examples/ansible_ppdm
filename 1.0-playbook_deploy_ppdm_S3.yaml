@@ -27,17 +27,6 @@
     release: 19.16
     local_directory: /tmp    
   tasks:
-  - name: Check  '{{ vm_name }}' already exists
-    community.vmware.vmware_vm_info:
-      vm_name: '{{ vm_name }}'
-    delegate_to: localhost
-    register: vm_info
-  - debug:
-      msg: "{{ vm_info }}"
-      verbosity: 0
-    when: vm_info is defined  
-
-
   - name: load_image_from_s3
     amazon.aws.aws_s3:
       bucket: "{{ s3_bucket}}"
@@ -48,7 +37,6 @@
       endpoint_url: "{{ s3_host }}"
       access_key: "{{ access_key }}"      
       secret_key: "{{ secret_key }}"  
-    when: vm_info is not defined  
   - name: Deploy ovf
     vmware_deploy_ovf:
       allow_duplicates: no
@@ -69,12 +57,6 @@
         vami.fqdn.brs: '{{ fqdn }}' 
     delegate_to: localhost
     register: result
-    when: vm_info is not defined      
   - name: display_result
     debug: 
-      msg: "{{ result }}"
-    when: vm_info is not defined    
-  - name: Fail when VM already exists
-    fail: 
-      msg: VM '{{ vm_name }}' already deployed
-    when: vm_info is defined         
+      msg: "{{ result }}"    
