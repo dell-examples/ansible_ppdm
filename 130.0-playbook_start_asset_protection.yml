@@ -51,6 +51,6 @@
       name: start_adhoc_ppdm_protections
     vars: 
         assetIds: 
-          '{{ assets[0].id }}'
+          - '{{ assets[0].id }}'
         policy_id: '{{ assets[0].protectionPolicyId }}'
         objective_id: '{{ protection_policy.objectives[0].id }}'     
