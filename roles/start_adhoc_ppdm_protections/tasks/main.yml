@@ -1,0 +1,21 @@
+- name: Run PPDM Protection Policy
+  uri:
+    method: POST
+    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/protections"
+    body_format: json
+    body: 
+      source:
+        assetIds: '{{ assetIds }}'
+      policy:
+        id: '{{ policy_id }}'
+        objectives:
+          - id: '{{ objective_id }}'   
+    headers:
+      accept: application/json
+      authorization: "Bearer {{ access_token }}"    
+    status_code: 200,201,202
+    validate_certs: false
+  register: result  
+  when: not ansible_check_mode 
+- set_fact:
+    protection_policy_run: "{{ result.json }}"
