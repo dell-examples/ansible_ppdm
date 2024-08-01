@@ -5,6 +5,8 @@
   connection: local
   vars_files: 
     - ./vars/main.yml
+  vars:
+    full_output: false  
   tasks:
   - name: Setting Base URL
     set_fact: 
@@ -33,4 +35,4 @@
     debug: 
       msg: "{{ assets }}"
       verbosity: 0   
-    when: assets is defined and ( asset_id is defined or full_output is defined)
+    when: assets is defined and ( asset_id is defined or full_output == true )
