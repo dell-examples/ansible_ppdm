@@ -40,17 +40,17 @@
       msg: "{{ assets }}"
       verbosity: 0   
     when: assets is defined and full_output == 'true'
-  - name: Get Protection Policy for '{{ assets.id }}'  
+  - name: Get Protection Policy for '{{ assets[0].id }}'  
     include_role: 
       name: get_ppdm_protection_policy
     vars:
-      id:  "{{ assets.protectionPolicyId }}" 
+      id:  "{{ assets[0].protectionPolicyId }}" 
       ppdm_api_ver: /api/v3 
   - name: start AdHoc Protection
     include_role: 
       name: start_adhoc_ppdm_protections
     vars: 
         assetIds: 
-          '{{ assets.id }}'
-        policy_id: '{{ assets.protectionPolicyId }}'
+          '{{ assets[0].id }}'
+        policy_id: '{{ assets[0].protectionPolicyId }}'
         objective_id: '{{ protection_policy[0].objectives[0].id }}'     
