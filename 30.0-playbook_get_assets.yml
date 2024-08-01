@@ -35,4 +35,4 @@
     debug: 
       msg: "{{ assets }}"
       verbosity: 0   
-    when: assets is defined and ( asset_id is defined or full_output == true )
+    when: assets is defined and ( asset_id is defined or full_output == 'true' )
