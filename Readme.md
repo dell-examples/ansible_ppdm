@@ -52,7 +52,7 @@ privateKey  |  |"{{ lookup('env','PPDM_PRIVATE_KEY') }}"
 certificateChain  |  |"{{ lookup('env','PPDM_CERTIFICATE_CHAIN') }}"
 licenseKey  |  |"{{ lookup('env','PPDM_LICENSE_KEY') }}"
 ppdm_timeZone  |  |"{{ lookup('env','PPDM_TIMEZONE') }}"
-rbac_source  |  |"{{ lookup('env','PPDM_RBAC_SOURCE', default='https://raw.githubusercontent.com/bottkars/ppdm-rbac/19.16/' ) }}"
+rbac_source  |  |"{{ lookup('env','PPDM_RBAC_SOURCE', default='https://raw.githubusercontent.com/bottkars/ppdm-rbac/19.17/' ) }}"
 
 ### PPDM Configuration Playbooks ( 1.x - 10.x )
 

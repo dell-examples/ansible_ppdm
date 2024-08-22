@@ -11,7 +11,7 @@
     access_key: minioadmin
     secret_key: Password123!
     s3_container: powerprotect
-    release: 19.16
+    release: 19.17
     local_directory: /tmp
     package:  
   tasks:
