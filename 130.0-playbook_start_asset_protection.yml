@@ -26,7 +26,7 @@
     name: do we have a token ?  
   - name: Get PPDM Assets
     vars:
-      filter: "{{ asset_filter | default('') }}"
+      filter: "{{ asset_filter | regex_replace(\"'\", '\"') | default('') }}"
       id: "{{ asset_id | default('')}}"
     include_role: 
       name: get_ppdm_assets

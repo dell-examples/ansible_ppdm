@@ -46,7 +46,7 @@
 
   - name: Get PPDM Assets
     vars:
-      filter: "{{ asset_filter | default('') }}"
+      filter: "{{ asset_filter | regex_replace(\"'\", '\"') | default('') }}"
     include_role: 
       name: get_ppdm_assets
   - name: Assets Result
