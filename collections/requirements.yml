@@ -3,3 +3,4 @@ collections:
   - name: community.general
   - name: community.windows
   - name: community.aws
+  - name: kubernetes.core
