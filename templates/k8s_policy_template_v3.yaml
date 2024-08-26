@@ -1,0 +1,46 @@
+
+systemStateRecoveryOnly: False
+ignoreMissingSystemStateFiles: True
+excludeNonCriticalDynamicDisks: False
+ignoreThirdPartyServices: False
+indexingEnabled: False
+backupStartTime: '2024-05-23T20:00:00.000Z'
+backupDuration: "PT10H"
+# operationId: "{{ (1000 | random | to_uuid | upper) }}"
+debugEnabled: False
+data_template:
+  name: "{{ policy_name }}"
+  description: "{{ description }}"
+  assetType: KUBERNETES
+  purpose: CENTRALIZED
+  disabled: false
+  objectives:
+    - config:
+        dataConsistency: CRASH_CONSISTENT
+        forceFull: false
+        excludeFilterIds: []
+        connectionsDetails: []
+        protectionEngineFlow: VMDIRECT
+      id: "{{ 1000 | random | to_uuid }}"
+      type: BACKUP
+      target:
+        storageTargetId: null
+        preferredInterfaceId: "{{ preferredInterfaceId }}"
+        storageContainerId: "{{ storageSystemId }}"
+      operations:
+        - id: "{{ 1000 | random | to_uuid  }}"
+          backupLevel: SYNTHETIC_FULL
+          schedule:
+            recurrence:
+              pattern:
+                type: HOURLY
+                interval: 1
+            window:
+              startTime: "{{ backupStartTime }}"
+              duration: "{{ backupDuration }}"
+      retentions:
+        - id: "{{ 1000 | random | to_uuid  }}"
+          time:
+            - unitValue: 3
+              unitType: DAY
+              type: RETENTION_AND_LOCK
