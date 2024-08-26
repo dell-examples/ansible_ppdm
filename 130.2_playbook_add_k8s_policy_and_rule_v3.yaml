@@ -56,7 +56,7 @@
       vars:
         name: "{{ k8s_policy_name }}"
         ppdm_api_ver: /api/v3
-        description: "Demo VM Policy for Bob 2024"
+        description: "Demo K8s Policy for Bob 2024"
         debugEnabled: "false"
         storageSystemId: "{{ storagesystems[0].id }}"
         preferredInterfaceId: "{{ storagesystems[0].details.dataDomain.preferredInterfaces[0].networkName }}"
@@ -77,57 +77,6 @@
         filter: type eq "DATA_DOMAIN_SYSTEM" and details.dataDomain.preferredInterfaces.ipAddress eq "{{ ddve_fqdn }}"
       when: protection_policy.id is not defined
 
-    - name: Create New Protection Policy
-      vars:
-        new_protection_policy:
-          id:
-          name: "{{ k8s_policy_name }}"
-          description: "This is a GTO Demo Kubernetes Protection Policy"
-          assetType: KUBERNETES
-          type: ACTIVE
-          category: CENTRALIZED_PROTECTION
-          targetStorageProvisionStrategy: AUTO_PROVISION
-          enabled: true
-          passive: false
-          forceFull: false
-          priority: 1
-          credentials:
-          encrypted: false
-          dataConsistency: CRASH_CONSISTENT
-          complianceInterval:
-          details:
-          stages:
-            - id: "{{ 1000 | random | to_uuid | upper }}" #99227db6-8bfc-38e1-d333-f63d740d2880
-              type: PROTECTION
-              passive: false
-              retention:
-                interval: 3
-                unit: DAY
-                storageSystemRetentionLock: false
-              extendedRetentions:
-                - retention:
-                    interval: 3
-                    unit: DAY
-                    storageSystemRetentionLock: false
-                  selector:
-                    backupType: SYNTHETIC_FULL
-              target:
-                storageSystemId: "{{ storagesystems[0].id }}"
-                preferredInterfaceId: "{{ storagesystems[0].details.dataDomain.preferredInterfaces[0].networkName }}"
-              attributes:
-                protection: {}
-              operations:
-                - type: AUTO_FULL
-                  schedule:
-                    frequency: HOURLY
-                    startTime: "2022-01-24T19:00:00Z"
-                    duration: PT10H
-                    interval: 3
-                  backupType: SYNTHETIC_FULL
-          filterIds: []
-      include_role:
-        name: new_ppdm_protection_policy
-      when: protection_policy.id is not defined and (storagesystems[0] is defined)
 
     - debug:
         msg: "{{ protection_policy }}"
