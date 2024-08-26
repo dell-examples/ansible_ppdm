@@ -8,7 +8,7 @@ backupDuration: "PT10H"
 # operationId: "{{ (1000 | random | to_uuid | upper) }}"
 debugEnabled: False
 data_template:
-  name: "{{ policy_name }}"
+  name: "{{ name }}"
   description: "{{ description }}"
   assetType: KUBERNETES
   purpose: CENTRALIZED
