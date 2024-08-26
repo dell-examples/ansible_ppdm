@@ -19,7 +19,6 @@ data_template:
         forceFull: false
         excludeFilterIds: []
         connectionsDetails: []
-        protectionEngineFlow: VMDIRECT
       id: "{{ 1000 | random | to_uuid }}"
       type: BACKUP
       target:
