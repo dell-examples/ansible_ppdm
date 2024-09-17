@@ -1,7 +1,7 @@
 - name: Set PPDM ASSET Assignment
   uri:
     method: POST
-    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/protection-policies/{{ id }}/unasset-assignments"
+    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/protection-policies/{{ id }}/asset-unassignments"
     body_format: json 
     body: "{{ asset_list }}"
     headers:
