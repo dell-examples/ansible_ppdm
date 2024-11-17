@@ -8,6 +8,7 @@
   vars:
     s3_bucket: dps-products
     s3_host: http://ansible.demo.local:9000
+    endpoint_url: http://ansible.demo.local:9000
     access_key: minioadmin
     secret_key: Password123!
     s3_container: powerprotect
