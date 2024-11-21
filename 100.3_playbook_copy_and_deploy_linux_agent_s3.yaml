@@ -1,0 +1,166 @@
+# Example Playbok to deploy agents
+- name: Deploy App Agent
+  hosts: linux
+  vars:
+    agent_src: /tmp
+    s3_bucket: dps-products
+    s3_host: http://ansible.demo.local:9000
+    access_key: minioadmin
+    secret_key: Password123!
+    s3_container: powerprotect
+    release: 19.17
+    package:    
+  vars_files: 
+    - ./vars/main.yml
+    - ./vars/agents_vars.yaml
+    - "{{ agent_src }}/agents.yaml" 
+  tasks:
+  - name: Checking Required Variable ppdm_fqdn
+    fail: 
+      msg: "We do not have ppdm fqdn set !"
+    when: (ppdm_fqdn is not defined) or (ppdm_fqdn|length <= 8)   
+    delegate_to: localhost
+
+  - name: Create a directory if it does not exist
+    ansible.builtin.file:
+      path: "{{ agent_src }}"
+      state: directory
+      #mode: '0755'     
+    delegate_to: localhost
+
+
+  - name: Copy Latest Agent Version from S3
+    amazon.aws.aws_s3:
+      bucket: "{{ s3_bucket}}"
+      object: "{{ s3_container }}/{{ release }}/agents/agents.yaml"
+      dest: "{{ agent_src }}/agents.yaml" 
+      mode: get
+      encrypt: false
+      endpoint_url: "{{ s3_host }}"
+      access_key: "{{ access_key  }}"      
+      secret_key: "{{ secret_key }}"
+    when: not ansible_check_mode  
+    delegate_to: localhost  
+
+  - name: Include Agent Vars from S3
+    ansible.builtin.include_vars:
+      dir: "{{ agent_src }}"
+      files_matching: agents.yaml
+
+
+  - name: Create a directory if it does not exist
+    ansible.builtin.file:
+      path: "{{ agent_src }}/{{ app_agent | dirname }}"
+      state: directory
+      mode: '0755'     
+    delegate_to: localhost
+
+
+
+
+
+  - name: Copy Agents from S3
+    amazon.aws.aws_s3:
+      bucket: "{{ s3_bucket}}"
+      object: "{{ s3_container }}/{{ release }}/agents/{{ app_agent }}"
+      dest: "{{ agent_src }}/{{ app_agent }}"
+      mode: get
+      encrypt: false
+      endpoint_url: "{{ s3_host }}"
+      access_key: "{{ access_key }}"      
+      secret_key: "{{ secret_key }}"
+    when: not ansible_check_mode  
+    delegate_to: localhost
+         
+
+  # - name: Copy agent to {{ ansible_fqdn }}
+  #   ansible.builtin.copy:
+  #     src: "{{ agent_src }}/{{ app_agent }}"
+  #     dest: /tmp
+  # - name: Unzip Agents
+  #   ansible.builtin.unarchive:
+  #     src: "/tmp{{ app_agent | basename }}"
+  #     dest: /tmp
+  #   register: unzip  
+    
+  # - name: Find files in path based on regex pattern
+  #   ansible.windows.win_find:
+  #     paths: c:/swdist/ntx64, c:/swdist/win_x64
+  #     patterns: "*-{{ agent_release }}.exe"
+  #   register: find_file        
+  # - name: "Install with fsagent {{ find_file.files[0].path }} on {{ ansible_fqdn }}"
+  #   vars:
+  #     preferred_address: |-
+  #           {%- if by_ip is defined -%}     
+  #             {%- if ansible_interfaces[0].ipv4.address is defined -%}
+  #             {{ ansible_interfaces[0].ipv4.address }}
+  #             {%- else -%}
+  #             {{ ansible_interfaces[0].ipv4[0].address }}
+  #             {%- endif -%}
+  #           {%- else -%}
+  #           {{ ansible_fqdn }}   
+  #           {%- endif -%}
+  #   ansible.windows.win_package:
+  #     path: "{{ find_file.files[0].path }}"
+  #     product_id: "{{ app_agent_product_id }}"
+  #     arguments:
+  #     - /s
+  #     - PPDMHostName={{ ppdm_fqdn | regex_replace('^https://') }}
+  #     - EnableFirewallRules=1
+  #     - PreferredAddress={{ preferred_address }}
+  #     - EnableScriptRequests=1
+  #   when: app_agent == fs_agent_windows
+  # - name: "Install with msappagent {{ find_file.files[0].path }} on {{ ansible_fqdn }}"
+  #   vars:
+  #     preferred_address: |-
+  #           {%- if by_ip is defined -%}     
+  #             {%- if ansible_interfaces[0].ipv4.address is defined -%}
+  #             {{ ansible_interfaces[0].ipv4.address }}
+  #             {%- else -%}
+  #             {{ ansible_interfaces[0].ipv4[0].address }}
+  #             {%- endif -%}
+  #           {%- else -%}
+  #           {{ ansible_fqdn }}   
+  #           {%- endif -%}  
+  #   ansible.windows.win_package:
+  #     path: "{{ find_file.files[0].path }}"
+  #     product_id: "{{ app_agent_product_id | default('') }}"
+  #     arguments:
+  #     - /s
+  #     - PPDMHostname={{ ppdm_fqdn | regex_replace('^https://') }}
+  #     - EnableFirewallRules=1
+  #     - PreferredAddress={{ preferred_address }}
+  #     - EnableSSMS={{ enable_ssms | default(0) }}
+  #     - InstallPPDMAgentCheckBox=1
+  #     - EnableScriptRequests=1
+  #   when: "'databasehosts' in group_names"   
+  # - name: "Install with mexchangeagent {{ find_file.files[0].path }} on {{ ansible_fqdn }}"
+  #   vars:
+  #     preferred_address: |-
+  #           {%- if by_ip is defined -%}     
+  #             {%- if ansible_interfaces[0].ipv4.address is defined -%}
+  #             {{ ansible_interfaces[0].ipv4.address }}
+  #             {%- else -%}
+  #             {{ ansible_interfaces[0].ipv4[0].address }}
+  #             {%- endif -%}
+  #           {%- else -%}
+  #           {{ ansible_fqdn }}   
+  #           {%- endif -%}  
+  #   ansible.windows.win_package:
+  #     path: "{{ find_file.files[0].path }}"
+  #     product_id: "{{ app_agent_product_id | default('') }}"
+  #     arguments:
+  #     - /s
+  #     - PPDMHostname={{ ppdm_fqdn | regex_replace('^https://') }}
+  #     - EnableFirewallRules=1
+  #     - PreferredAddress={{ preferred_address }}
+  #     - EnableItemPoint={{ enable_itempoint | default(0) }}
+  #     - InstallPPDMAgentCheckBox=1
+  #     - EnableScriptRequests=1
+  #   when: "'exchangehosts' in group_names"
+  # - name: Set service startup mode to auto and ensure it is started 
+  #   ansible.windows.win_service:
+  #     name: AgentService
+  #     state: started
+  #     start_mode: delayed   
+
