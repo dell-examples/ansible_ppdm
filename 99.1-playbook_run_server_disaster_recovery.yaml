@@ -35,7 +35,7 @@
     vars:
       body: 
         credentialPassword: "Password123!!"
-        credentialUsername: "{{ server_disaster_recovery_configuration.username }}" 
+        credentialUsername: "{{ ppdm_fqdn }}" 
         id: "{{ server_disaster_recovery_configuration.id }}"
         repositoryFilesystem: "BOOST_FILE_SYSTEM"
         repositoryHost: "{{ server_disaster_recovery_configuration.repositoryHost }}"
