@@ -1,7 +1,7 @@
 - name: Get PPDM Configuration
   uri:
     method: GET
-    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/server_disaster_recovery_configurations"
+    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/server-disaster-recovery-configurations"
     body_format: json 
     headers:
       accept: application/json
