@@ -8,5 +8,5 @@ collections:
     version: ">=6.3.0"
   - name: kubernetes.core
     version: ">=2.4.0"
-
- 
+  - name: community.vmware
+    version: ">=4.1.0"
