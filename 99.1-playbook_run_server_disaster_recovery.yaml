@@ -27,7 +27,7 @@
   - debug:
       msg: "{{ server_disaster_recovery_confgurations }}"     
       verbosity: 0     
-    when: server_disaster_recovery_confgurations is defined                 
+    when: server_disaster_recovery_confguration is defined                 
 
   - name: get disaster recovery confgurations
     include_role:
@@ -42,6 +42,6 @@
         repositoryPath: ""
     when: server_disaster_recovery_confgurations is defined               
   - debug:
-      msg: "{{ query_server_disaster_recovery_confgurations }}"     
+      msg: "{{ query_server_disaster_recovery_confguration }}"     
       verbosity: 0     
-    when: query_server_disaster_recovery_confgurations is defined        
+    when: query_server_disaster_recovery_confguration is defined        
