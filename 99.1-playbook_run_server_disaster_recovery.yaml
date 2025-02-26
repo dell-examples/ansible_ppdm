@@ -31,7 +31,7 @@
 
   - name: get disaster recovery confgurations
     include_role:
-      name: query_ppdm_server_disaster_recovery_confgurations
+      name: query_ppdm_server_disaster_recovery_confguration
     vars:
       body: 
         credentialPassword: "Password123!!"
