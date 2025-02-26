@@ -29,4 +29,19 @@
       verbosity: 0     
     when: server_disaster_recovery_confgurations is defined                 
 
- 
+  - name: get disaster recovery confgurations
+    include_role:
+      name: query_ppdm_server_disaster_recovery_confgurations
+    vars:
+      body: 
+        credentialPassword: "Password123!!"
+        credentialUsername: "{{ server_disaster_recovery_confgurations.username }}" 
+        id: "{{ server_disaster_recovery_confgurations.id }}"
+        repositoryFilesystem: "BOOST_FILE_SYSTEM"
+        repositoryHost: "{{ server_disaster_recovery_confgurations.repositoryHost }}"
+        repositoryPath: ""
+    when: server_disaster_recovery_confgurations is defined               
+  - debug:
+      msg: "{{ query_server_disaster_recovery_confgurations }}"     
+      verbosity: 0     
+    when: query_server_disaster_recovery_confgurations is defined        
