@@ -1,0 +1,55 @@
+# Deploy PPDM OVA from S3
+- name: Deploy PPDM OVA from S3
+  hosts: localhost
+  gather_facts: no
+  connection: local
+  vars_files: 
+    - ./vars/main.yml
+  vars:
+    s3_bucket: dps-products
+    s3_host: http://ansible.demo.local:9000
+    endpoint_url: http://ansible.demo.local:9000
+    access_key: minioadmin
+    secret_key: Password123!
+    s3_container: powerprotect
+    release: 19.19
+    local_directory: /tmp
+    ppdm_ip: 192.168.1.53
+    ppdm_gateway: 192.168.1.2
+    ppdm_dns: 192.168.1.2
+    ppdm_fqdn: ppdm-2.demo.local
+    ppdm_netmask: 255.255.255.0
+    package: dellemc-ppdm-sw-19.19.0-1-20250225.044745-1269.ova
+  tasks:
+
+  - name: Get OVA from S3
+    amazon.aws.aws_s3:
+      bucket: "{{ s3_bucket}}"
+      object: "{{ s3_container }}/{{ release }}/{{ package }}"
+      dest: "{{ local_directory }}/{{ package }}"
+      mode: get
+      encrypt: false
+      endpoint_url: "{{ s3_host }}"
+      access_key: "{{ access_key }}"      
+      secret_key: "{{ secret_key }}"
+
+  - name: deploy PPDM OVA
+    community.vmware.vmware_deploy_ovf:
+    #  hostname: '{{ vcenter_hostname }}'
+    #  username: '{{ vcenter_username }}'
+    #  password: '{{ vcenter_password }}'
+      datacenter: democenter
+      cluster: cluster
+      datastore: nfs-datastore
+      name: "{{ ppdm_fqdn.split('.')[0] }}"
+      networks: "{u'VM Network':u'VLAN0 prod vm network'}"
+      power_on: false
+      inject_ovf_env: true
+      properties: 
+        vami.ip0.brs: "{{ ppdm_ip }}" 
+        vami.gateway.brs: "{{ ppdm_gateway }}"
+        vami.netmask0.brs: "{{ ppdm_netmask }}"
+        vami.DNS.brs:  "{{ ppdm_dns }}"
+        vami.fqdn.brs: "{{ ppdm_fqdn }}"
+      ovf: "{{ local_directory }}/{{ package }}" 
+    delegate_to: localhost
