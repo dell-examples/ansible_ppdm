@@ -25,7 +25,7 @@
     include_role:
       name: get_ppdm_server_disaster_recovery_confgurations
   - debug:
-      msg: "{{ server_disaster_recovery_confgurations }}"     
+      msg: "{{ server_disaster_recovery_configuration }}"     
       verbosity: 0     
     when: server_disaster_recovery_confguration is defined                 
 

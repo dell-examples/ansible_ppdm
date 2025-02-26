@@ -11,4 +11,4 @@
   register: result  
   when: not ansible_check_mode 
 - set_fact:
-    server_disaster_recovery_configuration: "{{ result.json }}"
+    server_disaster_recovery_configuration: "{{ result.json.content }}"
