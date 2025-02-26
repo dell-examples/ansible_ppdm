@@ -35,10 +35,10 @@
     vars:
       body: 
         credentialPassword: "Password123!!"
-        credentialUsername: "{{ server_disaster_recovery_confgurations.username }}" 
-        id: "{{ server_disaster_recovery_confgurations.id }}"
+        credentialUsername: "{{ server_disaster_recovery_confguration.username }}" 
+        id: "{{ server_disaster_recovery_confguration.id }}"
         repositoryFilesystem: "BOOST_FILE_SYSTEM"
-        repositoryHost: "{{ server_disaster_recovery_confgurations.repositoryHost }}"
+        repositoryHost: "{{ server_disaster_recovery_confguration.repositoryHost }}"
         repositoryPath: ""
     when: server_disaster_recovery_confgurations is defined               
   - debug:
