@@ -7,6 +7,7 @@
     - ./vars/main.yml
   vars:
       isoformat: '%Y-%m-%dT%H:%M:%S.%fZ'
+      sysdr_password: Password123!!! 
   tasks:
   - name: Setting Base URL
     set_fact: 
@@ -53,7 +54,7 @@
       name: query_ppdm_server_disaster_recovery_confgurations
     vars:
       body: 
-        credentialPassword: "Password123!!"
+        credentialPassword: "{{ sysdr_password }}"
         credentialUsername: "{{ ppdm_fqdn | regex_replace('^https://')}}" 
         id: "{{ server_disaster_recovery_configuration.id }}"
         repositoryFilesystem: "BOOST_FILE_SYSTEM"
