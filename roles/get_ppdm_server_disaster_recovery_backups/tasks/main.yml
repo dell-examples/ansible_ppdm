@@ -8,7 +8,7 @@
   when: id  | default('', false) | trim == ''
 - name: Rewrite uri with filter
   set_fact: 
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}&{{ query | string | urlencode }}" 
+    uri: "{{ uri }}?filter={{ filter | string | urlencode }}" #&{{ query | string | urlencode }}" 
   when: filter   
 - name: Get PPDM Server Disaster Recovery Backups with filter {{ filter }}
   uri:
@@ -16,10 +16,10 @@
     url: "{{ uri }}"
     body_format: json
     body:
-      query:  
+      full: FALSE  
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ access_token }}"   
     status_code: 200,500,503
     validate_certs: false
   register: result
