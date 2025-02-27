@@ -5,4 +5,4 @@ delay: 1
 retries: 1
 condition: result is defined
 filter: 
-query: full eq "FALSE"
+query: full="FALSE"
