@@ -45,6 +45,7 @@
       name: "{{ ppdm_fqdn.split('.')[0] }}"
       networks: "{u'VM Network':u'VLAN0 prod vm network'}"
       power_on: "{{ power_on }}"
+      wait_for_ip_address : "{{ power_on }}"      
       inject_ovf_env: true
       properties: 
         vami.ip0.brs: "{{ ppdm_ip }}" 
