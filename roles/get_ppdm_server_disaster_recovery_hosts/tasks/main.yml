@@ -1,0 +1,34 @@
+- name: Define uri with id
+  set_fact: 
+    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/server-disaster-recovery-hosts/{{ id }}"
+  when: id  | default('', true) | trim != ''
+- name: Define uri without id
+  set_fact: 
+    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/server-disaster-recovery-hosts"
+  when: id  | default('', false) | trim == ''
+- name: Rewrite uri with filter
+  set_fact: 
+    uri: "{{ uri }}?filter={{ filter | string | urlencode }}" 
+  when: filter   
+- name: Get PPDM Server Disaster Recovery Hosts with filter {{ filter }}
+  uri:
+    method: GET
+    url: "{{ uri }}"
+    body_format: json 
+    headers:
+      accept: application/json
+      authorization: "Bearer {{ access_token }}"    
+    status_code: 200,500,503
+    validate_certs: false
+  register: result
+  when: not ansible_check_mode 
+- set_fact:
+    sdr_hosts: "{{ result.json.content }}"
+  when: result.json.content[0].id is defined and result.status == 200  
+- set_fact:
+    sdr_hosts: "{{ result.json }}"
+  when: result.json is defined and result.status == 200 and id is defined   
+- debug:
+    msg: "{{ nodes }}"     
+    verbosity: 1     
+  when: nodes is defined  
