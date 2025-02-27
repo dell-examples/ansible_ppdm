@@ -61,4 +61,6 @@
   - debug:
       msg: "{{ nodes }}"     
       verbosity: 1     
-    when: nodes is defined                  
+    when: nodes is defined       
+    
+               
