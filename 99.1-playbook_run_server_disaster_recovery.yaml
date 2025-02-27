@@ -69,7 +69,7 @@
     include_role:
       name: get_ppdm_server_disaster_recovery_hosts
     vars:
-      filter: 'version eg "{{ nodes.version }}"'  
+      filter: 'version eq "{{ nodes.version }}"'  
     when: nodes.status == "PENDING"  
   - debug:
       msg: "{{ server_disaster_recovery_hosts }}"     
