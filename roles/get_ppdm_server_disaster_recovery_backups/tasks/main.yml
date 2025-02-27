@@ -16,7 +16,7 @@
     url: "{{ uri }}"
     body_format: json
     body:
-      full: FALSE  
+      full: TRUE  
     headers:
       accept: application/json
       authorization: "Bearer {{ access_token }}"   
