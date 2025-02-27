@@ -26,7 +26,7 @@
       name: get_ppdm_configuration 
   - debug:
       msg: "{{ configuration }}"
-      verbosity: 0
+      verbosity: 1
     when: configuration is defined
 
 
@@ -52,7 +52,7 @@
     when: server_disaster_recovery_configuration is defined               
   - debug:
       msg: "{{ query_server_disaster_recovery_configuration }}"     
-      verbosity: 0     
+      verbosity: 1     
     when: query_server_disaster_recovery_configuration is defined  
 
   - name: Get  Nodes from PPDM
@@ -60,5 +60,5 @@
       name: get_ppdm_nodes
   - debug:
       msg: "{{ nodes }}"     
-      verbosity: 0     
+      verbosity: 1     
     when: nodes is defined                  
