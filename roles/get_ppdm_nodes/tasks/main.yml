@@ -25,9 +25,9 @@
 - set_fact:
     nodes: "{{ result.json.content }}"
   when: result.json.content[0].id is defined and result.status == 200  
-#- set_fact:
-#    nodes: "{{ result.json }}"
-#  when: result.json.consumersCount is defined and result.status == 200    
+- set_fact:
+    nodes: "{{ result.json }}"
+  when: result.json is defined and result.status == 200 and id is defined   
 - debug:
     msg: "{{ nodes }}"     
     verbosity: 1     
