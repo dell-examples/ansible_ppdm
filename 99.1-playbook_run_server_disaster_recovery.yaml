@@ -21,6 +21,15 @@
       verbosity: 1
     name: do we have a token ?  
 
+  - name: Get PPDM Configuration 
+    include_role: 
+      name: get_ppdm_configuration 
+  - debug:
+      msg: "{{ configuration }}"
+      verbosity: 0
+    when: configuration is defined
+
+
   - name: get disaster recovery confgurations
     include_role:
       name: get_ppdm_server_disaster_recovery_confgurations
@@ -44,4 +53,12 @@
   - debug:
       msg: "{{ query_server_disaster_recovery_configuration }}"     
       verbosity: 0     
-    when: query_server_disaster_recovery_configuration is defined        
+    when: query_server_disaster_recovery_configuration is defined  
+
+  - name: Get  Nodes from PPDM
+    include_role:
+      name: get_ppdm_nodes
+  - debug:
+      msg: "{{ nodes }}"     
+      verbosity: 0     
+    when: nodes is defined                  
