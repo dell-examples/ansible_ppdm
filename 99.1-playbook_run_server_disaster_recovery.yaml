@@ -65,5 +65,14 @@
       verbosity: 0     
     when: query_server_disaster_recovery_configuration is defined  
 
-
+  - name: Get SDR Hosts
+    include_role:
+      name: get_ppdm_server_disaster_recovery_hosts
+    vars:
+      filter: 'version eg "{{ nodes.version }}"'  
+    when: nodes.status == "PENDING"  
+  - debug:
+      msg: "{{ server_disaster_recovery_configuration }}"     
+      verbosity: 0     
+    when: server_disaster_recovery_configuration is defined     
 
