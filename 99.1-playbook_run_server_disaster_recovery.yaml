@@ -29,6 +29,14 @@
       verbosity: 0
     when: configuration is defined
 
+  - name: Get  Nodes from PPDM
+    include_role:
+      name: get_ppdm_nodes
+    vars: "{{ configuration.content[0].nodeId }}"  
+  - debug:
+      msg: "{{ nodes }}"     
+      verbosity: 0     
+    when: nodes is defined       
 
   - name: get disaster recovery confgurations
     include_role:
@@ -55,11 +63,5 @@
       verbosity: 0     
     when: query_server_disaster_recovery_configuration is defined  
 
-  - name: Get  Nodes from PPDM
-    include_role:
-      name: get_ppdm_nodes
-  - debug:
-      msg: "{{ nodes }}"     
-      verbosity: 0     
-    when: nodes is defined       
+
 
