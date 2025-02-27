@@ -90,7 +90,7 @@
 
 
   - debug:
-      msg: "{{ server_disaster_recovery_backups  | json_query(jmesquery) }}"
+      msg: "{{ server_disaster_recovery_backups[]  | json_query(jmesquery) }}"
     vars:
       jmesquery: "[? backupConsitencyType=='FULL']"
       verbosity: 0 
