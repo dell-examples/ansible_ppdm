@@ -83,9 +83,9 @@
       filter: 'nodeId eq "{{ server_disaster_recovery_hosts[0].nodeId }}"'  
     when: server_disaster_recovery_hosts is defined     
   - debug:
-      msg: "{{ server_disaster_recovery_hosts }}"     
+      msg: "{{ server_disaster_recovery_backups }}"     
       verbosity: 0     
-    when: server_disaster_recovery_hosts is defined     
+    when: server_disaster_recovery_backups is defined     
 
 
 
