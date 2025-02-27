@@ -11,4 +11,4 @@ collections:
   - name: community.vmware
     version: ">=4.1.0"
   - name: community.general
-    version: ">=8.3.0"  
+    version: ">=9.2.0"  
