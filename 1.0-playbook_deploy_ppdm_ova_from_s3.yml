@@ -20,6 +20,7 @@
     ppdm_fqdn: ppdm-2.demo.local
     ppdm_netmask: 255.255.255.0
     package: dellemc-ppdm-sw-19.19.0-1-20250225.044745-1269.ova
+    power_on: false
   tasks:
 
   - name: Get OVA from S3
@@ -43,7 +44,7 @@
       datastore: nfs-datastore
       name: "{{ ppdm_fqdn.split('.')[0] }}"
       networks: "{u'VM Network':u'VLAN0 prod vm network'}"
-      power_on: false
+      power_on: "{{ power_on }}"
       inject_ovf_env: true
       properties: 
         vami.ip0.brs: "{{ ppdm_ip }}" 
