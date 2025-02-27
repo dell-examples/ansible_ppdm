@@ -92,5 +92,5 @@
   - debug:
       msg: "{{ server_disaster_recovery_backups  | json_query(jmesquery) }}"
     vars:
-      jmesquery: "[? backupConsistencyType=='FULL'] | [0]"
+      jmesquery: "[? backupConsistencyType=='FULL'] | [? components.version=='{{ nodes.version }}'[0]"
       verbosity: 0 
