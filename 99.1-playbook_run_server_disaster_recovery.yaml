@@ -32,7 +32,8 @@
   - name: Get  Nodes from PPDM
     include_role:
       name: get_ppdm_nodes
-    vars: "{{ configuration.content[0].nodeId }}"  
+    vars: 
+      id: "{{ configuration.content[0].nodeId }}"  
   - debug:
       msg: "{{ nodes }}"     
       verbosity: 0     
