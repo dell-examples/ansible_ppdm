@@ -23,12 +23,12 @@
   register: result
   when: not ansible_check_mode 
 - set_fact:
-    sdr_hosts: "{{ result.json.content }}"
+    server_disaster_recovery_hosts: "{{ result.json.content }}"
   when: result.json.content[0].id is defined and result.status == 200  
 - set_fact:
-    sdr_hosts: "{{ result.json }}"
+    server_disaster_recovery_hosts: "{{ result.json }}"
   when: result.json is defined and result.status == 200 and id is defined   
 - debug:
-    msg: "{{ nodes }}"     
+    msg: "{{ server_disaster_recovery_hosts }}"     
     verbosity: 1     
-  when: nodes is defined  
+  when: server_disaster_recovery_hosts is defined  

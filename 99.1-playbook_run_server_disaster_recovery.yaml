@@ -72,7 +72,7 @@
       filter: 'version eg "{{ nodes.version }}"'  
     when: nodes.status == "PENDING"  
   - debug:
-      msg: "{{ server_disaster_recovery_configuration }}"     
+      msg: "{{ server_disaster_recovery_hosts }}"     
       verbosity: 0     
-    when: server_disaster_recovery_configuration is defined     
+    when: server_disaster_recovery_hosts is defined     
 
