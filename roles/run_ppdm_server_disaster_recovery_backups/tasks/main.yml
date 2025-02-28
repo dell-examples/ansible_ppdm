@@ -1,0 +1,15 @@
+- name: Run PPDM Sysdr Restore
+  uri:
+    method: PUT
+    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/server-disaster-recovery-backups/"
+    body_format: json
+    body: "{{ server_disaster_recovery_backup }}" 
+    headers:
+      accept: application/json
+      authorization: "Bearer {{ access_token }}"    
+    status_code: 200,500
+    validate_certs: false
+  register: result  
+  when: not ansible_check_mode 
+- set_fact:
+    server_disaster_recovery_backup_result: "{{ result.json.content[0] }}"
