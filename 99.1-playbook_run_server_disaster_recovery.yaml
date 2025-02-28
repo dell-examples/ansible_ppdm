@@ -9,6 +9,7 @@
       isoformat: '%Y-%m-%dT%H:%M:%S.%fZ'
       new_password: Password123!!! 
       auto_approve: false 
+      repositoryHost: "{{ lookup('env','DDVE_PRIVATE_FQDN') }}"
   tasks:
   - name: Setting Base URL
     set_fact: 
@@ -59,7 +60,7 @@
         credentialUsername: "{{ ppdm_fqdn | regex_replace('^https://')}}" 
         id: "{{ server_disaster_recovery_configuration.id }}"
         repositoryFilesystem: "BOOST_FILE_SYSTEM"
-        repositoryHost: "{{ server_disaster_recovery_configuration.repositoryHost }}"
+        repositoryHost: "{{ repositoryHost }}"
         repositoryPath: ""
     when: server_disaster_recovery_configuration is defined               
   - debug:
