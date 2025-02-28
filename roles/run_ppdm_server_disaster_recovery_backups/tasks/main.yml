@@ -3,7 +3,7 @@
     method: PUT
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/server-disaster-recovery-backups/{{ server_disaster_recovery_backup.id }}"
     body_format: json
-    body: "{{ server_disaster_recovery_backup }}" 
+    body: "{{ server_disaster_recovery_backup | default([]) | combine({ 'recover': true }) }}" 
     headers:
       accept: application/json
       authorization: "Bearer {{ access_token }}"    
