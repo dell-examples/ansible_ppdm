@@ -109,4 +109,4 @@
   - debug:
       msg: "{{ server_disaster_recovery_backups_state }}"     
       verbosity: 0     
-    when: server_disaster_recovery_backups_state is defined 
+    when: server_disaster_recovery_backup_result is defined 
