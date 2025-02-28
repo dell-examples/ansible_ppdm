@@ -90,18 +90,22 @@
       verbosity: 0     
     when: server_disaster_recovery_backups is defined     
 
-  - debug:
-      msg: "{{ server_disaster_recovery_backups  | json_query(jmesquery) }}"
+  - set_fact:
+      SysDR: "{{ server_disaster_recovery_backups  | json_query(jmesquery) }}"
     vars:
       jmesquery: "[? backupConsistencyType=='FULL'] | [0]"
-      verbosity: 0 
+ 
+  - debug:
+      msg: "{{ SysDR }}"     
+      verbosity: 0     
+    when: SysDR is defined 
 
   - name: Run Server Disaster Recovery
     include_role:
       name: run_ppdm_server_disaster_recovery_backups
     vars:
-      filter: 'nodeId eq "{{ server_disaster_recovery_hosts[0].nodeId }}"'  
-    when: server_disaster_recovery_hosts is defined and auto_approve == true     
+     server_disaster_recovery_backup: "{{ SysDR }}" 
+    when: SysDR is defined and auto_approve == true     
   - debug:
       msg: "{{ server_disaster_recovery_backups_state }}"     
       verbosity: 0     
