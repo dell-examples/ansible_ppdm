@@ -1,0 +1,46 @@
+# Example Playbok to Add SQL Policy to PPDM
+- name: Add SQL Policy
+  hosts: localhost
+  gather_facts: no
+  connection: local
+  vars_files: 
+    - ./vars/main.yml 
+  tasks:
+  - name: Checking Required Variable ppdm_fqdn
+    fail: 
+      msg: "We do not have ppdm_fqdn set !"
+    when: (ppdm_fqdn is not defined) or (ppdm_fqdn|length <= 8)
+  - name: Checking Required Variables
+    fail: 
+      msg: "We do not have ppdm_new_password  set !"
+    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)  
+  - name: Checking Required Variable ddve_fqdn
+    fail: 
+      msg: "We do not have ddve_fqdn  set !"
+    when: (ddve_fqdn is not defined) or (ddve_fqdn|length == 0)  
+  - name: Setting Base URL
+    set_fact: 
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"   
+  - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
+    include_role: 
+      name: get_ppdm_token
+    vars: 
+      ppdm_password: "{{ ppdm_new_password }}"
+  - debug: 
+      msg: "{{ access_token }}"
+      verbosity: 1
+    name: do we have a token ?  
+
+  - name: Patch Protection Policy
+    vars:
+      name: "{{ policy_name }}"
+      ppdm_api_ver: /api/v3      
+      protection_policy_patch: "{{ protection_policy_patch }}"
+    include_role:
+      name: set_ppdm_protection_policy
+      
+  - debug: 
+      msg: "{{ protection_policy }}"
+      verbosity: 0
+    when: protection_policy is defined #and (protection_policy.id is not defined)
+

@@ -1,0 +1,17 @@
+
+- name: Set PPDM Protection Policy
+  uri:
+    method: PATCH
+    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/protection-policies/{{ protection_policy_patch.id }}"
+    body_format: json
+    body: "{{ protection_policy_patch }}"
+    headers:
+      accept: application/json
+      authorization: "Bearer {{ access_token }}"    
+    status_code: 200,201,202,403
+    validate_certs: false
+  register: result  
+  when: not ansible_check_mode 
+- set_fact:
+    protection_policy: "{{ result.json }}"
+  when: result.json is defined
