@@ -1,5 +1,5 @@
 # Example Playbok to Add SQL Policy to PPDM
-- name: Add SQL Policy
+- name: Patch Protection Policy
   hosts: localhost
   gather_facts: no
   connection: local
