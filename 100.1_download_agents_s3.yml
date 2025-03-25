@@ -79,6 +79,13 @@
       agent_destination: "{{ download_destination }}"
     include_role:
       name: download_agents
+  - name: Generic Agent Linux
+    vars:
+      agent_filename: "{{ generic_agent_linux }}"
+      agent_destination: "{{ download_destination }}"
+    include_role:
+      name: download_agents  
+    when: agent_ver >= 19.19      
   - name: Download Oracle Agents Linux
     vars:
       agent_filename: "{{ ora_agent_linux }}"

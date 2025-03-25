@@ -6,3 +6,4 @@ fs_agent_aixpower: "{{ agent_branch }}/Aix/FS/fsagent{{ agent_ver }}_aixpower.ta
 ora_agent_linux: "{{ agent_branch }}/Linux/Oracle/ddrman{{ agent_ver }}_linux_x86_64.tar"
 ora_agent_aix: "{{ agent_branch }}/Aix/Oracle/ddrman{{ agent_ver }}_aixpower.tar"
 dbapp_agent_linux: "{{ agent_branch }}/Linux/Dbapp/dbappagent{{ agent_ver }}_linux_x86_64.tar.gz" 
+generic_agent_linux: "{{ agent_branch }}/Linux/GenericApplicationAgent/genericapplicationagent{{ agent_ver }}_linux_x86_64.tar.gz" 
