@@ -11,7 +11,7 @@
   collections:
    - kubernetes.core     
   vars: 
-
+   - parallel_pvc_backup: false 	
   tasks:  
   - name: Checking Required Variable ppdm_fqdn
     fail: 
@@ -138,7 +138,10 @@
           configurations:
           - type: CONTROLLER_CONFIG
             key: k8s.ppdm.vspherecsi.use.fsagent
-            value: 'false'           
+            value: 'false'
+          - type: CONTROLLER_CONFIG
+            key: k8s.ppdm.enable.parallel.pvc.backup
+            value: "{{ parallel_pvc_backup }}"                       
     when: inventorysources is defined and vcenter_address is defined 
 
   - name: Setting CSI use fsagent
@@ -150,6 +153,9 @@
           - type: CONTROLLER_CONFIG
             key: k8s.ppdm.vspherecsi.use.fsagent
             value: 'true' 
+          - type: CONTROLLER_CONFIG
+            key: k8s.ppdm.enable.parallel.pvc.backup
+            value: "{{ parallel_pvc_backup }}"
     when: use_fsagent == true
 
 
