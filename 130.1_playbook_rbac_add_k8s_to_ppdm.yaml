@@ -141,11 +141,12 @@
     set_fact:
       details:
         k8s:
+          distributionType: NON_VSPHERE
           configurations:
           - type: CONTROLLER_CONFIG
             key: k8s.ppdm.vspherecsi.use.fsagent
             value: 'true' 
-    when: use_fsagent == "true" 
+    when: use_fsagent == true
 
 
 #          configurations:
@@ -153,7 +154,7 @@
 #            key: k8s.ppdm.vspherecsi.use.fsagent
 #            value: 'true'    
 
-  - name: Ensure K8S Cluster {{ k8s_fqdn }} in Inventory with vCenter Details ( CSI Drivers as a Process )
+  - name: Ensure K8S Cluster {{ k8s_fqdn }} in Inventory with Details ( CSI Drivers as a Process of fsagent )
     when: details is defined
     vars:
       data:
