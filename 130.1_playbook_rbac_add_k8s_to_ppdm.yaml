@@ -145,7 +145,7 @@
           - type: CONTROLLER_CONFIG
             key: k8s.ppdm.vspherecsi.use.fsagent
             value: 'true' 
-    when: vcenter_address not defined and use_fsagent == "true" 
+    when: use_fsagent == "true" 
 
 
 #          configurations:
