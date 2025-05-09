@@ -141,7 +141,7 @@
             value: 'false'
           - type: CONTROLLER_CONFIG
             key: k8s.ppdm.enable.parallel.pvc.backup
-            value: "{{ parallel_pvc_backup }}"                       
+            value: "{{ parallel_pvc_backup | string }}"                       
     when: inventorysources is defined and vcenter_address is defined 
 
   - name: Setting CSI use fsagent
