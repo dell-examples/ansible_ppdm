@@ -155,7 +155,7 @@
             value: 'true' 
           - type: CONTROLLER_CONFIG
             key: k8s.ppdm.enable.parallel.pvc.backup
-            value: "{{ parallel_pvc_backup }}"
+            value: "{{ parallel_pvc_backup | string }}"
     when: use_fsagent == true
 
 
