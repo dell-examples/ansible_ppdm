@@ -135,6 +135,10 @@
         k8s:
           distributionType: VANILLA_ON_VSPHERE
           vCenterId: "{{ inventorysources[0].id }}"
+          configurations:
+          - type: CONTROLLER_CONFIG
+            key: k8s.ppdm.vspherecsi.use.fsagent
+            value: 'true'
     when: inventorysources is defined and vcenter_address is defined 
 
   - name: Ensure K8S Cluster {{ k8s_fqdn }} in Inventory with vCenter Details ( CSI Drivers as a Process )
