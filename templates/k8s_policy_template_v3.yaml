@@ -12,8 +12,6 @@ data_template:
     - config:
         dataConsistency: CRASH_CONSISTENT
         forceFull: false
-        excludeFilterIds: []
-        connectionsDetails: []
       id: "{{ 1000 | random | to_uuid }}"
       type: BACKUP
       target:
