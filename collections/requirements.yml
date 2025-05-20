@@ -2,19 +2,13 @@
 collections:
   - name: community.general
     version: ">=7.4.0"
-    source: https://github.com/ansible-collections
   - name: community.windows
     version: ">=2.0.0"
-    source: https://github.com/ansible-collections
   - name: community.aws
     version: ">=6.3.0"
-    source: https://github.com/ansible-collections
   - name: kubernetes.core
     version: ">=2.4.0"
-    source: https://github.com/ansible-collections
   - name: community.vmware
     version: ">=4.1.0"
-    source: https://github.com/ansible-collections
   - name: community.general
     version: ">=9.2.0"
-    source: https://github.com/ansible-collections
