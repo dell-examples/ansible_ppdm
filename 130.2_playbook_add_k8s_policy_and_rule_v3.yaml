@@ -133,7 +133,43 @@
             id: 00000000-0000-4000-a000-000000000000
       include_role:
         name: new_ppdm_protection_rule
-      when: protection_policy.id is defined and protection_rule.id is not defined
+      when: protection_policy.id is defined and protection_rule.id is not defined and assetAttributeName == "userTags"
+    - name: Create New Protection Rule
+      vars:
+        new_protection_rule:
+          name: Kubernetes Namespace Name Rule {{ ppdm_rule }}
+          category: COMPOUND
+          rules:
+            - category: PRIMITIVE
+              conditions:
+                - assetAttributeName: "{{ assetAttributeName }}"
+                  operator: EQUALS
+                  assetAttributeValue: "{{ ppdm_rule }}"
+                  assetAttributeValues:
+                    - "{{ ppdm_rule }}"
+              conditionConnector: AND
+              logicalOperator: AND
+              inventorySourceType: KUBERNETES
+              priority: -1
+              tenant:
+                id: 00000000-0000-4000-a000-000000000000
+          action: MOVE_TO_GROUP
+          actionResult: "{{ protection_policy.id }}"
+          conditions:
+            - assetAttributeName: name
+              operator: BEGINS_WITH
+              assetAttributeValue: "{{ ppdm_rule }}"
+              assetAttributeValues:
+                - "{{ ppdm_rule }}"
+          conditionConnector: OR
+          logicalOperator: OR
+          inventorySourceType: KUBERNETES
+          priority: 1
+          tenant:
+            id: 00000000-0000-4000-a000-000000000000
+      include_role:
+        name: new_ppdm_protection_rule
+      when: protection_policy.id is defined and protection_rule.id is not defined and assetAttributeName == "name"      
     - debug:
         msg: "{{ protection_rule }}"
         verbosity: 0
