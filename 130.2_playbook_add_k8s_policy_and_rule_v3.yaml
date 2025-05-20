@@ -8,6 +8,7 @@
     - ./templates/k8s_policy_template_v3.yaml
   vars:
     k8s_policy_name: K8S_Protection 3hrs 3days
+    assetAttributeName: userTags
   tasks:
     - name: Checking Required Variable ppdm_fqdn
       fail:
@@ -105,7 +106,7 @@
           rules:
             - category: PRIMITIVE
               conditions:
-                - assetAttributeName: userTags
+                - assetAttributeName: "{{ assetAttributeName }}"
                   operator: EQUALS
                   assetAttributeValue: "{{ ppdm_rule }}"
                   assetAttributeValues:
