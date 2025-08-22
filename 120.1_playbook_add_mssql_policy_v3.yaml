@@ -9,7 +9,7 @@
   vars:  
     policy_name: "SQL_DEMO"
     app_credentials_name: 'demouser sql'
-    app_credentials_username: 'sql_service'
+    app_credentials_username: 'sql_service_local'
     app_credentials_password: 'Password123!'   
   tasks:
   - name: Checking Required Variable ppdm_fqdn
