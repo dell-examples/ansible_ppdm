@@ -54,7 +54,7 @@
           id: "{{ protection_policy[0].id }}"
           objectives:
           - id: "{{ protection_policy[0].objectives[0].id }}"
-            operations: 
+            operation: 
               backupLevel: FULL
     include_role:
       name: run_ppdm_protections
