@@ -8,9 +8,9 @@
     - ./templates/sql_policy_template_v3.yaml
   vars:  
     policy_name: "SQL_DEMO"
-    app_credentials_name: 'sql_service'
-    app_credentials_username: 'demouser sql'
-    app_credentials_password: 'Password123!'    
+    app_credentials_name: 'demouser sql'
+    app_credentials_username: 'sql_service'
+    app_credentials_password: 'Password123!'   
   tasks:
   - name: Checking Required Variable ppdm_fqdn
     fail: 
