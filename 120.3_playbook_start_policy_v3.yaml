@@ -50,14 +50,15 @@
   - name: Run Protection Policy
     vars:
       backup:
-        id: "{{ protection_policy[0].id }}"
-        objectives:
-        - id: "{{ protection_policy[0].objectives[0].id }}"
-          retention: 
-            interval: 3
-            unit: DAY
-          operations: 
-            backupLevel: FULL
+        policy:
+          id: "{{ protection_policy[0].id }}"
+          objectives:
+          - id: "{{ protection_policy[0].objectives[0].id }}"
+            retention: 
+              interval: 3
+              unit: DAY
+            operations: 
+              backupLevel: FULL
     include_role:
       name: run_ppdm_protections
     when: protection_policy[0].id is defined
