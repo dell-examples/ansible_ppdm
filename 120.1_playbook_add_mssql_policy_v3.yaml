@@ -38,11 +38,12 @@
     name: do we have a token ?  
   - name: Get Protection Policy with filter
     vars:
+      ppdm_api_ver: "/api/v3"    
       filter: 'name eq "{{ policy_name }}"'
     include_role:
       name: get_ppdm_protection_policy
   - set_fact:
-      ppdm_api_ver: "/api/v3"
+
       protection_policy: "{{ protection_policy[0] }}" 
     when: protection_policy[0] is defined
   - debug: 
