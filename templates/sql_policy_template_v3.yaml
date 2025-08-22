@@ -80,7 +80,7 @@ data_template:
           - credentialId: "{{ credentials_id }}"
             type: OS
       options:
-        debugEnabled: "{{ debugEnabled }}"
+        debugEnabled: "{{ debugEnabled | bool }}"
         excludeSystemDatabase: "{{  excludeSystemDatabase }}"
         autoPromote: "{{ autoPromote }}"
         skipUnprotectableState: "{{ skipUnprotectableState }}"
