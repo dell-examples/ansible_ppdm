@@ -1,0 +1,69 @@
+# Example Playbok to Start a Policy
+- name: Start Policy by name Query
+  hosts: localhost
+  gather_facts: no
+  connection: local
+  vars:  
+    policy_name: 
+    policy_type: # one of VMWARE_VIRTUAL_MACHINE,ORACLE_DATABASE,MICROSOFT_SQL_DATABASE,FILE_SYSTEM,KUBERNETES,MICROSOFT_EXCHANGE_DATABASE,SAP_HANA_DATABASE,NAS_SHARE,POWERSTORE_BLOCK
+  vars_files: 
+    - ./vars/main.yml
+  tasks:
+  - name: Checking Required Variable policy_type
+    fail: 
+      msg: "We do not have a policy_type set or policy_type not one of VMWARE_VIRTUAL_MACHINE,ORACLE_DATABASE,MICROSOFT_SQL_DATABASE,FILE_SYSTEM,KUBERNETES,MICROSOFT_EXCHANGE_DATABASE,SAP_HANA_DATABASE,NAS_SHARE,POWERSTORE_BLOCK!"
+    when: (policy_type is not defined) or (policy_type not in ("VMWARE_VIRTUAL_MACHINE","ORACLE_DATABASE","MICROSOFT_SQL_DATABASE","FILE_SYSTEM","KUBERNETES","MICROSOFT_EXCHANGE_DATABASE","SAP_HANA_DATABASE","NAS_SHARE","POWERSTORE_BLOCK"))  
+  - name: Checking Required Variable policy_name
+    fail: 
+      msg: "We do not have a policy_name set !"
+    when: (policy_name is not defined) or (policy_name|length == 0)
+  - name: Checking Required Variable ppdm_fqdn
+    fail: 
+      msg: "We do not have a ppdm_fqdn set !"
+    when: (ppdm_fqdn is not defined) or (ppdm_fqdn|length <= 8)
+  - name: Checking Required Variables
+    fail: 
+      msg: "We do not have ppdm_new_password  set !"
+    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)  
+  - name: Checking Required Variable ddve_fqdn
+    fail: 
+      msg: "We do not have ddve_fqdn  set !"
+    when: (ddve_fqdn is not defined) or (ddve_fqdn|length == 0)  
+  - name: Setting Base URL
+    set_fact: 
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"   
+  - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
+    include_role: 
+      name: get_ppdm_token
+    vars: 
+      ppdm_password: "{{ ppdm_new_password }}"
+  - debug: 
+      msg: "{{ access_token }}"
+      verbosity: 1
+    name: do we have a token ?  
+  - name: Get Protection Policy
+    include_role: 
+      name: get_ppdm_protection_policy
+    vars:
+      ppdm_api_ver: "/api/v3"    
+      filter: assetType eq "{{ policy_type }}" and name eq "{{ policy_name }}" 
+  - name: Run Protection Policy
+    vars:
+      ppdm_api_ver: "/api/v3"    
+      policy_id: "{{ protection_policy[0].id }}"
+      backup:
+        assetIds:
+        stages:
+        - id: "{{ protection_policy[0].stages[0].id }}"
+          retention: 
+            interval: 3
+            unit: DAY
+          operation: 
+            backupType: FULL
+    include_role:
+      name: run_ppdm_protection_policy
+    when: protection_policy[0].id is defined
+  - debug: 
+      msg: "{{ protection_policy_run }}"
+      verbosity: 0   
+
