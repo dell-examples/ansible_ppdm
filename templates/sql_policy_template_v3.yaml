@@ -81,7 +81,7 @@ data_template:
       options:
         debugEnabled: "{{ debugEnabled | bool }}"
         excludeSystemDatabase: "{{  excludeSystemDatabase | bool }}"
-        autoPromote: "{{ autoPromote }}"
-        skipUnprotectableState: "{{ skipUnprotectableState }}"
-        skipSimpleDatabase: "{{ skipSimpleDatabase }}"
+        autoPromote: "{{ autoPromote | bool }}"
+        skipUnprotectableState: "{{ skipUnprotectableState | bool}}"
+        skipSimpleDatabase: "{{ skipSimpleDatabase | bool }}"
         promotionType: "{{ promotionType }}"  
