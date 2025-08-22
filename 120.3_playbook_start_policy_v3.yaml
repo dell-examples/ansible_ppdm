@@ -54,9 +54,6 @@
           id: "{{ protection_policy[0].id }}"
           objectives:
           - id: "{{ protection_policy[0].objectives[0].id }}"
-            retention: 
-              interval: 3
-              unit: DAY
             operations: 
               backupLevel: FULL
     include_role:
