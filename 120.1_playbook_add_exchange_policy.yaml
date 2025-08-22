@@ -7,9 +7,9 @@
     - ./vars/main.yml
     - ./templates/exchange_policy_template.yaml
   vars:  
-    policy_name: "Exchange_Bob"
-    app_credentials_username: 'bob exchange demouser'
-    app_credentials_name: 'adfministrator@demo.local'
+    policy_name: "Exchange_DEMO"
+    app_credentials_name: 'exchange demouser'
+    app_credentials_username: 'administrator@demo.local'
     app_credentials_password: 'Password123!'    
   tasks:
   - name: Checking Required Variable ppdm_fqdn

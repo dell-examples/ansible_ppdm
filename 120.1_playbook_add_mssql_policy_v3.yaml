@@ -7,9 +7,9 @@
     - ./vars/main.yml
     - ./templates/sql_policy_template_v3.yaml
   vars:  
-    policy_name: "SQL_Bob"
-    app_credentials_username: 'sql_service_local'
-    app_credentials_name: 'bob demouser sql'
+    policy_name: "SQL_DEMO"
+    app_credentials_name: 'sql_service'
+    app_credentials_username: 'demouser sql'
     app_credentials_password: 'Password123!'    
   tasks:
   - name: Checking Required Variable ppdm_fqdn
@@ -42,6 +42,7 @@
     include_role:
       name: get_ppdm_protection_policy
   - set_fact:
+      ppdm_api_ver: "/api/v3"
       protection_policy: "{{ protection_policy[0] }}" 
     when: protection_policy[0] is defined
   - debug: 
