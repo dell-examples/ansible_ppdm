@@ -49,10 +49,8 @@
       filter: assetType eq "{{ policy_type }}" and name eq "{{ policy_name }}" 
   - name: Run Protection Policy
     vars:
-      ppdm_api_ver: "/api/v3"    
-      policy_id: "{{ protection_policy[0].id }}"
       backup:
-        assetIds:
+        id: "{{ protection_policy[0].id }}"
         objectives:
         - id: "{{ protection_policy[0].objectives[0].id }}"
           retention: 
@@ -61,7 +59,7 @@
           operations: 
             backupLevel: FULL
     include_role:
-      name: run_ppdm_protection_policy
+      name: run_ppdm_protections
     when: protection_policy[0].id is defined
   - debug: 
       msg: "{{ protection_policy_run }}"
