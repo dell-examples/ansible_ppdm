@@ -75,13 +75,12 @@ data_template:
       config:
         dataConsistency: "{{ dataConsistency }}"
         forceFull: false
-        excludeFilterIds: []
         connectionsDetails:
           - credentialId: "{{ credentials_id }}"
             type: OS
       options:
         debugEnabled: "{{ debugEnabled | bool }}"
-        excludeSystemDatabase: "{{  excludeSystemDatabase }}"
+        excludeSystemDatabase: "{{  excludeSystemDatabase | bool }}"
         autoPromote: "{{ autoPromote }}"
         skipUnprotectableState: "{{ skipUnprotectableState }}"
         skipSimpleDatabase: "{{ skipSimpleDatabase }}"
