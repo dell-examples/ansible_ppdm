@@ -26,7 +26,7 @@
       paths: c:/swdist/ntx64, c:/swdist/win_x64
       patterns: "*-{{ agent_release }}.exe"
     register: find_file        
-  - name: "Install with fsagent {{ find_file.files[0].path }} on {{ ansible_fqdn }}"
+  - name: "Install with fsagent {{ find_file.files[0].path }}"
     vars:
       preferred_address: |-
             {%- if by_ip is defined -%}     
@@ -48,7 +48,7 @@
       - PreferredAddress={{ preferred_address }}
       - EnableScriptRequests=1
     when: app_agent == fs_agent_windows
-  - name: "Install with msappagent {{ find_file.files[0].path }} on {{ ansible_fqdn }}"
+  - name: "Install with msappagent {{ find_file.files[0].path }}"
     vars:
       preferred_address: |-
             {%- if by_ip is defined -%}     
@@ -72,7 +72,7 @@
       - InstallPPDMAgentCheckBox=1
       - EnableScriptRequests=1
     when: "'databasehosts' in group_names"   
-  - name: "Install with mexchangeagent {{ find_file.files[0].path }} on {{ ansible_fqdn }}"
+  - name: "Install with mexchangeagent {{ find_file.files[0].path }}"
     vars:
       preferred_address: |-
             {%- if by_ip is defined -%}     
