@@ -53,13 +53,13 @@
       policy_id: "{{ protection_policy[0].id }}"
       backup:
         assetIds:
-        stages:
-        - id: "{{ protection_policy[0].stages[0].id }}"
+        objectives:
+        - id: "{{ protection_policy[0].objectives[0].id }}"
           retention: 
             interval: 3
             unit: DAY
-          operation: 
-            backupType: FULL
+          operations: 
+            backupLevel: FULL
     include_role:
       name: run_ppdm_protection_policy
     when: protection_policy[0].id is defined
