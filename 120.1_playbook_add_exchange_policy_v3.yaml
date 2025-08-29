@@ -1,5 +1,5 @@
-# Example Playbok to Add SQL Policy to PPDM
-- name: Add SQL Policy
+# Example Playbok to Add Exchange Policy to PPDM
+- name: Add Exchange Policy
   hosts: localhost
   gather_facts: no
   connection: local

@@ -51,7 +51,6 @@ data_template:
         forceFull: false
         excludeFilterIds: []
         backupMechanism: AUTO
-        connectionsDetails: []
       options:
         debugEnabled: "{{ debugEnabled }}"
         indexingEnabled: "{{ indexingEnabled }}"
