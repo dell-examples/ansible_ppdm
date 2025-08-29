@@ -1,5 +1,5 @@
 # Example Playbok to clear localhosts entires
-- name: Prepare hosts for App Agent via DNS by removing 17.0.0.1 and ::1 entries
+- name: Prepare hosts for App Agent via DNS by removing 127.0.0.1 and ::1 entries
   hosts: windows
   vars:
    agent_src: /tmp
@@ -13,7 +13,7 @@
       state: absent
       ip_address: '::1'
       
-  - name: Remove vmware-plugin on 172.0.0.1 
+  - name: Remove vmware-plugin on 127.0.0.1
     community.windows.win_hosts:
       canonical_name: vmware-plugin
       state: absent
@@ -24,7 +24,7 @@
       state: absent
       ip_address: '::1'
       
-  - name: Remove  172.0.0.1 
+  - name: Remove  127.0.0.1
     community.windows.win_hosts:
       state: absent
       ip_address: 127.0.0.1
