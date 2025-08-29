@@ -3,6 +3,8 @@ ignoreMissingSystemStateFiles: True
 excludeNonCriticalDynamicDisks: False
 ignoreThirdPartyServices: False
 indexingEnabled: False
+anomalyDetectionEnabled: False
+skipUnprotectableState: true
 backupStartTime: '2024-05-23T20:00:00.000Z'
 backupDuration: "PT10H"
 # operationId: "{{ (1000 | random | to_uuid | upper) }}"
@@ -52,9 +54,11 @@ data_template:
         excludeFilterIds: []
         backupMechanism: AUTO
       options:
-        debugEnabled: "{{ debugEnabled }}"
-        indexingEnabled: "{{ indexingEnabled }}"
-        systemStateRecoveryOnly: "{{ systemStateRecoveryOnly }}"
-        ignoreMissingSystemStateFiles: "{{ ignoreThirdPartyServices }}"
-        excludeNonCriticalDynamicDisks: "{{ excludeNonCriticalDynamicDisks }}"
-        ignoreThirdPartyServices: "{{ ignoreMissingSystemStateFiles }}"
+        debugEnabled: "{{ debugEnabled | bool }}"
+        indexingEnabled: "{{ indexingEnabled | bool }}"
+        systemStateRecoveryOnly: "{{ systemStateRecoveryOnly| bool }}"
+        ignoreMissingSystemStateFiles: "{{ ignoreMissingSystemStateFiles | bool }}"
+        excludeNonCriticalDynamicDisks: "{{ excludeNonCriticalDynamicDisks | bool }}"
+        ignoreThirdPartyServices: "{{ ignoreThirdPartyServices | bool }}"
+        anomalyDetectionEnabled: "{{ anomalyDetectionEnabled | bool }}"
+        skipUnprotectableState: "{{ skipUnprotectableState | bool }}"
