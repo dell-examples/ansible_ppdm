@@ -48,8 +48,6 @@ data_template:
       config:
         dataConsistency: "{{ dataConsistency }}"
         forceFull: "{{ forceFull }}"
-        excludeFilterIds: []
-        connectionsDetails: []
       options:
         debugEnabled: "{{ debugEnabled}}"
         consistencyCheck: "{{ consistencyCheck}}"
