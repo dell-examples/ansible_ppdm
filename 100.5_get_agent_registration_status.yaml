@@ -36,7 +36,7 @@
     include_role:
       name: get_ppdm_agent_registration_status
     vars:
-      filter: "{{ filter | default('') }} }}"  
+      filter: "{{ filter | default('') }}"  
 
   - name: Agent Registration Brief Result
     debug: 
