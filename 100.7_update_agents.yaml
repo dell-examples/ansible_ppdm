@@ -48,14 +48,13 @@
 
   - name: Extract agent IDs and application types
     set_fact:
-      extracted_agents: >-
-        {{
-          agent_registration_status | map(attribute='agent') | map(attribute='id') | list |
-          zip(
-            agent_registration_status | map(attribute='applications') |
-            map('map', attribute='type') | list
-          ) | map('combine', [id, appServerTypes]) | list
-        }}
+      extracted_agents: []
+
+  - name: Build list of agent IDs and application types
+    set_fact:
+      extracted_agents: "{{ extracted_agents + [ { 'id': item.agent.id, 'appServerTypes': item.applications | map(attribute='type') | list } ] }}"
+    loop: "{{ agent_registration_status }}"
+
 
   - name: Assets Result Extract
     debug: 
