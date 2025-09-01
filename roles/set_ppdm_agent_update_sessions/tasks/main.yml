@@ -3,7 +3,11 @@
     method: POST
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/agent-update-sessions"
     body_format: json 
-    body: "{{ update_hosts }}"
+    body: 
+      hosts: "{{ update_hosts }}"
+      precheckOnly: "{{ precheckOnly }}"
+      scheduledAt: "{{ scheduledAt }}"
+      name: "{{ name }}"
     headers:
       accept: application/json
       authorization: "Bearer {{ access_token }}"    

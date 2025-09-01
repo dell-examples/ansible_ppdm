@@ -1,3 +1,6 @@
 ppdm_api_ver: /api/v2
 ppdm_username: admin
 ppdm_port: 8443
+precheckOnly: true
+scheduledAt: null
+name: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters+digits') }}"

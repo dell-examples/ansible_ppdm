@@ -61,3 +61,11 @@
       msg: "{{ extracted_agents }}"
       verbosity: 0   
     when: extracted_agents is defined
+
+  - name: Update Agents from extracted List
+    include_role:
+      name: set_ppdm_agent_update_sessions
+    vars:
+      update_hosts: "{{ extracted_agents }}"
+    when:
+     - extracted_agents is defined       
