@@ -45,4 +45,20 @@
     when: agent_registration_status is defined
 
 
-     
+
+  - name: Extract agent IDs and application types
+    set_fact:
+      extracted_agents: >-
+        {{
+          agent_data | map(attribute='agent') | map(attribute='id') | list |
+          zip(
+            agent_data | map(attribute='applications') |
+            map('map', attribute='type') | list
+          ) | map('combine', ['id', 'appServerTypes']) | list
+        }}
+
+  - name: Assets Result
+    debug: 
+      msg: "{{ extracted_agents }}"
+      verbosity: 0   
+    when: extracted_agents is defined
