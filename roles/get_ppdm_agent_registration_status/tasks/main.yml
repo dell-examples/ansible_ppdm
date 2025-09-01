@@ -9,7 +9,7 @@
 - name: Rewrite uri with filter
   set_fact: 
     uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
-  when: filter  | default('', true) | trim != ''
+  when: (filter | default('') | trim) != ''
 
 - name: Get PPDM Agent registration Status with status {{ condition }}
   uri:
