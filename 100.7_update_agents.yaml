@@ -50,14 +50,14 @@
     set_fact:
       extracted_agents: >-
         {{
-          agent_data | map(attribute='agent') | map(attribute='id') | list |
+          agent_registration_status | map(attribute='agent') | map(attribute='id') | list |
           zip(
-            agent_data | map(attribute='applications') |
+            agent_registration_status | map(attribute='applications') |
             map('map', attribute='type') | list
           ) | map('combine', ['id', 'appServerTypes']) | list
         }}
 
-  - name: Assets Result
+  - name: Assets Result Extract
     debug: 
       msg: "{{ extracted_agents }}"
       verbosity: 0   
