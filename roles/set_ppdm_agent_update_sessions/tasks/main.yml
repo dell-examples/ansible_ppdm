@@ -1,0 +1,15 @@
+- name: Set PPDM ASSET Assignment
+  uri:
+    method: POST
+    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/agent-update-sessions"
+    body_format: json 
+    body: "{{ update_hosts }}"
+    headers:
+      accept: application/json
+      authorization: "Bearer {{ access_token }}"    
+    status_code: 200,201,202,204,500
+    validate_certs: false
+  register: result  
+  when: not ansible_check_mode 
+- set_fact:
+    asset_unassignments: "{{ result }}"
