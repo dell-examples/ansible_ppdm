@@ -54,7 +54,7 @@
           zip(
             agent_registration_status | map(attribute='applications') |
             map('map', attribute='type') | list
-          ) | map('combine', ['id', 'appServerTypes']) | list
+          ) | map('combine', [id, appServerTypes]) | list
         }}
 
   - name: Assets Result Extract
