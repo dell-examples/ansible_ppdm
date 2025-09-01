@@ -1,7 +1,7 @@
 - name: Set PPDM ASSET Assignment
   uri:
     method: POST
-    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/agent-update-sessions"
+    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/agents-update-sessions"
     body_format: json 
     body: 
       hosts: "{{ update_hosts }}"
