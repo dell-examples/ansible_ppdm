@@ -52,7 +52,7 @@
 
   - name: Build list of agent IDs and application types
     set_fact:
-      extracted_agents: "{{ extracted_agents + [ { 'id': item.agent.id, 'privileged': item.agent.userDetail.privileged,'appServerTypes': item.applications | map(attribute='type') | list } ] }}"
+      extracted_agents: "{{ extracted_agents + [ { 'id': item.agent.hostId, 'privileged': item.agent.userDetail.privileged,'appServerTypes': item.applications | map(attribute='type') | list } ] }}"
     loop: "{{ agent_registration_status }}"
 
 

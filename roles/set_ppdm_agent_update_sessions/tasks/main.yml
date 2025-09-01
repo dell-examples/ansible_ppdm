@@ -1,4 +1,4 @@
-- name: Set PPDM ASSET Assignment
+- name: Set Agent Update Session
   uri:
     method: POST
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/agents-update-sessions"
