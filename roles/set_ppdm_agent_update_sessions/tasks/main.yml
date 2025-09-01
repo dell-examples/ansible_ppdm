@@ -6,7 +6,7 @@
     body: 
       hosts: "{{ update_hosts }}"
       precheckOnly: "{{ precheckOnly }}"
-#      scheduledAt: "{{ scheduledAt }}"
+      scheduledAt: "{{ scheduledAt }}"
       name: "{{ name }}"
     headers:
       accept: application/json
