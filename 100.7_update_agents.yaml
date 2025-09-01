@@ -67,5 +67,6 @@
       name: set_ppdm_agent_update_sessions
     vars:
       update_hosts: "{{ extracted_agents }}"
+      precheckOnly: "{{ precheckOnly | bool }}"
     when:
      - extracted_agents is defined       
