@@ -78,16 +78,20 @@
       verbosity: 0   
     when: agent_update is defined
 
-  - name: get agents update status
-    include_role:
-      name: get_ppdm_agents_update_sessions
-    vars:
-      id: "{{ agent_update.id }}"  
+  - name: Wait until agent update session is completed
+    block:
+      - name: Get agents update status
+        include_role:
+          name: get_ppdm_agents_update_sessions
+        vars:
+          id: "{{ agent_update.id }}"
+      
+      - name: Check if update session is completed
+        set_fact:
+          update_completed: "{{ agents_update_sessions.state == 'COMPLETED' }}"
+    register: update_check
+    until: update_check.results[1].ansible_facts.update_completed
+    retries: 10
+    delay: 30
 
-
-  - name: update sessions results
-    debug: 
-      msg: "{{ agents_update_sessions }}"
-      verbosity: 0   
-    when: agents_update_sessions is defined
 
