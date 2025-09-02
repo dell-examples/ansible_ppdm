@@ -80,19 +80,19 @@
 
   - name: Wait until agent update session is completed
     vars:
-      update_completed: false
-    until: update_completed
+      update_state: ""
+    until: update_state == "COMPLETED"
     retries: 10
     delay: 30
-    block:
+    tasks:
       - name: Get agents update status
         include_role:
           name: get_ppdm_agents_update_sessions
         vars:
           id: "{{ agent_update.id }}"
 
-      - name: Check if update session is completed
+      - name: Set update state
         set_fact:
-          update_completed: "{{ agents_update_sessions.state == 'COMPLETED' }}"
+          update_state: "{{ agents_update_sessions.state }}"
 
 
