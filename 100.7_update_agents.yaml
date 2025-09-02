@@ -90,3 +90,21 @@
       verbosity: 0   
     when: agents_update_sessions is defined
 
+
+  - name: Override agent_registration_status
+    set_fact:
+      agent_registration_status: null
+
+  - name: get agent registration status
+    include_role:
+      name: get_ppdm_agent_registration_status
+    vars:
+      filter: "{{ myfilter | default('') }}"  
+
+  - name: Agent Registration Brief Result
+    debug: 
+      msg: "{{ agent_registration_status | json_query('[*].{hostname: hostname,address: agent.address, hostId: hostId,os: os,status: status }') }}"
+      verbosity: 0   
+    when: 
+     - agent_registration_status is defined
+     - agent_registration_status  is not none
