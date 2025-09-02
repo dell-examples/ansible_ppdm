@@ -78,21 +78,15 @@
       verbosity: 0   
     when: agent_update is defined
 
-  - name: Wait until agent update session is completed
+  - name: wait agents update status
+    include_role:
+      name: wait_ppdm_agents_update_sessions
     vars:
-      update_state: ""
-    until: update_state == "COMPLETED"
-    retries: 10
-    delay: 30
-    tasks:
-      - name: Get agents update status
-        include_role:
-          name: get_ppdm_agents_update_sessions
-        vars:
-          id: "{{ agent_update.id }}"
+      id: "{{ agent_update.id }}"  
 
-      - name: Set update state
-        set_fact:
-          update_state: "{{ agents_update_sessions.state }}"
-
+  - name: update sessions results
+    debug: 
+      msg: "{{ agents_update_sessions }}"
+      verbosity: 0   
+    when: agents_update_sessions is defined
 
