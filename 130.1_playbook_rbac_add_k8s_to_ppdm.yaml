@@ -144,15 +144,12 @@
             value: "{{ parallel_pvc_backup | string | lower }}"                       
     when: inventorysources is defined and vcenter_address is defined 
 
-  - name: Setting CSI use fsagent
+  - name: Setting CSI not use fsagent
     set_fact:
       details:
         k8s:
           distributionType: NON_VSPHERE
           configurations:
-          - type: CONTROLLER_CONFIG
-            key: k8s.ppdm.vspherecsi.use.fsagent
-            value: 'true' 
           - type: CONTROLLER_CONFIG
             key: k8s.ppdm.enable.parallel.pvc.backup
             value: "{{ parallel_pvc_backup | string | lower }}"
