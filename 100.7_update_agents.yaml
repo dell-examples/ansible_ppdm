@@ -69,4 +69,25 @@
       update_hosts: "{{ extracted_agents }}"
       precheckOnly: "{{ precheckOnly | bool }}"
     when:
-     - extracted_agents is defined       
+     - extracted_agents is defined    
+
+
+  - name: Set Update Result
+    debug: 
+      msg: "{{ agent_update }}"
+      verbosity: 0   
+    when: agent_update is defined
+
+  - name: get agents update status
+    include_role:
+      name: get_ppdm_agents_update_sessions
+    vars:
+      id: "{{ agent_update.id }}"  
+
+
+  - name: update sessions results
+    debug: 
+      msg: "{{ agents_update_sessions }}"
+      verbosity: 0   
+    when: agents_update_sessions is defined
+
