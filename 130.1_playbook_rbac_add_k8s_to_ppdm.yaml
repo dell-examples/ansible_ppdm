@@ -154,7 +154,7 @@
             key: k8s.ppdm.enable.parallel.pvc.backup
             value: "{{ parallel_pvc_backup | string | lower }}"
     when: 
-     - vcenter_address not defined 
+     - vcenter_address is not defined 
 
 
 #          configurations:
