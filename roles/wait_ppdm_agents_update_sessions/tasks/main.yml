@@ -1,0 +1,40 @@
+- name: Define uri with agents-agents-update-sessions ID
+  set_fact: 
+    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/agents-update-sessions/{{ id }}"
+  when: id  | default('', true) | trim != ''
+- name: Define uri without agents-update-sessions id
+  set_fact: 
+    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/agents-update-sessions"
+  when: id  | default('', false) | trim == ''
+- name: Rewrite uri with filter
+  set_fact: 
+    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
+  when: filter  | default('', true) | trim != ''
+
+- name: Get PPDM agents-update-sessions
+  uri:
+    method: GET
+    url: "{{ uri }}"
+    body_format: json 
+    headers:
+      accept: application/json
+      authorization: "Bearer {{ access_token }}"    
+    status_code: 200,500
+    validate_certs: false
+  register: result  
+  when: 
+    - not ansible_check_mode 
+    - id is defined
+  until: result.json is defined and result.json.state == "COMPLETED"
+  retries: "{{ retry }}"
+  delay: "{{ wait }}"    
+- debug:
+    msg: "{{ result.json }}"
+    verbosity: 1
+- set_fact:
+    agents_update_sessions: "{{ result.json }}"
+  when: id  | default('', true) | trim != '' and result.json is defined     
+- debug:
+    msg: "{{ agents_update_sessions }}"
+    verbosity: 1   
+
