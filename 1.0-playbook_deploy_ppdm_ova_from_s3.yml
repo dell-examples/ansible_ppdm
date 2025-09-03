@@ -39,6 +39,7 @@
     #  hostname: '{{ vcenter_hostname }}'
     #  username: '{{ vcenter_username }}'
     #  password: '{{ vcenter_password }}'
+      allow_duplicates: no
       datacenter: democenter
       cluster: cluster
       datastore: nfs-datastore
