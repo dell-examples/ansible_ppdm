@@ -21,6 +21,7 @@
     ppdm_netmask: 255.255.255.0
     package: dellemc-ppdm-sw-19.19.0-1-20250225.044745-1269.ova
     power_on: false
+    datacenter: democenter
   tasks:
 
   - name: Get OVA from S3
@@ -40,7 +41,7 @@
     #  username: '{{ vcenter_username }}'
     #  password: '{{ vcenter_password }}'
       allow_duplicates: no
-      datacenter: democenter
+      datacenter: "{{ datacenter }}"
       cluster: cluster
       datastore: nfs-datastore
       name: "{{ ppdm_fqdn.split('.')[0] }}"
