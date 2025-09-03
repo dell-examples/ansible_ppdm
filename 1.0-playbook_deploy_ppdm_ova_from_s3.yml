@@ -42,7 +42,8 @@
     #  password: '{{ vcenter_password }}'
       allow_duplicates: no
       datacenter: "{{ datacenter }}"
-      cluster: cluster
+      cluster: "{{ cluster_name | default(omit) if target != '-- Please Select --' else omit }}"
+      esxi_hostname: "{{ esxi_hostname | default(omit) if target != '-- Please Select --' else omit }}"
       datastore: nfs-datastore
       name: "{{ ppdm_fqdn.split('.')[0] }}"
       networks: "{u'VM Network':u'VLAN0 prod vm network'}"
