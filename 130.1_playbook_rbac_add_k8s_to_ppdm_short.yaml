@@ -61,11 +61,7 @@
       service_account: ppdm-discovery-serviceaccount
       namespace: powerpotect
       duration: 600  # seconds (10 minutes)
-    register: token_info
-
-    - name: Show token
-      debug:
-        msg: "Token: {{ token_info.api_key }}"
+    register: token
 
 #        apiVersion: v1
 #        kind: Secret
@@ -76,7 +72,6 @@
 #              kubernetes.io/service-account.name: ppdm-discovery-serviceaccount
 #        type: kubernetes.io/service-account-token
         
-    register: token
     retries: "4"
     delay: "2"
     until: token.token_info.api_key is defined
