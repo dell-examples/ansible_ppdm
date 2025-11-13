@@ -46,11 +46,9 @@
       verify_ssl: no
       state: present
       src: "{{ rbac_source }}/ppdm-discovery.yaml"
-  - name: apply ppdm-discovery-serviceaccount-token
 
   - name: Call TokenRequest API
     kubernetes.core.k8s:
-      kubeconfig: ~/.kube/config
       state: present
       definition:
         apiVersion: authentication.k8s.io/v1
