@@ -47,14 +47,6 @@
       state: present
       src: "{{ rbac_source }}/ppdm-discovery.yaml"
   - name: apply ppdm-discovery-serviceaccount-token
-  # we will run this at least 2 Times as the .data.token is not in the result output on 1st
-  # apply
-    kubernetes.core.k8s:
-      verify_ssl: no
-      state: present      
-      definition:
-
-
     kubernetes.core.k8s_auth:
       state: present
       verify_ssl: no
