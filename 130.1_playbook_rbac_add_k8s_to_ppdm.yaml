@@ -137,6 +137,9 @@
           vCenterId: "{{ inventorysources[0].id }}"
           configurations:
           - type: CONTROLLER_CONFIG
+            key: k8s.docker.registry
+            value: quay.io/delldps               
+          - type: CONTROLLER_CONFIG
             key: k8s.ppdm.vspherecsi.use.fsagent
             value: 'true'
           - type: CONTROLLER_CONFIG
@@ -153,6 +156,9 @@
           - type: CONTROLLER_CONFIG
             key: k8s.ppdm.enable.parallel.pvc.backup
             value: "{{ parallel_pvc_backup | string | lower }}"
+          - type: CONTROLLER_CONFIG
+            key: k8s.docker.registry
+            value: quay.io/delldps     
     when: 
      - vcenter_address is not defined 
 
