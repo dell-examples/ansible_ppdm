@@ -47,33 +47,31 @@
       state: present
       src: "{{ rbac_source }}/ppdm-discovery.yaml"
   - name: apply ppdm-discovery-serviceaccount-token
-    kubernetes.core.k8s_auth:
-      host: "{{ api_status.connection.host }}"
-      state: present
-      verify_ssl: no
-      service_account: ppdm-discovery-serviceaccount
-      namespace: powerpotect
-      duration: 600  # seconds (10 minutes)
-    register: token
 
-#        apiVersion: v1
-#        kind: Secret
-#        metadata:
-#            name: ppdm-discovery-serviceaccount-token
-#            namespace: powerprotect
-#            annotations:
-#              kubernetes.io/service-account.name: ppdm-discovery-serviceaccount
-#        type: kubernetes.io/service-account-token
-        
+  - name: Call TokenRequest API
+    kubernetes.core.k8s:
+      kubeconfig: ~/.kube/config
+      state: present
+      definition:
+        apiVersion: authentication.k8s.io/v1
+        kind: TokenRequest
+        metadata:
+          name: ppdm-discovery-serviceaccount-token
+          namespace: powerpotect
+        spec:
+          expirationSeconds: 600
+          audiences:
+            - https://kubernetes.default.svc
+    register: token_response       
     retries: "4"
     delay: "2"
-    until: token.token_info.api_key is defined
+    until: token_response.result.status.token is defined
   - debug: 
-      msg: "{{ token.token_info.api_key}}"
+      msg: "{{token_response.result.status.token}}"
       verbosity: 1
   - name: register token
     ansible.builtin.set_fact:
-      k8s_token: "{{ token.token_info.api_key }}"     
+      k8s_token: "{{ token_response.result.status.token }}"     
   - debug: 
       msg: "{{ k8s_fqdn }} {{ k8s_name }} {{ k8s_port }}"
       verbosity: 1
