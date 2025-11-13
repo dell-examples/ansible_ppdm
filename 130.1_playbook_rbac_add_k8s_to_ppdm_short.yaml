@@ -48,6 +48,7 @@
       src: "{{ rbac_source }}/ppdm-discovery.yaml"
   - name: apply ppdm-discovery-serviceaccount-token
     kubernetes.core.k8s_auth:
+      host: "{{ api_status.connection.host }}"
       state: present
       verify_ssl: no
       service_account: ppdm-discovery-serviceaccount
