@@ -1,0 +1,217 @@
+# This example Playbook adds a Kubernetes Cluster to PPDM
+# Kubernetes Information will be read from k8s core cluster_info module
+# it is expected that Environment Variables are set for core K8S Modules
+# e.g. export K8S_AUTH_KUBECONFIG= 
+- name: Add K8S to PPDM
+  hosts: localhost
+  gather_facts: no
+  connection: local
+  vars_files: 
+    - ./vars/main.yml
+  collections:
+   - kubernetes.core     
+  vars: 
+   - parallel_pvc_backup: false 	
+  tasks:  
+  - name: Checking Required Variable ppdm_fqdn
+    fail: 
+      msg: "We do not have ppdm_fqdn set !"
+    when: (ppdm_fqdn is not defined) or (ppdm_fqdn|length <= 8)
+  - name: Checking Required Variables
+    fail: 
+      msg: "We do not have ppdm_new_password  set !"
+    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)  
+  - name: Setting Base URL
+    ansible.builtin.set_fact: 
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"   
+  - name: Get Cluster information
+    kubernetes.core.k8s_cluster_info:
+#      verify_ssl: no
+    register: api_status
+  - debug: 
+      msg: "Connected to {{ api_status.connection.host }}"
+      verbosity: 0
+  - name: Setting Connection Parameters from api api_status
+    set_fact: 
+      k8s_fqdn: "{{ api_status.connection.host | regex_replace('^https://') | regex_replace('\\:\\d+') }}" 
+      k8s_port: "{{ api_status.connection.host.split(':').2 | default('443')}}"
+      k8s_name: "{{ api_status.connection.host.split('.').1 }}"
+  - name: apply PPDM RBAC from {{ rbac_source }}
+    k8s:
+      verify_ssl: no
+      state: present
+      src: "{{ rbac_source }}/ppdm-controller-rbac.yaml"    
+  - name: apply PPDM discovery from {{ rbac_source }}
+    k8s:
+      verify_ssl: no
+      state: present
+      src: "{{ rbac_source }}/ppdm-discovery.yaml"
+  - name: apply ppdm-discovery-serviceaccount-token
+  # we will run this at least 2 Times as the .data.token is not in the result output on 1st
+  # apply
+    kubernetes.core.k8s:
+      verify_ssl: no
+      state: present      
+      definition:
+ 
+        apiVersion: authentication.k8s.io/v1
+        kind: TokenRequest
+        metadata:
+          name: ppdm-discovery-serviceaccount-token
+          namespace: powerpotect
+          annotations:
+            kubernetes.io/service-account.name: ppdm-discovery-serviceaccount
+        spec:
+          audiences:
+            - https://kubernetes.default.svc
+          expirationSeconds: 3600  # 
+     
+#        apiVersion: v1
+#        kind: Secret
+#        metadata:
+#            name: ppdm-discovery-serviceaccount-token
+#            namespace: powerprotect
+#            annotations:
+#              kubernetes.io/service-account.name: ppdm-discovery-serviceaccount
+#        type: kubernetes.io/service-account-token
+        
+    register: token
+    retries: "4"
+    delay: "2"
+    until: token.result.data.token is defined
+  - debug: 
+      msg: "{{ token.result.data.token | b64decode }}"
+      verbosity: 1
+  - name: register token
+    ansible.builtin.set_fact:
+      k8s_token: "{{ token.result.data.token | b64decode }}"     
+  - debug: 
+      msg: "{{ k8s_fqdn }} {{ k8s_name }} {{ k8s_port }}"
+      verbosity: 1
+  - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
+    include_role: 
+      name: get_ppdm_token
+    vars: 
+      ppdm_password: "{{ ppdm_new_password }}"
+  - debug: 
+      msg: "{{ access_token }}"
+      verbosity: 1
+    name: do we have a token ?  
+ # - name: enable Kubernetes Asset Source
+ #   include_role: 
+ #     name: set_ppdm_asset_setting
+ #   vars: 
+ #     data:
+ #       id: ASSET_SETTING
+ #       properties:
+ #       - name: enabledAssetTypes
+ #         type: LIST
+#        value: KUBERNETES
+  - name: Get Kubernetes Host Certificate for {{ k8s_fqdn }}
+    include_role:
+      name: get_ppdm_host_certificate  
+    vars:  
+      host: "{{ k8s_fqdn }}"
+      port: "{{ k8s_port }}"
+  - name: Accept K8S Host Certificate
+    include_role:
+      name: accept_ppdm_host_certificate  
+    vars: 
+      old_certificate: "{{ certificate }}"  
+  - name: "Ensure K8S Credentials ppdm-discovery-{{ k8s_fqdn }}"
+    vars:
+      data:
+        method: "TOKEN" 
+        name: "ppdm-discovery-{{ k8s_fqdn }}"
+        type: "KUBERNETES"        
+        password: "{{ k8s_token }}"
+        username: "ppdm-discovery-{{ k8s_fqdn }}"
+    include_role:
+      name: create_ppdm_credentials  
+
+  - name: "Get PPDM inventory-sources for {{ vcenter_address }}"
+    include_role: 
+      name: get_ppdm_inventory-sources
+    vars:
+      filter: 'address eq "{{ vcenter_address }}" and type eq "VCENTER"'
+    when: vcenter_address is defined
+
+  - name: inventorysources Result summary
+    debug: 
+      msg: "{{ inventorysources | json_query('[0].{name: name,id: id,type: type}') }}"
+      verbosity: 0   
+    when: inventorysources is defined
+
+  - name: Setting vCenter Details
+    set_fact:
+      details:
+        k8s:
+          distributionType: VANILLA_ON_VSPHERE
+          vCenterId: "{{ inventorysources[0].id }}"
+          configurations:
+          - type: CONTROLLER_CONFIG
+            key: k8s.docker.registry
+            value: quay.io/delldps               
+          - type: CONTROLLER_CONFIG
+            key: k8s.ppdm.vspherecsi.use.fsagent
+            value: 'true'
+          - type: CONTROLLER_CONFIG
+            key: k8s.ppdm.enable.parallel.pvc.backup
+            value: "{{ parallel_pvc_backup | string | lower }}"                       
+    when: inventorysources is defined and vcenter_address is defined 
+
+  - name: Setting CSI not use fsagent
+    set_fact:
+      details:
+        k8s:
+          distributionType: NON_VSPHERE
+          configurations:
+          - type: CONTROLLER_CONFIG
+            key: k8s.ppdm.enable.parallel.pvc.backup
+            value: "{{ parallel_pvc_backup | string | lower }}"
+          - type: CONTROLLER_CONFIG
+            key: k8s.docker.registry
+            value: quay.io/delldps     
+    when: 
+     - vcenter_address is not defined 
+
+
+#          configurations:
+#          - type: CONTROLLER_CONFIG
+#            key: k8s.ppdm.vspherecsi.use.fsagent
+#            value: 'true'    
+
+  - name: Ensure K8S Cluster {{ k8s_fqdn }} in Inventory with Details ( CSI Drivers as a Process of fsagent )
+    when: details is defined
+    vars:
+      data:
+        name: "{{ k8s_fqdn }}"
+        type: KUBERNETES
+        vendor: KUBERNETES
+        address: "{{ k8s_fqdn }}"
+        port: "{{ k8s_port | int }}"
+        details: "{{ details }}"
+        credentials: 
+            id: "{{ credentials.id }}"
+      retries: 2
+      delay: 30      
+    include_role:
+      name: add_ppdm_inventory
+  - name: Ensure K8S Cluster {{ k8s_fqdn }} in Inventory without Details
+    when: details is not defined
+    vars:
+      data:
+        name: "{{ k8s_fqdn }}"
+        type: KUBERNETES
+        vendor: KUBERNETES
+        address: "{{ k8s_fqdn }}"
+        port: "{{ k8s_port | int }}"
+        credentials: 
+            id: "{{ credentials.id }}"
+      retries: 2
+      delay: 30      
+    include_role:
+      name: add_ppdm_inventory      
+  - debug: 
+      msg: "{{ inventory }}"
+      verbosity: 0       
