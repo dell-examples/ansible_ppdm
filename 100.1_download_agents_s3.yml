@@ -48,10 +48,10 @@
       agent_build: "{{semver_list[4]}}"     
     set_fact:
       agents:
-        agent_ver: "{{ agent_major }}{{ agent_minor }}{{ agent_service }}"
+        agent_ver: "{{ agent_major }}{{ agent_minor }}{{ agent_service }}{{ agent_patch }}"
         agent_branch: "{{ agent_major }}.{{ agent_minor }}.{{ agent_service }}.{{ agent_patch }}-{{agent_build}}"
         agent_release: "{{ agent_major }}.{{ agent_minor }}.{{ agent_service }}.{{ agent_patch }}"
-      agent_ver: "{{ agent_major }}{{ agent_minor }}{{ agent_service }}"
+      agent_ver: "{{ agent_major }}{{ agent_minor }}{{ agent_service }}{{ agent_patch }}"
       agent_branch: "{{ agent_major }}.{{ agent_minor }}.{{ agent_service }}.{{ agent_patch }}-{{agent_build}}"
       agent_release: "{{ agent_major }}.{{ agent_minor }}.{{ agent_service }}.{{ agent_patch }}"
       release: "{{ agent_major }}.{{ agent_minor }}.{{ agent_service }}.{{ agent_patch }}"    
