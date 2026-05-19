@@ -110,6 +110,15 @@
       secret_key: "{{ secret_key }}"
 
 
+  - name: Check if prefix {{ s3_container }} exists
+    amazon.aws.aws_s3:
+      bucket: "{{ s3_bucket}}"
+      mode: list
+      prefix:  "{{ s3_container }}"
+      access_key: "{{ access_key }}"
+      secret_key: "{{ secret_key }}"      
+    register: s3_prefix_check
+
 
   - name: Debug result
     debug:
