@@ -114,6 +114,7 @@
     amazon.aws.aws_s3:
       bucket: "{{ s3_bucket}}"
       mode: list
+      endpoint_url: "{{ s3_host }}"      
       prefix: "{{ s3_container }}"
       access_key: "{{ access_key }}"
       secret_key: "{{ secret_key }}"      
