@@ -109,7 +109,20 @@
       access_key: "{{ access_key }}"
       secret_key: "{{ secret_key }}"
 
-  - name: "create {{ s3_container }}}"
+
+
+  - name: Debug result
+    debug:
+      msg: "Prefix {{ s3_container }} exists"
+    when: s3_prefix_check.s3_keys | length > 0
+
+  - name: Debug not exists
+    debug:
+      msg: "Prefix does NOT exist"
+    when: s3_prefix_check.s3_keys | length == 0
+
+
+  - name: "create {{ s3_container }}"
     amazon.aws.aws_s3:
       bucket: "{{ s3_bucket}}"
       object: "{{ s3_container }}"
@@ -118,6 +131,8 @@
       endpoint_url: "{{ s3_host }}"
       access_key: "{{ access_key }}"      
       secret_key: "{{ secret_key }}"
+    when: s3_prefix_check.s3_keys | length == 0
+
 
   - name: Sync Agents to S3
     community.aws.s3_sync:
