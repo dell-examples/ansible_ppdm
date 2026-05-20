@@ -4,11 +4,13 @@
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}/ppdm/vm-flr-agents"
     body_format: json
     return_content: true
+    follow_redirects: true
     headers:
       connection_encoding: br
       content_type: application/json
       accept: "application/json, text/plain, */*"
-      authorization: "Bearer {{ access_token }}" 
+      # authorization: "Bearer {{ access_token }}" 
+      Cookie: "{{ login.cookies_string }}"
     status_code: 200,500
     validate_certs: false
   register: result  
