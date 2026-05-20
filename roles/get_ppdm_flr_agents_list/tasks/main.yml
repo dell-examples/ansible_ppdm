@@ -10,7 +10,7 @@
       content_type: application/json
       accept: "application/json, text/plain, */*"
       # authorization: "Bearer {{ access_token }}" 
-      Cookie: "{{ login.cookies_string }}"
+      Cookie: "_csfr={{ login.cookies_string }}"
     status_code: 200,500
     validate_certs: false
   register: result  
