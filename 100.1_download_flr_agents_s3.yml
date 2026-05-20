@@ -34,6 +34,7 @@
       body: "username=admin&password={{ ppdm_new_password }}"
       status_code: 200
       follow_redirects: true
+      validate_certs: false
     register: login       
 #  - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
 #    include_role: 
