@@ -1,0 +1,3 @@
+flr_agent_deb: "vm-flr-agents/linux/emc-vProxy-FLRAgent-20.1.0.1-10_1.x86_64.deb"
+lsr_agent_rpm: "vm-flr-agents/linux/emc-vProxy-FLRAgent-20.1.0.1-10_1.x86_64.rpm"
+flr_agent_windows: "vm-flr-agents/linux/emc-vProxy-FLRAgent-20.1.0.1-10_1.x86_64.deb"

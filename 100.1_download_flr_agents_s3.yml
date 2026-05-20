@@ -1,0 +1,156 @@
+# Example Playbok to deploy agentzs
+- name: Download Agents from PPDM
+  hosts: localhost
+  gather_facts: no
+  connection: local
+  vars_files: 
+    - ./vars/main.yml
+    - ./vars/agents_vars.yaml
+    - ./vars/flr_agents_vars.yaml
+  vars: 
+    download_destination: /tmp
+    s3_bucket: dps-products
+    s3_host: http://ansible.demo.local:9000
+    access_key: minioadmin
+    secret_key: Password123!
+    s3_container: powerprotect 
+  tasks:
+  - name: Checking Required Variable ppdm_fqdn
+    fail: 
+      msg: "We do not have ppdm fqdn set !"
+    when: (ppdm_fqdn is not defined) or (ppdm_fqdn|length <= 8)
+  - name: Checking Required Variable ppdm_new_password
+    fail: 
+      msg: "We do not have ppdm_new_password  set !"
+    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)  
+ 
+  - name: Setting Base URL
+    set_fact: 
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"   
+  - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
+    include_role: 
+      name: get_ppdm_token
+    vars: 
+      ppdm_password: "{{ ppdm_new_password }}"
+  - debug: 
+      msg: "{{ access_token }}"
+      verbosity: 1
+    name: do we have a token ?  
+  - name: get current agents list from PPDM Server
+    include_role:
+      name: get_ppdm_flr_agents_list
+  - name: Setting Agent Vars 
+    vars: 
+      semver_list: "{{ flr_agents_list[0] | regex_search('([0-9]{1,2}).([0-9]{1,2}).([0-9]{1,2}).([0-9]{1,2})--(\\d+(?:_\\d+)?)\\.', '\\1', '\\2', '\\3' ,'\\4', '\\5')}}"
+      flr_agent_major: "{{semver_list[0]}}"
+      flr_agent_minor: "{{semver_list[1]}}"
+      flr_agent_service: "{{semver_list[2]}}"
+      flr_agent_patch: "{{semver_list[3]}}"
+      flr_agent_build: "{{semver_list[4]}}"     
+    set_fact:
+      flr_agents:
+        ver: "{{ flr_agent_major }}{{ flr_agent_minor }}{{ flr_agent_service }}{{ flr_agent_patch }}"
+        branch: "{{ flr_agent_major }}.{{ flr_agent_minor }}.{{ flr_agent_service }}.{{ flr_agent_patch }}-{{ flr_agent_build}}"
+        release: "{{ flr_agent_major }}.{{ flr_agent_minor }}.{{ flr_agent_service }}.{{ flr_agent_patch }}"
+      flr_agent_ver: "{{ flr_agent_major }}{{ flr_agent_minor }}{{ flr_agent_service }}{{ flr_agent_patch }}"
+      flr_agent_branch: "{{ flr_agent_major }}.{{ flr_agent_minor }}.{{ flr_agent_service }}.{{ flr_agent_patch }}-{{ flr_agent_build}}"
+      flr_agent_release: "{{ flr_agent_major }}.{{ flr_agent_minor }}.{{ flr_agent_service }}.{{ flr_agent_patch }}"
+      release: "{{ flr_agent_major }}.{{ flr_agent_minor }}.{{ flr_agent_service }}.{{ flr_agent_patch }}"    
+  - local_action: 
+      module: copy 
+      content: "{{ flr_agents }}"
+      dest: "{{ download_destination }}/flr-agents-{{ flr_agents.branch }}.yaml"
+  - local_action: 
+      module: copy 
+      content: "{{ agents }}"
+      dest: "{{ download_destination }}/flr-agents.yaml"      
+#  - name: Download FS Agents Windows
+#    vars:
+#      flr_agent_filename: "{{ fs_agent_windows }}"
+#      flr_agent_destination: "{{ download_destination }}"
+#    include_role:
+#      name: download_flr_agents
+
+  - name: Setting S3Bucket
+    amazon.aws.s3_bucket:
+      state: present
+      name: "{{ s3_bucket}}"
+      endpoint_url: "{{ s3_host }}"
+      versioning: false
+      access_key: "{{ access_key }}"
+      secret_key: "{{ secret_key }}"
+
+
+  - name: Check if prefix {{ s3_container }} exists
+    amazon.aws.aws_s3:
+      bucket: "{{ s3_bucket}}"
+      mode: list
+      endpoint_url: "{{ s3_host }}"      
+      prefix: "{{ s3_container }}"
+      access_key: "{{ access_key }}"
+      secret_key: "{{ secret_key }}"      
+    register: s3_prefix_check
+
+
+  - name: Debug result
+    debug:
+      msg: "Prefix {{ s3_container }} exists"
+    when: s3_prefix_check.s3_keys | length > 0
+
+  - name: Debug not exists
+    debug:
+      msg: "Prefix does NOT exist"
+    when: s3_prefix_check.s3_keys | length == 0
+
+
+  - name: "create {{ s3_container }}"
+    amazon.aws.aws_s3:
+      bucket: "{{ s3_bucket}}"
+      object: "{{ s3_container }}"
+      mode: create
+      encrypt: false
+      endpoint_url: "{{ s3_host }}"
+      access_key: "{{ access_key }}"      
+      secret_key: "{{ secret_key }}"
+    when: s3_prefix_check.s3_keys | length == 0
+
+
+  - name: Sync Agents to S3
+    community.aws.s3_sync:
+      bucket: "{{ s3_bucket }}"
+      key_prefix: "{{ s3_container }}/{{ release }}/flr-agents/{{ flr_agent_branch }}/"
+      file_root: "{{ download_destination }}/{{ flr_agent_branch }}"
+      endpoint_url: "{{ s3_host }}"
+      access_key: "{{ access_key }}"      
+      secret_key: "{{ secret_key }}"
+    when: not ansible_check_mode  
+
+  - name: Copy Agent Version to S3
+    amazon.aws.aws_s3:
+      bucket: "{{ s3_bucket}}"
+      object: "{{ s3_container }}/{{ release }}/flr-agents/flr-agents-{{ flr_agents.branch }}.yaml"
+      src: "{{ download_destination }}/flr-agents-{{ flr_agents.branch }}.yaml" 
+      mode: put
+      encrypt: false
+      endpoint_url: "{{ s3_host }}"
+      access_key: "{{ access_key }}"      
+      secret_key: "{{ secret_key }}"
+    when: not ansible_check_mode  
+    delegate_to: localhost
+  - name: Copy Latest Agent Version to S3
+    amazon.aws.aws_s3:
+      bucket: "{{ s3_bucket}}"
+      object: "{{ s3_container }}/{{ release }}/flr-agents/flr-agents.yaml"
+      src: "{{ download_destination }}/flr-agents.yaml" 
+      mode: put
+      encrypt: false
+      endpoint_url: "{{ s3_host }}"
+      access_key: "{{ access_key }}"      
+      secret_key: "{{ secret_key }}"
+    when: not ansible_check_mode  
+    delegate_to: localhost         
+
+
+          
+
+     

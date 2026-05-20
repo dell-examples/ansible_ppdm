@@ -1,0 +1,19 @@
+- name: Get PPDM Agents List
+  uri:
+    method: GET
+    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}/vm-flr-agent"
+    body_format: raw
+    return_content: true
+    headers:
+      content_type: application/json
+      accept: "application/json, text/plain, */*"
+      authorization: "Bearer {{ access_token }}" 
+    status_code: 200,500
+    validate_certs: false
+  register: result  
+- set_fact:
+    flr_agents_list: "{{ result.content }}"
+- debug:
+    msg: "{{ flr_agents_list }}"
+    verbosity: 0    
+
