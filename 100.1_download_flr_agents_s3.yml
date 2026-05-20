@@ -26,14 +26,22 @@
  
   - name: Setting Base URL
     set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"   
-  - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
-    include_role: 
-      name: get_ppdm_token
-    vars: 
-      ppdm_password: "{{ ppdm_new_password }}"
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"  
+  - name: Login to the PPDM
+    uri:
+      url: "{{ ppdm_baseurl }}/#/login"
+      method: POST
+      body: "username=admin&password={{ ppdm_new_password }}"
+      status_code: 200
+      follow_redirects: true
+    register: login       
+#  - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
+#    include_role: 
+#      name: get_ppdm_token
+#    vars: 
+#      ppdm_password: "{{ ppdm_new_password }}"
   - debug: 
-      msg: "{{ access_token }}"
+      msg: "{{ login }}"
       verbosity: 1
     name: do we have a token ?  
   - name: get current flr agents list from PPDM Server
