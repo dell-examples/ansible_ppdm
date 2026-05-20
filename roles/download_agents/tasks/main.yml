@@ -4,7 +4,7 @@
     state: directory
 - name: "Download Agent {{ agent_filename }}" 
   get_url:
-    url: "{{ ppdm_baseurl }}/vm-flr-agent-download?filename={{ agent_filename }}" 
+    url: "{{ ppdm_baseurl }}/agent-download?filename={{ agent_filename }}" 
     headers:
       authorization: "Bearer {{ access_token }}"  
     dest: "{{ agent_destination }}/{{ agent_filename | dirname }}"  
