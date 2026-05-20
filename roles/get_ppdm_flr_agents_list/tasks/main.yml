@@ -1,13 +1,15 @@
-- name: Get PPDM Agents List
+- name: Get PPDM FLR Agents List
   uri:
     method: GET
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}/ppdm/vm-flr-agents"
+    url_username: admin
+    url_password: "Password123!"
     body_format: raw
     return_content: true
     headers:
       content_type: application/json
       accept: "application/json, text/plain, */*"
-      authorization: "Bearer {{ access_token }}" 
+#      authorization: "Bearer {{ access_token }}" 
     status_code: 200,500
     validate_certs: false
   register: result  
