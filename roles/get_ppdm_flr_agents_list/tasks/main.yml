@@ -1,7 +1,7 @@
 - name: Get PPDM Agents List
   uri:
     method: GET
-    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}/vm-flr-agents"
+    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}/ppdm/vm-flr-agents"
     body_format: raw
     return_content: true
     headers:
