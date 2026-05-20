@@ -2,7 +2,7 @@
   uri:
     method: GET
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}/ppdm/vm-flr-agents"
-    body_format: raw
+    body_format: json
     return_content: true
     headers:
       content_type: application/json

@@ -36,9 +36,9 @@
       msg: "{{ access_token }}"
       verbosity: 1
     name: do we have a token ?  
-  - name: get current agents list from PPDM Server
+  - name: get current flr agents list from PPDM Server
     include_role:
-      name: get_ppdm_agents_list
+      name: get_ppdm_flr_agents_list
   - name: Setting Agent Vars 
     vars: 
       semver_list: "{{ flr_agents_list[0] | regex_search('([0-9]{1,2}).([0-9]{1,2}).([0-9]{1,2}).([0-9]{1,2})--(\\d+(?:_\\d+)?)\\.', '\\1', '\\2', '\\3' ,'\\4', '\\5')}}"
