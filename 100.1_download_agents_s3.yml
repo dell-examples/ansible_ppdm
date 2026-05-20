@@ -74,7 +74,14 @@
       agent_filename: "{{ fs_agent_linux }}"
       agent_destination: "{{ download_destination }}"
     include_role:
-      name: download_agents      
+      name: download_agents     
+  - name: Download FS Agents AIX
+    vars:
+      agent_filename: "{{ fs_agent_aixpower }}"
+      agent_destination: "{{ download_destination }}"
+    include_role:
+      name: download_agents 
+
   - name: Download MSApps Agents Windows
     vars:
       agent_filename: "{{ msapp_agent_windows }}"
@@ -94,6 +101,24 @@
       agent_destination: "{{ download_destination }}"
     include_role:
       name: download_agents
+  - name: Download Oracle Agents AIX
+    vars:
+      agent_filename: "{{ ora_agent_aix }}"
+      agent_destination: "{{ download_destination }}"
+    include_role:
+      name: download_agents   
+  - name: Download Oracle Agents windows
+    vars:
+      agent_filename: "{{ ora_agent_windows }}"
+      agent_destination: "{{ download_destination }}"
+    include_role:
+      name: download_agents  
+  - name: Download WinPE
+    vars:
+      agent_filename: "{{ win_pe}}"
+      agent_destination: "{{ download_destination }}"
+    include_role:
+      name: download_agents                    
   - name: Download SAP Hana Agents Linux
     vars:
       agent_filename: "{{ dbapp_agent_linux }}"
