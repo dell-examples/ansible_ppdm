@@ -30,7 +30,7 @@
       msg: "{{ access_token }}"
       verbosity: 1
     name: do we have a token ?  
-  - name: get current agents list from PPDM Server
+  - name: get current rbac list from PPDM Server
     include_role:
       name: get_ppdm_agents_list
   - name: Setting Agent Vars 
@@ -43,13 +43,13 @@
       agent_build: "{{semver_list[4]}}"         
     set_fact:
       agents:
-        agent_ver: "{{ agent_major }}{{ agent_minor }}{{ agent_service }}{{ agent_patch }}"
-        agent_branch: "{{ agent_major }}.{{ agent_minor }}.{{ agent_service }}.{{ agent_patch }}-{{agent_build}}"
+        agent_ver: "{{ agent_major }}{{ agent_minor }}"
+        agent_branch: "{{ agent_major }}.{{ agent_minor }}.{{ agent_service }}.{{ agent_patch }}-{{agent_patch}}"
         agent_release: "{{ agent_major }}.{{ agent_minor }}.{{ agent_service }}.{{ agent_patch }}"
-      agent_ver: "{{ agent_major }}{{ agent_minor }}{{ agent_service }}{{ agent_patch }}"
-      agent_branch: "{{ agent_major }}.{{ agent_minor }}.{{ agent_service }}.{{ agent_patch }}-{{agent_build}}"
+      agent_ver: "{{ agent_major }}{{ agent_minor }}"
+      agent_branch: "{{ agent_major }}.{{ agent_minor }}-{{agent_patch}}"
       agent_release: "{{ agent_major }}.{{ agent_minor }}.{{ agent_service }}.{{ agent_patch }}"
-      release: "{{ agent_major }}.{{ agent_minor }}.{{ agent_service }}.{{ agent_patch }}" 
+      release: "{{ agent_major }}.{{ agent_minor }}.{{ agent_service }}.{{ agent_patch }}"
   - local_action: 
       module: copy 
       content: "{{ agents }}"
