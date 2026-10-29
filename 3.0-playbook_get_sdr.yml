@@ -14,14 +14,14 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: Get SDR Configuration Template
-    include_role: 
+    include_role:
       name: get_ppdm_sdr_configuration
   - name: Current SDR Config
-    debug: 
-      msg: "{{ sdr_configuration }}"
+    debug:
+      msg: "{{ get_ppdm_sdr_configuration_sdr_configuration }}"
       verbosity: 0 
