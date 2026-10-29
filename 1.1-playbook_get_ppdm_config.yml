@@ -25,13 +25,13 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: our do we have a token ?  
-  - name: Get PPDM Configuration 
-    include_role: 
-      name: get_ppdm_configuration 
+    name: our do we have a token ?
+  - name: Get PPDM Configuration
+    include_role:
+      name: get_ppdm_configuration
   - debug:
       msg: "{{ configuration }}"
       verbosity: 0
