@@ -21,7 +21,7 @@
     status_code: 200,500
     validate_certs: false
   register: result
-  until: condition   
+  until: "{{ condition }}"
   retries: "{{ retries }}"
   delay: "{{ delay }}"
   when: not ansible_check_mode 
