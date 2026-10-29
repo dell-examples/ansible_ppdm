@@ -26,33 +26,33 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: Get PPDM Assets
-    include_role: 
+    include_role:
       name: get_ppdm_assets
     vars:
-        #filter: details.k8s.namespace in ("mysql", "mysql-rh", "openshift-image-registry", "powerstore", "scale002", "testpowerstore") and subtype eq "K8S_PERSISTENT_VOLUME_CLAIM"
-        filter: name eq "{{ namespace_name }}" and type eq "KUBERNETES" and subtype eq "K8S_NAMESPACE" and lastAvailableCopyTime ne null
-        #filter: type eq "KUBERNETES" and protectionStatus eq "PROTECTED" and details.k8s.namespac eq "{{ namespace_name }}"
+        #get_ppdm_assets_filter: details.k8s.namespace in ("mysql", "mysql-rh", "openshift-image-registry", "powerstore", "scale002", "testpowerstore") and subtype eq "K8S_PERSISTENT_VOLUME_CLAIM"
+        get_ppdm_assets_filter: name eq "{{ namespace_name }}" and type eq "KUBERNETES" and subtype eq "K8S_NAMESPACE" and lastAvailableCopyTime ne null
+        #get_ppdm_assets_filter: type eq "KUBERNETES" and protectionStatus eq "PROTECTED" and details.k8s.namespac eq "{{ namespace_name }}"
   - name: Assets Result
-    debug: 
-      msg: "{{ assets | json_query('[*].{name: name,id: id,type: type,protectionStatus: protectionStatus , details: details}') }}"
-      verbosity: 0 
+    debug:
+      msg: "{{ get_ppdm_assets_assets | json_query('[*].{name: name,id: id,type: type,protectionStatus: protectionStatus , details: details}') }}"
+      verbosity: 0
   - name: Get PPDM Assetcopies
-    include_role: 
+    include_role:
       name: get_ppdm_assetcopies
     vars:
-        id: "{{ assets[0].id }}" 
+        get_ppdm_assetcopies_id: "{{ get_ppdm_assets_assets[0].id }}"
   - name: Copies Result
-    debug: 
-      msg: "{{ copies | json_query('[*].{assetName: assetName,id: id,assetType: assetType,createTime: createTime }') }}"
-      verbosity: 0 
+    debug:
+      msg: "{{ get_ppdm_assetcopies_copies | json_query('[*].{assetName: assetName,id: id,assetType: assetType,createTime: createTime }') }}"
+      verbosity: 0
   - name: Copies Result
-    debug: 
-      msg: "{{ copies }}"
+    debug:
+      msg: "{{ get_ppdm_assetcopies_copies }}"
       verbosity: 1         
 
 

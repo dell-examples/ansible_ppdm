@@ -26,31 +26,31 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: Get PPDM Assets
-    include_role: 
+    include_role:
       name: get_ppdm_assets
     vars:
-        filter: type eq "VMWARE_VIRTUAL_MACHINE" and protectionStatus eq "PROTECTED" and name eq "{{ vm_name }}"
+        get_ppdm_assets_filter: type eq "VMWARE_VIRTUAL_MACHINE" and protectionStatus eq "PROTECTED" and name eq "{{ vm_name }}"
   - name: Assets Result
-    debug: 
-      msg: "{{ assets }}"
+    debug:
+      msg: "{{ get_ppdm_assets_assets }}"
       verbosity: 0
 #  - name: set_copy
 #    set_fact:
-#      copy_time:      
+#      copy_time:
   - name: Get VM Assetcopies
-    include_role: 
+    include_role:
       name: get_ppdm_assetcopies
     vars:
-        filter: startTime eq "{{ copy_time | default(assets[0].lastAvailableCopyTime)}}"
-        id: "{{ assets[0].id }}" 
+        get_ppdm_assetcopies_filter: startTime eq "{{ copy_time | default(get_ppdm_assets_assets[0].lastAvailableCopyTime)}}"
+        get_ppdm_assetcopies_id: "{{ get_ppdm_assets_assets[0].id }}"
   - name: Copies Result
-    debug: 
-      msg: "{{ copies[0] }}"
+    debug:
+      msg: "{{ get_ppdm_assetcopies_copies[0] }}"
       verbosity: 0
   - name: Restore VM Assetcopies
     include_role: 

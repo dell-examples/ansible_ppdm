@@ -33,55 +33,55 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: Get PPDM Assets
-    include_role: 
+    include_role:
       name: get_ppdm_assets
     vars:
-        #filter: details.k8s.namespace in ("mysql", "mysql-rh", "openshift-image-registry", "powerstore", "scale002", "testpowerstore") and subtype eq "K8S_PERSISTENT_VOLUME_CLAIM"
-        filter: name eq "{{ namespace_name }}" and type eq "KUBERNETES" and subtype eq "K8S_NAMESPACE" and lastAvailableCopyTime ne null
-        #filter: type eq "KUBERNETES" and protectionStatus eq "PROTECTED" and details.k8s.namespac eq "{{ namespace_name }}"
+        #get_ppdm_assets_filter: details.k8s.namespace in ("mysql", "mysql-rh", "openshift-image-registry", "powerstore", "scale002", "testpowerstore") and subtype eq "K8S_PERSISTENT_VOLUME_CLAIM"
+        get_ppdm_assets_filter: name eq "{{ namespace_name }}" and type eq "KUBERNETES" and subtype eq "K8S_NAMESPACE" and lastAvailableCopyTime ne null
+        #get_ppdm_assets_filter: type eq "KUBERNETES" and protectionStatus eq "PROTECTED" and details.k8s.namespac eq "{{ namespace_name }}"
   - name: Assets Result
-    debug: 
-      msg: "{{ assets }}"
-      verbosity: 1 
+    debug:
+      msg: "{{ get_ppdm_assets_assets }}"
+      verbosity: 1
   - name: Get PPDM Assetcopies
-    include_role: 
+    include_role:
       name: get_ppdm_assetcopies
     vars:
-        id: "{{ assets[0].id }}" 
+        get_ppdm_assetcopies_id: "{{ get_ppdm_assets_assets[0].id }}"
   - name: Copies Result
-    debug: 
-      msg: "{{ copies[0] }}"
-      verbosity: 0         
+    debug:
+      msg: "{{ get_ppdm_assetcopies_copies[0] }}"
+      verbosity: 0
 
   - name: Restore K8S Assetcopies
-    include_role: 
+    include_role:
       name: restore_ppdm_k8s_copies
     vars:
-        copy: "{{ copies[0] }}"
-        asset: "{{ assets[0] }}"
+        copy: "{{ get_ppdm_assetcopies_copies[0] }}"
+        asset: "{{ get_ppdm_assets_assets[0] }}"
         message: "{{ ticket_reason | default('') }}"
         target_namespace: "{{ target_namespace_name }}"
-        restoreType: "{{ restore_type | default('TO_ALTERNATE') }}"     
+        restoreType: "{{ restore_type | default('TO_ALTERNATE') }}"
   - name: Restore Result
-    debug: 
-      msg: "{{ restore }}"
-      verbosity: 0                    
+    debug:
+      msg: "{{ restore_ppdm_k8s_copies_restore }}"
+      verbosity: 0
   - name: Wait Restore complete
     include_role:
       name: get_ppdm_activities
     vars:
-      id: "{{ restore.activityId }}"
-      delay: 30
-      retries: 30
-      condition: result.json.state == "COMPLETED" or result.json.state == "FAILED"
-    when: wait_activity is defined and restore is defined  
+      get_ppdm_activities_id: "{{ restore_ppdm_k8s_copies_restore.activityId }}"
+      get_ppdm_activities_delay: 30
+      get_ppdm_activities_retries: 30
+      get_ppdm_activities_condition: get_ppdm_activities_result.json.state == "COMPLETED" or get_ppdm_activities_result.json.state == "FAILED"
+    when: wait_activity is defined and restore_ppdm_k8s_copies_restore is defined
   - name: Result
-    debug: 
-      msg: "{{ activities }}"
+    debug:
+      msg: "{{ get_ppdm_activities_activities }}"
       verbosity: 0 
     when: activities is defined       
