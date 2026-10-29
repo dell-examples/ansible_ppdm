@@ -42,7 +42,7 @@
     include_role:
       name: get_ppdm_credentials
   - set_fact:
-     credentials: "{{ get_ppdm_credentials_credentials[0] }}"
+     get_ppdm_credentials_credentials: "{{ get_ppdm_credentials_credentials[0] }}"
     when: get_ppdm_credentials_credentials[0].id is defined
   - name: Create CLOUD_SNAPSHOT_MANAGER Credentials
     vars:
