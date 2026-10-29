@@ -1,33 +1,33 @@
 - name: Define uri with sync-instance ID
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/sync-instance/{{ id }}"
-  when: id | default('', true) | trim != ''
+  set_fact:
+    get_ppdm_sync_instance_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/sync-instance/{{ get_ppdm_sync_instance_id }}"
+  when: get_ppdm_sync_instance_id | default('', true) | trim != ''
 - name: Define uri without sync-instance id
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/sync-instance"
-  when: id  | default('', false) | trim == ''
+  set_fact:
+    get_ppdm_sync_instance_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/sync-instance"
+  when: get_ppdm_sync_instance_id | default('', false) | trim == ''
 - name: Rewrite uri with filter
-  set_fact: 
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}" 
-  when: filter is defined     
+  set_fact:
+    get_ppdm_sync_instance_uri: "{{ get_ppdm_sync_instance_uri }}?filter={{ get_ppdm_sync_instance_filter | string | urlencode }}"
+  when: get_ppdm_sync_instance_filter is defined
 - name: Get PPDM sync-instance with status
   uri:
     method: GET
-    url: "{{ uri }}"
-    body_format: json 
+    url: "{{ get_ppdm_sync_instance_uri }}"
+    body_format: json
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ access_token }}"
     status_code: 200,500
     validate_certs: false
-  register: result
-#  until: "{{ condition }}"    
-  retries: "{{ retries }}"
-  delay: "{{ delay }}"
-  when: not ansible_check_mode 
+  register: get_ppdm_sync_instance_result
+#  until: "{{ get_ppdm_sync_instance_condition }}"
+  retries: "{{ get_ppdm_sync_instance_retries }}"
+  delay: "{{ get_ppdm_sync_instance_delay }}"
+  when: not ansible_check_mode
 - set_fact:
-    syncinstance: "{{ result.json.content }}"
+    get_ppdm_sync_instance_syncinstance: "{{ get_ppdm_sync_instance_result.json.content }}"
 - debug:
-    msg: "{{ syncinstance }}"
+    msg: "{{ get_ppdm_sync_instance_syncinstance }}"
     verbosity: 0
-  when: syncinstance is defined       
+  when: get_ppdm_sync_instance_syncinstance is defined       

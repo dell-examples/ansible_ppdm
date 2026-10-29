@@ -1,37 +1,37 @@
 - name: Define uri with assets ID
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/assets/{{ id }}"
-  when: id  | default('', true) | trim != ''
+  set_fact:
+    get_ppdm_assets_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/assets/{{ get_ppdm_assets_id }}"
+  when: get_ppdm_assets_id | default('', true) | trim != ''
 - name: Define uri without assets id
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/assets"
-  when: id  | default('', false) | trim == ''
+  set_fact:
+    get_ppdm_assets_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/assets"
+  when: get_ppdm_assets_id | default('', false) | trim == ''
 - name: Rewrite uri with filter
-  set_fact: 
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
-  when: filter  | default('', true) | trim != ''
+  set_fact:
+    get_ppdm_assets_uri: "{{ get_ppdm_assets_uri }}?filter={{ get_ppdm_assets_filter | string | urlencode }}"
+  when: get_ppdm_assets_filter | default('', true) | trim != ''
 
-- name: Get PPDM assets with status {{ condition }}
+- name: Get PPDM assets with status {{ get_ppdm_assets_condition }}
   uri:
     method: GET
-    url: "{{ uri }}"
-    body_format: json 
+    url: "{{ get_ppdm_assets_uri }}"
+    body_format: json
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ access_token }}"
     status_code: 200,500
     validate_certs: false
-  register: result
-  until: "{{ condition }}"    
-  retries: "{{ retries }}"
-  delay: "{{ delay }}"
-  when: not ansible_check_mode 
+  register: get_ppdm_assets_result
+  until: "{{ get_ppdm_assets_condition }}"
+  retries: "{{ get_ppdm_assets_retries }}"
+  delay: "{{ get_ppdm_assets_delay }}"
+  when: not ansible_check_mode
 - set_fact:
-    assets: "{{ result.json.content }}"
-  when: result.json.content is defined
+    get_ppdm_assets_assets: "{{ get_ppdm_assets_result.json.content }}"
+  when: get_ppdm_assets_result.json.content is defined
 - set_fact:
-    assets: "{{ result.json }}"
-  when: id  | default('', true) | trim != '' and result.json is defined     
+    get_ppdm_assets_assets: "{{ get_ppdm_assets_result.json }}"
+  when: get_ppdm_assets_id | default('', true) | trim != '' and get_ppdm_assets_result.json is defined
 - debug:
-    msg: "{{ assets }}"
+    msg: "{{ get_ppdm_assets_assets }}"
     verbosity: 1    

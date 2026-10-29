@@ -1,32 +1,32 @@
 - name: Define uri with storage-systems ID
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/storage-systems/{{ id }}"
-  when: id  | default('', true) | trim != ''
+  set_fact:
+    get_ppdm_storage_systems_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/storage-systems/{{ get_ppdm_storage_systems_id }}"
+  when: get_ppdm_storage_systems_id | default('', true) | trim != ''
 - name: Define uri without storage-systems id
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/storage-systems"
-  when: id  | default('', false) | trim == ''
+  set_fact:
+    get_ppdm_storage_systems_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/storage-systems"
+  when: get_ppdm_storage_systems_id | default('', false) | trim == ''
 - name: Rewrite uri with filter
   set_fact:
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
-  when: filter | default('', true) | trim != ''  
+    get_ppdm_storage_systems_uri: "{{ get_ppdm_storage_systems_uri }}?filter={{ get_ppdm_storage_systems_filter | string | urlencode }}"
+  when: get_ppdm_storage_systems_filter | default('', true) | trim != ''
 - name: Get PPDM storage-systems with status
   uri:
     method: GET
-    url: "{{ uri }}"
-    body_format: json 
+    url: "{{ get_ppdm_storage_systems_uri }}"
+    body_format: json
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ access_token }}"
     status_code: 200,500
     validate_certs: false
-  register: result
-#  until: "{{ condition }}"    
-  retries: "{{ retries }}"
-  delay: "{{ delay }}"
-  when: not ansible_check_mode 
+  register: get_ppdm_storage_systems_result
+#  until: "{{ get_ppdm_storage_systems_condition }}"
+  retries: "{{ get_ppdm_storage_systems_retries }}"
+  delay: "{{ get_ppdm_storage_systems_delay }}"
+  when: not ansible_check_mode
 - set_fact:
-    storagesystems: "{{ result.json.content }}"
+    get_ppdm_storage_systems_storagesystems: "{{ get_ppdm_storage_systems_result.json.content }}"
 - debug:
-    msg: "{{ storagesystems }}"
+    msg: "{{ get_ppdm_storage_systems_storagesystems }}"
     verbosity: 0    

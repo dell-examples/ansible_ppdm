@@ -1,45 +1,45 @@
 - name: Define uri with inventory-sources ID
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/inventory-sources/{{ id }}"
-  when: id  | default('', true) | trim != ''
+  set_fact:
+    get_ppdm_inventory_sources_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/inventory-sources/{{ get_ppdm_inventory_sources_id }}"
+  when: get_ppdm_inventory_sources_id | default('', true) | trim != ''
 - name: Define uri with inventory-sources ID for storage-systems
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/inventory-sources/{{ id }}/storage-systems"
-  when: (id  | default('', true) | trim != '') and storagesystems is defined 
+  set_fact:
+    get_ppdm_inventory_sources_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/inventory-sources/{{ get_ppdm_inventory_sources_id }}/storage-systems"
+  when: (get_ppdm_inventory_sources_id | default('', true) | trim != '') and get_ppdm_inventory_sources_storagesystems is defined
 - name: Define uri without inventory-sources id
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/inventory-sources"
-  when: id  | default('', false) | trim == ''
-- name: "Rewrite uri with filter: {{ filter }}"
-  set_fact: 
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
-  when: filter is defined    
-- name: Get PPDM inventory-sources with status {{ condition }}
+  set_fact:
+    get_ppdm_inventory_sources_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/inventory-sources"
+  when: get_ppdm_inventory_sources_id | default('', false) | trim == ''
+- name: "Rewrite uri with filter: {{ get_ppdm_inventory_sources_filter }}"
+  set_fact:
+    get_ppdm_inventory_sources_uri: "{{ get_ppdm_inventory_sources_uri }}?filter={{ get_ppdm_inventory_sources_filter | string | urlencode }}"
+  when: get_ppdm_inventory_sources_filter is defined
+- name: Get PPDM inventory-sources with status {{ get_ppdm_inventory_sources_condition }}
   uri:
     method: GET
-    url: "{{ uri }}"
-    body_format: json 
+    url: "{{ get_ppdm_inventory_sources_uri }}"
+    body_format: json
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ access_token }}"
     status_code: 200,500
     validate_certs: false
-  register: result
-  until: "{{ condition }}"
-  retries: "{{ retries }}"
-  delay: "{{ delay }}"
-  when: not ansible_check_mode 
+  register: get_ppdm_inventory_sources_result
+  until: "{{ get_ppdm_inventory_sources_condition }}"
+  retries: "{{ get_ppdm_inventory_sources_retries }}"
+  delay: "{{ get_ppdm_inventory_sources_delay }}"
+  when: not ansible_check_mode
 
 
 - set_fact:
-    inventorysources: "{{ result.json.content }}"
-  when: result.json.content is defined
+    get_ppdm_inventory_sources_inventorysources: "{{ get_ppdm_inventory_sources_result.json.content }}"
+  when: get_ppdm_inventory_sources_result.json.content is defined
 - set_fact:
-    inventorysources: "{{ result.json.content }}"
-  when: id  | default('', true) | trim != '' and result.json.content is defined     
+    get_ppdm_inventory_sources_inventorysources: "{{ get_ppdm_inventory_sources_result.json.content }}"
+  when: get_ppdm_inventory_sources_id | default('', true) | trim != '' and get_ppdm_inventory_sources_result.json.content is defined
 - set_fact:
-    inventorysources: "{{ result.json }}"
-  when: id  | default('', true) | trim != '' and result.json.content is not defined and result.json is defined    
+    get_ppdm_inventory_sources_inventorysources: "{{ get_ppdm_inventory_sources_result.json }}"
+  when: get_ppdm_inventory_sources_id | default('', true) | trim != '' and get_ppdm_inventory_sources_result.json.content is not defined and get_ppdm_inventory_sources_result.json is defined
 - debug:
-    msg: "{{ inventorysources }}"
+    msg: "{{ get_ppdm_inventory_sources_inventorysources }}"
     verbosity: 1      
