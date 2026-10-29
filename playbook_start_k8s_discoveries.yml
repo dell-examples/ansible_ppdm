@@ -38,20 +38,20 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: Get PPDM inventory-sources for K8S "{{ new_k8s_api }}"
-    include_role: 
+    include_role:
       name: get_ppdm_inventory_sources
     vars:
-      filter: address eq "{{ k8s_fqdn }}" and type eq "KUBERNETES"
-  - debug: 
-      msg: "{{ inventorysources }}"
+      get_ppdm_inventory_sources_filter: address eq "{{ k8s_fqdn }}" and type eq "KUBERNETES"
+  - debug:
+      msg: "{{ get_ppdm_inventory_sources_inventorysources }}"
       verbosity: 1
 
-  - name: Run Discovery for K8S inventory-source  "{{ inventorysources[0].id }} "
+  - name: Run Discovery for K8S inventory-source  "{{ get_ppdm_inventory_sources_inventorysources[0].id }} "
     include_role: 
       name: run_ppdm_discoveries
     vars:

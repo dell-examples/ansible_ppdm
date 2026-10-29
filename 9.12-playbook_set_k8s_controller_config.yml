@@ -18,24 +18,24 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: Get PPDM inventory-sources
-    include_role: 
+    include_role:
       name: get_ppdm_inventory_sources
     vars:
-      filter: address eq "api.ocs1.home.labbuildr.com" and type eq "KUBERNETES" 
+      get_ppdm_inventory_sources_filter: address eq "api.ocs1.home.labbuildr.com" and type eq "KUBERNETES"
   - name: creating configurations
     set_fact:
 ## prior 19.7, we published _links ....      new_config: "{% set copy=configuration.content[0].copy() %}{% set removed=copy.pop('_links') %}{{ copy }}"
-     new_inventorysources: "{% set copy=inventorysources[0].copy() %}{% set removed=copy.pop('_links') %}{{ copy }}"
+     new_inventorysources: "{% set copy=get_ppdm_inventory_sources_inventorysources[0].copy() %}{% set removed=copy.pop('_links') %}{{ copy }}"
 #    name: Generating K8S Configuration
-     new_config: "{{ inventorysources[0] | json_query('details.k8s.configurations[?key!=`k8s.velero.exclude.resources`]') }}"
+     new_config: "{{ get_ppdm_inventory_sources_inventorysources[0] | json_query('details.k8s.configurations[?key!=`k8s.velero.exclude.resources`]') }}"
   - debug:
       msg: "{{ new_config }}"
-      verbosity: 0   
+      verbosity: 0
   - name: creating configurations
     vars:
       old_config:
@@ -49,7 +49,7 @@
       new_config: "{{ old_config | default([]) | combine(my_new_config, list_merge='append',recursive=True, ) }}"
   - debug:
       msg: "{{ new_config }}"
-      verbosity: 0 
+      verbosity: 0
   - name: final list_merge
     vars:
       new_details:
@@ -60,7 +60,7 @@
 
   - debug:
       msg: "{{ new_inventorysources }}"
-      verbosity: 0 
+      verbosity: 0
 
   - name: Set K8S Controller Options
     vars:
