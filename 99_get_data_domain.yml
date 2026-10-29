@@ -14,27 +14,27 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
 
   - name: Get PPDM inventory-sources
-    include_role: 
+    include_role:
       name: get_ppdm_inventory_sources
     vars:
-      filter: name eq "{{ ddve_fqdn }}"
+      get_ppdm_inventory_sources_filter: name eq "{{ ddve_fqdn }}"
 
 
   - name: Get DataDomain Storage Systems via Inventory
-    include_role: 
+    include_role:
       name: get_ppdm_inventory_sources
     vars:
-      id: "{{ inventorysources[0].id }}"
-      storagesystems: "true"
+      get_ppdm_inventory_sources_id: "{{ get_ppdm_inventory_sources_inventorysources[0].id }}"
+      get_ppdm_inventory_sources_storagesystems: "true"
   - name: inventorysource Result
-    debug: 
-      msg: "{{ inventorysources[0] }}"
-      verbosity: 0   
-    when: inventorysources is defined  
+    debug:
+      msg: "{{ get_ppdm_inventory_sources_inventorysources[0] }}"
+      verbosity: 0
+    when: get_ppdm_inventory_sources_inventorysources is defined  
     

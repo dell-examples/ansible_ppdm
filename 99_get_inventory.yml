@@ -14,18 +14,18 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: Get PPDM inventory-sources
-    include_role: 
+    include_role:
       name: get_ppdm_inventory_sources
     vars:
-      filter: "{{ inventory_filter | default('') }}"
-      id: "{{ inventory_id | default('') }}"
+      get_ppdm_inventory_sources_filter: "{{ inventory_filter | default('') }}"
+      get_ppdm_inventory_sources_id: "{{ inventory_id | default('') }}"
   - debug:
-      msg: "{{ inventorysources  | json_query('[*].{name: name,id: id,type: type}') }}"
+      msg: "{{ get_ppdm_inventory_sources_inventorysources  | json_query('[*].{name: name,id: id,type: type}') }}"
       verbosity: 0   
 
   - name: inventorysources Result summary
