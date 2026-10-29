@@ -22,16 +22,16 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
 
   - name: cerate_flr_session
     include_role:
       name: create_flr_session
     vars:
-      data: 
+      data:
         copyId: 178050da-5cf8-5732-ae28-5cac05229d7b
         targetVmAssetId: 2def57c4-2278-57cf-b0a0-b0a716c1791b
         targetUser: root
@@ -43,6 +43,6 @@
   - name: get_flr_session
     include_role:
       name: get_flr_session
-    vars: 
-      id: "{{ flr_session.flrSessionId }}"
+    vars:
+      id: "{{ create_flr_session_flr_session.flrSessionId }}"
      

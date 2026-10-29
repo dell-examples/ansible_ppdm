@@ -24,23 +24,23 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
 
   - name: get_flr_session
     include_role:
       name: get_flr_session
-    vars: 
-      id: "{{ flr_session.flrSessionId }}/files/"
+    vars:
+      id: "{{ get_flr_session_flr_session.flrSessionId }}/files/"
 
 
   - name: modify_flr_session
     include_role:
       name: modify_flr_session
-    vars: 
-      id: "{{ flr_session.flrSessionId }}"
+    vars:
+      id: "{{ get_flr_session_flr_session.flrSessionId }}"
       data:
         directory: /home/bottk
         browseDest: true
@@ -48,14 +48,14 @@
   - name: get_flr_session
     include_role:
       name: get_flr_session
-    vars: 
-      id: "{{ flr_session.flrSessionId }}/files/"
+    vars:
+      id: "{{ get_flr_session_flr_session.flrSessionId }}/files/"
 
   - name: create_flr_restore
     include_role:
       name: create_flr_restore
-    vars: 
-      id: "{{ flr_session.flrSessionId }}"
+    vars:
+      id: "{{ get_flr_session_flr_session.flrSessionId }}"
       data:
         targetDirectory: "/tmp"
         filePaths:
