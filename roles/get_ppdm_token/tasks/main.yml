@@ -5,10 +5,10 @@
     body:
       username: "{{ ppdm_username }}"
       password: "{{ ppdm_password }}"
-    body_format: json 
+    body_format: json
     status_code: 200
     validate_certs: false
-  register: result  
-  when: not ansible_check_mode 
+  register: get_ppdm_token_result
+  when: not ansible_check_mode
 - set_fact:
-    access_token: "{{ result.json.access_token }}"
+    get_ppdm_token_access_token: "{{ get_ppdm_token_result.json.access_token }}"
