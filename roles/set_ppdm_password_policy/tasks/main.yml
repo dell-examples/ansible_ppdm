@@ -4,8 +4,9 @@
     uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/policies/password"
   when: id  | default('', false) | trim == ''
 - name: Rewrite uri with filter
-  set_fact: 
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}" 
+  set_fact:
+    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
+  when: filter | default('', true) | trim != '' 
 - name: SET PPDM Password Policy
   uri:
     method: PUT

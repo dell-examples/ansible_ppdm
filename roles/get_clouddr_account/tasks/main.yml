@@ -7,8 +7,9 @@
     uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/cloud-dr-accounts"
   when: id  | default('', false) | trim == ''
 - name: Rewrite uri with filter
-  set_fact: 
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}" 
+  set_fact:
+    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
+  when: filter | default('', true) | trim != '' 
 
 
 - name: GET PPDM CloudDR Accounts

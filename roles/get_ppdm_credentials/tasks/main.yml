@@ -7,9 +7,9 @@
     uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/credentials"
   when: id  | default('', false) | trim == ''
 - name: Rewrite uri with filter
-  set_fact: 
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}" 
-  when: filter   
+  set_fact:
+    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
+  when: filter | default('', true) | trim != ''   
 - name: Get PPDM Credentials with filter {{ filter }}
   uri:
     method: GET
