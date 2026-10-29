@@ -1,7 +1,7 @@
 ppdm_api_ver: /api/v2
 ppdm_username: admin
 ppdm_port: 8443
-delay: 1
-retries: 1
-condition: result is defined
-filter: 
+get_ppdm_server_disaster_recovery_hosts_delay: 1
+get_ppdm_server_disaster_recovery_hosts_retries: 1
+get_ppdm_server_disaster_recovery_hosts_condition: get_ppdm_server_disaster_recovery_hosts_result is defined
+get_ppdm_server_disaster_recovery_hosts_filter: 

@@ -1,22 +1,22 @@
 
 - name: Define uri without id
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/policies/password"
-  when: id  | default('', false) | trim == ''
+  set_fact:
+    set_ppdm_password_policy_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/policies/password"
+  when: set_ppdm_password_policy_id | default('', false) | trim == ''
 - name: Rewrite uri with filter
   set_fact:
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
-  when: filter | default('', true) | trim != '' 
+    set_ppdm_password_policy_uri: "{{ set_ppdm_password_policy_uri }}?filter={{ set_ppdm_password_policy_filter | string | urlencode }}"
+  when: set_ppdm_password_policy_filter | default('', true) | trim != ''
 - name: SET PPDM Password Policy
   uri:
     method: PUT
-    url: "{{ uri }}"
-    body_format: json 
+    url: "{{ set_ppdm_password_policy_uri }}"
+    body_format: json
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ access_token }}"
     status_code: 200,500
     validate_certs: false
     body: "{{ body }}"
-  register: result
+  register: set_ppdm_password_policy_result
   when: not ansible_check_mode 

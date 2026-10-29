@@ -1,7 +1,7 @@
 ppdm_api_ver: /api/v2
 ppdm_username: admin
 ppdm_port: 8443
-delay: 1
-retries: 1
-condition: result is defined
-filter: 
+set_ppdm_password_policy_delay: 1
+set_ppdm_password_policy_retries: 1
+set_ppdm_password_policy_condition: set_ppdm_password_policy_result is defined
+set_ppdm_password_policy_filter: 

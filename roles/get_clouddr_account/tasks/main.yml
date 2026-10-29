@@ -1,35 +1,35 @@
 - name: Define uri with Account ID
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/cloud-dr-accounts/{{ id }}"
-  when: id  | default('', true) | trim != ''
+  set_fact:
+    get_clouddr_account_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/cloud-dr-accounts/{{ get_clouddr_account_id }}"
+  when: get_clouddr_account_id | default('', true) | trim != ''
 - name: Define uri without Credential id
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/cloud-dr-accounts"
-  when: id  | default('', false) | trim == ''
+  set_fact:
+    get_clouddr_account_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/cloud-dr-accounts"
+  when: get_clouddr_account_id | default('', false) | trim == ''
 - name: Rewrite uri with filter
   set_fact:
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
-  when: filter | default('', true) | trim != '' 
+    get_clouddr_account_uri: "{{ get_clouddr_account_uri }}?filter={{ get_clouddr_account_filter | string | urlencode }}"
+  when: get_clouddr_account_filter | default('', true) | trim != ''
 
 
 - name: GET PPDM CloudDR Accounts
   uri:
     method: GET
-    url: "{{ uri }}"
+    url: "{{ get_clouddr_account_uri }}"
     body_format: json
-#    body: "{{ data }}"
+#    body: "{{ get_clouddr_account_data }}"
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ access_token }}"
     status_code: 200,201,202,503,400
     validate_certs: false
-  register: result  
+  register: get_clouddr_account_result
 #  retries: "10"
 #  delay: "30"
-#  until: result.status == 201 or result.status == 200
-  when: not ansible_check_mode   
+#  until: get_clouddr_account_result.status == 201 or get_clouddr_account_result.status == 200
+  when: not ansible_check_mode
 - set_fact:
-    clouddr_accounts: "{{ result.json.content }}"
+    get_clouddr_account_clouddr_accounts: "{{ get_clouddr_account_result.json.content }}"
 - debug:
-    msg: "{{ clouddr_accounts }}"     
+    msg: "{{ get_clouddr_account_clouddr_accounts }}"
     verbosity: 0   
