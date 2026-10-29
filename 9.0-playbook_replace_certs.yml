@@ -23,13 +23,13 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
 
   - name: Set PPDM Certificates
-    include_role: 
+    include_role:
       name: set_ppdm_certificates
     vars:
       newprivateKey: "{{ privateKey }}"
