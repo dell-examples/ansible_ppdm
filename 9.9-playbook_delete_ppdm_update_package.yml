@@ -18,21 +18,21 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: get Update Package
-    include_role: 
+    include_role:
       name: get_ppdm_update_package
     vars:
-      filter: 'category eq "ACTIVE"' 
+      get_ppdm_update_package_filter: 'category eq "ACTIVE"'
 
   - name: delete_ppdm_upgrade
-    when: update_package[0] is defined
-    include_role: 
+    when: get_ppdm_update_package_update_package[0] is defined
+    include_role:
       name: delete_ppdm_update_package
     vars:
-      id: "{{ update_package[0].id }}"
-  - debug: 
+      id: "{{ get_ppdm_update_package_update_package[0].id }}"
+  - debug:
       msg: "{{ result }}"
