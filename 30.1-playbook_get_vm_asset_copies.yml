@@ -26,18 +26,18 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: Get PPDM Assets
-    include_role: 
+    include_role:
       name: get_ppdm_assets
     vars:
-        filter: type eq "VMWARE_VIRTUAL_MACHINE" and protectionStatus eq "PROTECTED" and name eq "{{ vm_name }}"
+        get_ppdm_assets_filter: type eq "VMWARE_VIRTUAL_MACHINE" and protectionStatus eq "PROTECTED" and name eq "{{ vm_name }}"
   - name: Assets Result
-    debug: 
-      msg: "{{ assets }}"
+    debug:
+      msg: "{{ get_ppdm_assets_assets }}"
       verbosity: 0 
   - name: Get PPDM Assetcopies
     include_role: 
