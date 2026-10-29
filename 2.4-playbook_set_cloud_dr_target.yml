@@ -22,29 +22,29 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: GET CRA Component ID
     include_role:
       name: get_ppdm_components
   - debug:
-      msg: "{{ components.content  | json_query(jmesquery) }}"
+      msg: "{{ get_ppdm_components_components.content  | json_query(jmesquery) }}"
     vars:
       jmesquery: "[? componentServiceName=='cdr']"
-      verbosity: 0 
+      verbosity: 0
 
-  - name: Get Cloud DR Account 
+  - name: Get Cloud DR Account
     include_role:
       name: get_clouddr_account
   - name: Set Clouddr Data Target
     include_role:
-      name: set_clouddr_data_target  
+      name: set_clouddr_data_target
     vars:
       jmesquery: "[? providerName=='AZURE'].id | [0]"
-      id: "{{ clouddr_accounts  | json_query(jmesquery) }}"
-      body: 
+      id: "{{ get_clouddr_account_clouddr_accounts  | json_query(jmesquery) }}"
+      body:
         name: "{{ storageaccount }}"
         encryptionMethod: null
         copiesStorageContainer:

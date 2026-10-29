@@ -22,28 +22,28 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
 
-  - name: Get Cloud DR Account 
+  - name: Get Cloud DR Account
     include_role:
       name: get_clouddr_account
   - name: Get Clouddr Data Target
     include_role:
-      name: get_clouddr_data_target  
+      name: get_clouddr_data_target
     vars:
       jmesquery: "[? providerName=='AZURE'].id | [0]"
-      id: "{{ clouddr_accounts  | json_query(jmesquery) }}"
+      id: "{{ get_clouddr_account_clouddr_accounts  | json_query(jmesquery) }}"
   - name: Set CDRS Deployment
     # debug: msg="{{ clouddr_data_target  | json_query(jmesquery) }}"
     include_role:
-      name: set_cdrs_deployment  
+      name: set_cdrs_deployment
     vars:
       jmesquery: "[].id | [0]"
       id: "{{ clouddr_data_target  | json_query(jmesquery) }}"
-      body:   
+      body:
         cloudTargetId: "{{ id }}"
         vpcId: null
         adminPassword: "{{ ppdm_new_password }}"
