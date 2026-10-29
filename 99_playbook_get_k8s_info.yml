@@ -30,6 +30,6 @@
     kubernetes.core.k8s_cluster_info:
       verify_ssl: no
     register: api_status
-  - debug: 
+  - debug:
       msg: "Connected to {{ api_status.connection.host }}"
       verbosity: 0
