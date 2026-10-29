@@ -9,14 +9,14 @@
       connection_encoding: br
       content_type: application/json
       accept: "application/json, text/plain, */*"
-      # authorization: "Bearer {{ access_token }}" 
+      # authorization: "Bearer {{ access_token }}"
       Cookie: "_csfr={{ login.cookies_string }}"
     status_code: 200,500
     validate_certs: false
-  register: result  
+  register: get_ppdm_flr_agents_list_result
 - set_fact:
-    flr_agents_list: "{{ result.content }}"
+    get_ppdm_flr_agents_list_flr_agents_list: "{{ get_ppdm_flr_agents_list_result.content }}"
 - debug:
-    msg: "{{ flr_agents_list }}"
+    msg: "{{ get_ppdm_flr_agents_list_flr_agents_list }}"
     verbosity: 0    
 

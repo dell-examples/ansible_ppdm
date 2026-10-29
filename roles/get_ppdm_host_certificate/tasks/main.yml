@@ -1,18 +1,18 @@
-- name: Get PPDM Host Certificate for {{ host }}
+- name: Get PPDM Host Certificate for {{ get_ppdm_host_certificate_host }}
   uri:
     method: GET
-    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/certificates?host={{ host }}&port={{ port }}&type=Host"
-    body_format: json 
+    url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/certificates?host={{ get_ppdm_host_certificate_host }}&port={{ get_ppdm_host_certificate_port }}&type=Host"
+    body_format: json
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ access_token }}"
     status_code: 200
     validate_certs: false
-  register: result  
-  when: not ansible_check_mode 
+  register: get_ppdm_host_certificate_result
+  when: not ansible_check_mode
 - debug:
-    msg: "{{ result.json }}"
+    msg: "{{ get_ppdm_host_certificate_result.json }}"
     verbosity: 1
 - name: return certificate
   set_fact:
-    certificate: "{{ result.json }}"
+    get_ppdm_host_certificate_certificate: "{{ get_ppdm_host_certificate_result.json }}"

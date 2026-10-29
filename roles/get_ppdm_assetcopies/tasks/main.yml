@@ -1,28 +1,28 @@
 - name: Define uri with assets ID
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/assets/{{ id }}/copies"
+  set_fact:
+    get_ppdm_assetcopies_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/assets/{{ get_ppdm_assetcopies_id }}/copies"
 - name: Rewrite uri with filter
-  set_fact: 
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
-  when: filter  | default('', true) | trim != ''
+  set_fact:
+    get_ppdm_assetcopies_uri: "{{ get_ppdm_assetcopies_uri }}?filter={{ get_ppdm_assetcopies_filter | string | urlencode }}"
+  when: get_ppdm_assetcopies_filter | default('', true) | trim != ''
 
-- name: Get PPDM assetcopies with status {{ condition }}
+- name: Get PPDM assetcopies with status {{ get_ppdm_assetcopies_condition }}
   uri:
     method: GET
-    url: "{{ uri }}"
-    body_format: json 
+    url: "{{ get_ppdm_assetcopies_uri }}"
+    body_format: json
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ access_token }}"
     status_code: 200,500
     validate_certs: false
-  register: result
-  until: "{{ condition }}"    
-  retries: "{{ retries }}"
-  delay: "{{ delay }}"
-  when: not ansible_check_mode 
+  register: get_ppdm_assetcopies_result
+  until: "{{ get_ppdm_assetcopies_condition }}"
+  retries: "{{ get_ppdm_assetcopies_retries }}"
+  delay: "{{ get_ppdm_assetcopies_delay }}"
+  when: not ansible_check_mode
 - set_fact:
-    copies: "{{ result.json.content }}"
+    get_ppdm_assetcopies_copies: "{{ get_ppdm_assetcopies_result.json.content }}"
 - debug:
-    msg: "{{ copies }}"
+    msg: "{{ get_ppdm_assetcopies_copies }}"
     verbosity: 1    

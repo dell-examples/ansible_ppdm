@@ -1,6 +1,6 @@
 ppdm_api_ver: /api/v2
 ppdm_username: admin
 ppdm_port: 8443
-delay: 1
-retries: 0
-condition: result is defined
+restore_ppdm_k8s_copies_delay: 1
+restore_ppdm_k8s_copies_retries: 0
+restore_ppdm_k8s_copies_condition: restore_ppdm_k8s_copies_result is defined
