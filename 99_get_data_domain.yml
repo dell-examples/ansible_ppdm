@@ -21,14 +21,14 @@
 
   - name: Get PPDM inventory-sources
     include_role: 
-      name: get_ppdm_inventory-sources
+      name: get_ppdm_inventory_sources
     vars:
       filter: name eq "{{ ddve_fqdn }}"
 
 
   - name: Get DataDomain Storage Systems via Inventory
     include_role: 
-      name: get_ppdm_inventory-sources
+      name: get_ppdm_inventory_sources
     vars:
       id: "{{ inventorysources[0].id }}"
       storagesystems: "true"

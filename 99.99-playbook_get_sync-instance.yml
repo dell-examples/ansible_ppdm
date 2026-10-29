@@ -20,7 +20,7 @@
     name: do we have a token ?  
   - name: Get sync-instance
     include_role: 
-      name: get_ppdm_sync-instance
+      name: get_ppdm_sync_instance
   - name: Current sync-instance 
     debug: 
       msg: "{{ syncinstance }}"

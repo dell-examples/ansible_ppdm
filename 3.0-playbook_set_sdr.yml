@@ -27,7 +27,7 @@
       verbosity: 0 
   - name: Get DataDomain Inventory Sources
     include_role: 
-      name: get_ppdm_storage-systems
+      name: get_ppdm_storage_systems
     vars:
       filter: type eq "DATA_DOMAIN_SYSTEM" and name eq "{{ ddve_fqdn }}" 
   - name: Extract SDR Config ID
