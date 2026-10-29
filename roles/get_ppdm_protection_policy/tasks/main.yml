@@ -1,37 +1,37 @@
 - name: Define uri with protection-policies ID
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/protection-policies/{{ id }}"
-  when: id  | default('', true) | trim != ''
+  set_fact:
+    get_ppdm_protection_policy_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/protection-policies/{{ get_ppdm_protection_policy_id }}"
+  when: get_ppdm_protection_policy_id | default('', true) | trim != ''
 - name: Define uri without protection-policies id
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/protection-policies"
-  when: id  | default('', false) | trim == ''
+  set_fact:
+    get_ppdm_protection_policy_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/protection-policies"
+  when: get_ppdm_protection_policy_id | default('', false) | trim == ''
 - name: Rewrite uri with filter
-  set_fact: 
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"  
-  when: filter is defined   
-- name: Get PPDM protection-policies with status {{ condition }}
+  set_fact:
+    get_ppdm_protection_policy_uri: "{{ get_ppdm_protection_policy_uri }}?filter={{ get_ppdm_protection_policy_filter | string | urlencode }}"
+  when: get_ppdm_protection_policy_filter is defined
+- name: Get PPDM protection-policies with status {{ get_ppdm_protection_policy_condition }}
   uri:
     method: GET
-    url: "{{ uri }}"
-    body_format: json 
+    url: "{{ get_ppdm_protection_policy_uri }}"
+    body_format: json
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ access_token }}"
     status_code: 200,500
     validate_certs: false
-  register: result
-  until: "{{ condition }}"
-  retries: "{{ retries }}"
-  delay: "{{ delay }}"
-  when: not ansible_check_mode 
+  register: get_ppdm_protection_policy_result
+  until: "{{ get_ppdm_protection_policy_condition }}"
+  retries: "{{ get_ppdm_protection_policy_retries }}"
+  delay: "{{ get_ppdm_protection_policy_delay }}"
+  when: not ansible_check_mode
 
 - set_fact:
-    protection_policy: "{{ result.json.content }}"
-  when: result.json.content is defined
+    get_ppdm_protection_policy_protection_policy: "{{ get_ppdm_protection_policy_result.json.content }}"
+  when: get_ppdm_protection_policy_result.json.content is defined
 - set_fact:
-    protection_policy: "{{ result.json }}"
-  when: id  | default('', true) | trim != '' and result.json is defined     
+    get_ppdm_protection_policy_protection_policy: "{{ get_ppdm_protection_policy_result.json }}"
+  when: get_ppdm_protection_policy_id | default('', true) | trim != '' and get_ppdm_protection_policy_result.json is defined
 - debug:
-    msg: "{{ protection_policy }}"
+    msg: "{{ get_ppdm_protection_policy_protection_policy }}"
     verbosity: 1    

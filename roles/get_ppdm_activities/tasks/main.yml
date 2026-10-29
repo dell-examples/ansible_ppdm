@@ -1,37 +1,37 @@
 - name: Define uri with activities ID
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/activities/{{ id }}"
-  when: id  | default('', true) | trim != ''
+  set_fact:
+    get_ppdm_activities_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/activities/{{ get_ppdm_activities_id }}"
+  when: get_ppdm_activities_id | default('', true) | trim != ''
 - name: Define uri without activities id
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/activities"
-  when: id  | default('', false) | trim == ''
+  set_fact:
+    get_ppdm_activities_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/activities"
+  when: get_ppdm_activities_id | default('', false) | trim == ''
 - name: Rewrite uri with filter
-  set_fact: 
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
-  when: filter  | default('', true) | trim != ''
+  set_fact:
+    get_ppdm_activities_uri: "{{ get_ppdm_activities_uri }}?filter={{ get_ppdm_activities_filter | string | urlencode }}"
+  when: get_ppdm_activities_filter | default('', true) | trim != ''
 
-- name: Get PPDM activities with status {{ condition }}
+- name: Get PPDM activities with status {{ get_ppdm_activities_condition }}
   uri:
     method: GET
-    url: "{{ uri }}"
-    body_format: json 
+    url: "{{ get_ppdm_activities_uri }}"
+    body_format: json
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ access_token }}"
     status_code: 200,500
     validate_certs: false
-  register: result
-  until: "{{ condition }}"    
-  retries: "{{ retries }}"
-  delay: "{{ delay }}"
-  when: not ansible_check_mode 
+  register: get_ppdm_activities_result
+  until: "{{ get_ppdm_activities_condition }}"
+  retries: "{{ get_ppdm_activities_retries }}"
+  delay: "{{ get_ppdm_activities_delay }}"
+  when: not ansible_check_mode
 - set_fact:
-    activities: "{{ result.json.content }}"
-  when: result.json.content is defined
+    get_ppdm_activities_activities: "{{ get_ppdm_activities_result.json.content }}"
+  when: get_ppdm_activities_result.json.content is defined
 - set_fact:
-    activities: "{{ result.json }}"
-  when: id  | default('', true) | trim != '' and result.json is defined       
+    get_ppdm_activities_activities: "{{ get_ppdm_activities_result.json }}"
+  when: get_ppdm_activities_id | default('', true) | trim != '' and get_ppdm_activities_result.json is defined
 - debug:
-    msg: "{{ activities }}"
+    msg: "{{ get_ppdm_activities_activities }}"
     verbosity: 1    

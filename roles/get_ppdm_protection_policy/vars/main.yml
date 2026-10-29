@@ -1,6 +1,6 @@
 ppdm_api_ver: /api/v2
 ppdm_username: admin
 ppdm_port: 8443
-delay: 1
-retries: 1
-condition: result is defined
+get_ppdm_protection_policy_delay: 1
+get_ppdm_protection_policy_retries: 1
+get_ppdm_protection_policy_condition: get_ppdm_protection_policy_result is defined

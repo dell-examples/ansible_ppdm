@@ -1,33 +1,33 @@
 - name: Define uri with assets ID
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/whitelist/{{ id }}"
-  when: id  | default('', true) | trim != ''
+  set_fact:
+    get_ppdm_whitelist_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/whitelist/{{ get_ppdm_whitelist_id }}"
+  when: get_ppdm_whitelist_id | default('', true) | trim != ''
 - name: Define uri without assets id
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/whitelist"
-  when: id  | default('', false) | trim == ''
+  set_fact:
+    get_ppdm_whitelist_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/whitelist"
+  when: get_ppdm_whitelist_id | default('', false) | trim == ''
 - name: Rewrite uri with filter
-  set_fact: 
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
-  when: filter  | default('', true) | trim != ''
+  set_fact:
+    get_ppdm_whitelist_uri: "{{ get_ppdm_whitelist_uri }}?filter={{ get_ppdm_whitelist_filter | string | urlencode }}"
+  when: get_ppdm_whitelist_filter | default('', true) | trim != ''
 
-- name: "Get PPDM Whitelist with status {{ condition }}"
+- name: "Get PPDM Whitelist with status {{ get_ppdm_whitelist_condition }}"
   uri:
     method: GET
-    url: "{{ uri }}"
-    body_format: json 
+    url: "{{ get_ppdm_whitelist_uri }}"
+    body_format: json
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ access_token }}"
     status_code: 200,500
     validate_certs: false
-  register: result
-  until: "{{ condition }}"    
-  retries: "{{ retries }}"
-  delay: "{{ delay }}"
-  when: not ansible_check_mode 
+  register: get_ppdm_whitelist_result
+  until: "{{ get_ppdm_whitelist_condition }}"
+  retries: "{{ get_ppdm_whitelist_retries }}"
+  delay: "{{ get_ppdm_whitelist_delay }}"
+  when: not ansible_check_mode
 - set_fact:
-    whitelist: "{{ result.json.content }}"
+    get_ppdm_whitelist_whitelist: "{{ get_ppdm_whitelist_result.json.content }}"
 - debug:
-    msg: "{{ whitelist }}"
+    msg: "{{ get_ppdm_whitelist_whitelist }}"
     verbosity: 1    

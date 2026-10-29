@@ -1,32 +1,32 @@
 - name: Define uri with protection-rules ID
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/protection-rules/{{ id }}"
-  when: id  | default('', true) | trim != ''
+  set_fact:
+    get_ppdm_protection_rules_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/protection-rules/{{ get_ppdm_protection_rules_id }}"
+  when: get_ppdm_protection_rules_id | default('', true) | trim != ''
 - name: Define uri without protection-rules id
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/protection-rules"
-  when: id  | default('', false) | trim == ''
+  set_fact:
+    get_ppdm_protection_rules_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/protection-rules"
+  when: get_ppdm_protection_rules_id | default('', false) | trim == ''
 - name: Rewrite uri with filter
-  set_fact: 
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"  
-  when: filter is defined   
-- name: Get PPDM protection-rules with status {{ condition }}
+  set_fact:
+    get_ppdm_protection_rules_uri: "{{ get_ppdm_protection_rules_uri }}?filter={{ get_ppdm_protection_rules_filter | string | urlencode }}"
+  when: get_ppdm_protection_rules_filter is defined
+- name: Get PPDM protection-rules with status {{ get_ppdm_protection_rules_condition }}
   uri:
     method: GET
-    url: "{{ uri }}"
-    body_format: json 
+    url: "{{ get_ppdm_protection_rules_uri }}"
+    body_format: json
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ access_token }}"
     status_code: 200,500
     validate_certs: false
-  register: result
-  until: "{{ condition }}"
-  retries: "{{ retries }}"
-  delay: "{{ delay }}"
-  when: not ansible_check_mode 
+  register: get_ppdm_protection_rules_result
+  until: "{{ get_ppdm_protection_rules_condition }}"
+  retries: "{{ get_ppdm_protection_rules_retries }}"
+  delay: "{{ get_ppdm_protection_rules_delay }}"
+  when: not ansible_check_mode
 - set_fact:
-    protection_rule: "{{ result.json.content }}"
+    get_ppdm_protection_rules_protection_rule: "{{ get_ppdm_protection_rules_result.json.content }}"
 - debug:
-    msg: "{{ protection_rule }}"
+    msg: "{{ get_ppdm_protection_rules_protection_rule }}"
     verbosity: 0    
