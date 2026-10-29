@@ -22,38 +22,38 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: GET CRA Component ID
     include_role:
       name: get_ppdm_components
   - debug:
-      msg: "{{ components.content   | json_query(jmesquery) }}"
+      msg: "{{ get_ppdm_components_components.content   | json_query(jmesquery) }}"
     vars:
       jmesquery: "[? componentServiceName=='cdr']"
       verbosity: 0
   - set_fact:
-      component_id:  "{{ components.content  | json_query(jmesquery) }}"
-    vars:      
+      component_id:  "{{ get_ppdm_components_components.content  | json_query(jmesquery) }}"
+    vars:
       jmesquery: "[? componentServiceName=='cdr'].id | [0]"
 
   - name: GET CRA Component status
     include_role:
       name: get_ppdm_components
     vars:
-      id: "{{ component_id }}"
-      retries: 20
-      delay: 5
-      condition: result.json.status == "UP"
+      get_ppdm_components_id: "{{ component_id }}"
+      get_ppdm_components_retries: 20
+      get_ppdm_components_delay: 5
+      get_ppdm_components_condition: get_ppdm_components_result.json.status == "UP"
 
-  - name: Get Cloud DR Account 
+  - name: Get Cloud DR Account
     include_role:
       name: get_clouddr_account
     vars:
-      filter: providerName eq "AZURE"
-  - name: set cdra component 
+      get_clouddr_account_filter: providerName eq "AZURE"
+  - name: set cdra component
     include_role:
       name: create_clouddr_account
     vars:
