@@ -14,10 +14,10 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: find PowerProtect upgrade software at input mapping
     find:
       paths: "{{ upgrade_source| default(lookup('env','PWD')) }}"
@@ -26,7 +26,7 @@
   - name: Setting Upload Filename
     set_fact:
       upgrade_file: "{{ result.files[0].path }}"
-    when: result.files is defined     
+    when: result.files is defined
   - name: parsed upload file
     debug: 
       msg: "{{ upgrade_file }}"
