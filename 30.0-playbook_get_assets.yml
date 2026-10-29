@@ -16,19 +16,19 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: Get PPDM Assets
     vars:
-      filter: "{{ asset_filter | regex_replace(\"'\", '\"') | default('') }}"
-      id: "{{ asset_id | default('')}}"
-    include_role: 
+      get_ppdm_assets_filter: "{{ asset_filter | regex_replace(\"'\", '\"') | default('') }}"
+      get_ppdm_assets_id: "{{ asset_id | default('')}}"
+    include_role:
       name: get_ppdm_assets
   - name: Assets Result
-    debug: 
-      msg: "{{ assets | json_query('[*].{name: name,id: id,type: type,protectionStatus: protectionStatus }') }}"
+    debug:
+      msg: "{{ get_ppdm_assets_assets | json_query('[*].{name: name,id: id,type: type,protectionStatus: protectionStatus }') }}"
       verbosity: 0   
     when: assets is defined
   - name: Assets Result

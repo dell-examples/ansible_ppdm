@@ -20,32 +20,32 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: Get PPDM Assets
     vars:
-      filter: "{{ asset_filter | regex_replace(\"'\", '\"') | default('') }}"
-      id: "{{ asset_id | default('')}}"
-    include_role: 
+      get_ppdm_assets_filter: "{{ asset_filter | regex_replace(\"'\", '\"') | default('') }}"
+      get_ppdm_assets_id: "{{ asset_id | default('')}}"
+    include_role:
       name: get_ppdm_assets
   - name: Assets Result
-    debug: 
-      msg: "{{ assets | json_query('[*].{name: name,id: id,type: type,protectionStatus: protectionStatus }') }}"
-      verbosity: 0   
-    when: assets is defined
+    debug:
+      msg: "{{ get_ppdm_assets_assets | json_query('[*].{name: name,id: id,type: type,protectionStatus: protectionStatus }') }}"
+      verbosity: 0
+    when: get_ppdm_assets_assets is defined
   - name: Assets Result
-    debug: 
-      msg: "{{ assets }}"
-      verbosity: 0   
-    when: assets is defined and full_output == 'true'
-  - name: Get Protection Policy for '{{ assets[0].id }}'  
-    include_role: 
+    debug:
+      msg: "{{ get_ppdm_assets_assets }}"
+      verbosity: 0
+    when: get_ppdm_assets_assets is defined and full_output == 'true'
+  - name: Get Protection Policy for '{{ get_ppdm_assets_assets[0].id }}'
+    include_role:
       name: get_ppdm_protection_policy
     vars:
-      id:  "{{ assets[0].protectionPolicyId }}" 
-      ppdm_api_ver: /api/v3 
+      get_ppdm_protection_policy_id:  "{{ get_ppdm_assets_assets[0].protectionPolicyId }}"
+      ppdm_api_ver: /api/v3
   - name: start AdHoc Protection
     include_role: 
       name: start_adhoc_ppdm_protections

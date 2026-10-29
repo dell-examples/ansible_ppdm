@@ -16,24 +16,24 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: Get PPDM Assets
-    include_role: 
+    include_role:
       name: get_ppdm_activities
     vars:
-        filter: "{{ activity_filter | default('') }}"
-        id: "{{ activity_id | default('') }}"
+        get_ppdm_activities_filter: "{{ activity_filter | default('') }}"
+        get_ppdm_activities_id: "{{ activity_id | default('') }}"
   - name: Activities Result Short, full result in fact activities
-    debug: 
-      msg: "{{ activities | json_query('[*].{name: name,id: id,type: type}') }}"
-      verbosity: 0   
-    when: activities is defined
+    debug:
+      msg: "{{ get_ppdm_activities_activities | json_query('[*].{name: name,id: id,type: type}') }}"
+      verbosity: 0
+    when: get_ppdm_activities_activities is defined
   - name: Activities Result
-    debug: 
-      msg: "{{ activities }}"
-      verbosity: 0   
-    when: activities is defined and activity_id is defined
+    debug:
+      msg: "{{ get_ppdm_activities_activities }}"
+      verbosity: 0
+    when: get_ppdm_activities_activities is defined and activity_id is defined
 
