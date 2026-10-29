@@ -28,20 +28,20 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
 
   - name: Get Protection Policy with filter
     vars:
-      filter: 'name eq "{{ k8s_policy_name }}"'
+      get_ppdm_protection_policy_filter: 'name eq "{{ k8s_policy_name }}"'
     include_role:
       name: get_ppdm_protection_policy
-  - debug: 
-      msg: "{{ protection_policy }}"
-      verbosity: 0   
-    when: protection_policy is defined
+  - debug:
+      msg: "{{ get_ppdm_protection_policy_protection_policy }}"
+      verbosity: 0
+    when: get_ppdm_protection_policy_protection_policy is defined
 
 
 

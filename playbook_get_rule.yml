@@ -28,19 +28,19 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
 
   - name: Get Protection rule with filter
     vars:
-      filter: 'name eq "Kubernetes Namespace Label Rule {{ ppdm_rule }}"'
-#      filter: 'name eq "Kubernetes Namespace Label Rule ppdm_policy=PPDM_GOLD"'
+      get_ppdm_protection_rules_filter: 'name eq "Kubernetes Namespace Label Rule {{ ppdm_rule }}"'
+#      get_ppdm_protection_rules_filter: 'name eq "Kubernetes Namespace Label Rule ppdm_policy=PPDM_GOLD"'
     include_role:
       name: get_ppdm_protection_rules
-  - debug: 
-      msg: "{{ protection_rule }}"
+  - debug:
+      msg: "{{ get_ppdm_protection_rules_protection_rule }}"
       verbosity: 0    
 
 

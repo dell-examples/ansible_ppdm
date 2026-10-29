@@ -34,40 +34,40 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: Get Kubernetes Host Certificate for {{ k8s_fqdn }}
     include_role:
-      name: get_ppdm_host_certificate  
-    vars: 
-      host: "{{ k8s_fqdn }}"
-      port: "{{ k8s_port }}"
+      name: get_ppdm_host_certificate
+    vars:
+      get_ppdm_host_certificate_host: "{{ k8s_fqdn }}"
+      get_ppdm_host_certificate_port: "{{ k8s_port }}"
   - name: Accept K8S Host Certificate
     include_role:
-      name: accept_ppdm_host_certificate  
-    vars: 
-      old_certificate: "{{ certificate }}"  
+      name: accept_ppdm_host_certificate
+    vars:
+      old_certificate: "{{ get_ppdm_host_certificate_certificate }}"
   - name: Create K8S Credentials
     vars:
       data:
-        method: "TOKEN" 
+        method: "TOKEN"
         name: "ppdm-discovery-{{ k8s_fqdn }}"
-        type: "KUBERNETES"        
+        type: "KUBERNETES"
         password: "{{ k8s_token }}"
         username: "ppdm-discovery-{{ k8s_fqdn }}"
     include_role:
       name: create_ppdm_credentials
   - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
-    include_role: 
+    include_role:
       name: get_ppdm_token
-    vars: 
+    vars:
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?          
+    name: do we have a token ?
   - name: Add K8S Cluster to Inventory
     vars:
       data:
@@ -75,14 +75,14 @@
         type: "KUBERNETES"
         address: "{{ k8s_fqdn }}"
         port: "{{ k8s_port }}"
-        retries: 10
-        delay: 30
-        credentials: 
-            id: "{{ credentials.id }}"
+        add_ppdm_inventory_retries: 10
+        add_ppdm_inventory_delay: 30
+        credentials:
+            id: "{{ get_ppdm_credentials_credentials.id }}"
     include_role:
       name: add_ppdm_inventory
-  - debug: 
-      msg: "{{ inventory }}"
+  - debug:
+      msg: "{{ add_ppdm_inventory_inventory }}"
       verbosity: 0     
 
 
