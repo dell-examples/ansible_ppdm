@@ -11,7 +11,7 @@
   collections:
    - kubernetes.core     
   vars: 
-   - parallel_pvc_backup: false 	
+    parallel_pvc_backup: true 	
   tasks:  
   - name: Checking Required Variable ppdm_fqdn
     fail: 
