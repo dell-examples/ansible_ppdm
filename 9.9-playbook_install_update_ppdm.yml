@@ -18,49 +18,49 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: get Update Package
-    include_role: 
+    include_role:
       name: get_ppdm_update_package
     vars:
-      filter: 'category eq "ACTIVE"' 
+      get_ppdm_update_package_filter: 'category eq "ACTIVE"'
 
   - name: get_ppdm_upgrade_by ID
-    when: update_package[0] is defined and update_package[0].upgradeError is not defined
-    include_role: 
+    when: get_ppdm_update_package_update_package[0] is defined and get_ppdm_update_package_update_package[0].upgradeError is not defined
+    include_role:
       name: get_ppdm_update_package
     vars:
-      id: "{{ update_package[0].id }}"
+      get_ppdm_update_package_id: "{{ get_ppdm_update_package_update_package[0].id }}"
 
   - name: merge update body
     vars:
       my_new_config:
         state: INSTALLED
         certificateTrustedByUser: true
-        eula: 
+        eula:
           productEulaAccepted: true # honor EULA Changes
           telemetryEulaAccepted: true  # honor EULA Changes
-        sizeInBytes:  "{{ update_package.sizeInBytes | int }}"
+        sizeInBytes:  "{{ get_ppdm_update_package_update_package.sizeInBytes | int }}"
     set_fact:
-      update_package: "{{ update_package | default([]) | combine(my_new_config, recursive=True) }}"
-  - debug: 
-      msg: "{{ update_package }}"
+      get_ppdm_update_package_update_package: "{{ get_ppdm_update_package_update_package | default([]) | combine(my_new_config, recursive=True) }}"
+  - debug:
+      msg: "{{ get_ppdm_update_package_update_package }}"
   - name: install_ppdm_upgrade
-    when: update_package is defined and update_package.state == "INSTALLED"
-    include_role: 
+    when: get_ppdm_update_package_update_package is defined and get_ppdm_update_package_update_package.state == "INSTALLED"
+    include_role:
       name: install_ppdm_update_package
     vars:
-      id: "{{ update_package.id }}"
-      body: "{{ update_package }}"
+      id: "{{ get_ppdm_update_package_update_package.id }}"
+      body: "{{ get_ppdm_update_package_update_package }}"
   - name: Validate Update Started
-    when: update_package is defined and update_package.upgradeError is not defined
-    include_role: 
+    when: get_ppdm_update_package_update_package is defined and get_ppdm_update_package_update_package.upgradeError is not defined
+    include_role:
       name: get_ppdm_update_package
     vars:
-      id: "{{ update_package.id }}"   
+      id: "{{ get_ppdm_update_package_update_package.id }}"
   - name: Check Update State  https://{{ ppdm_fqdn | regex_replace('^https://') }}
     include_role:
       name: check_update_done             
