@@ -36,58 +36,58 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: Get Datadomain Host Certificate for  {{ ddve_fqdn }}
     include_role:
       name: get_ppdm_host_certificate
-    vars: 
-      host: "{{ ddve_fqdn }}"
-      port: 3009
+    vars:
+      get_ppdm_host_certificate_host: "{{ ddve_fqdn }}"
+      get_ppdm_host_certificate_port: 3009
   - name: Accept Datadomain Host Certificate for {{ ddve_fqdn }}
     include_role:
-      name: accept_ppdm_host_certificate  
-    vars: 
-      old_certificate: "{{ certificate }}"
+      name: accept_ppdm_host_certificate
+    vars:
+      old_certificate: "{{ get_ppdm_host_certificate_certificate }}"
   - name: Get DataDomain Credentials from PPDM
     vars:
-      filter: name eq "{{ ddve_username }}" and type eq "DATADOMAIN"
+      get_ppdm_credentials_filter: name eq "{{ ddve_username }}" and type eq "DATADOMAIN"
     include_role:
       name: get_ppdm_credentials
   - set_fact:
-     credentials: "{{ credentials[0] }}"
-    when: credentials[0].id is defined                     
+     credentials: "{{ get_ppdm_credentials_credentials[0] }}"
+    when: get_ppdm_credentials_credentials[0].id is defined
   - name: Create DataDomain Credentials
     vars:
-      data: 
+      data:
         type: "DATADOMAIN"
         name: "{{ ddve_username }}"
         username: "{{ ddve_username }}"
         password: "{{ ddve_password }}"
     include_role:
-      name: create_ppdm_credentials 
-    when: credentials.id is not defined
+      name: create_ppdm_credentials
+    when: get_ppdm_credentials_credentials[0].id is not defined
 #  - name: Get DataDomain Inventory Sources
-#    include_role: 
+#    include_role:
 #      name: get_ppdm_inventory_sources
 #    vars:
-#      filterstring: type eq "EXTERNALDATADOMAIN" and name eq "{{ ddve_fqdn }}"          
+#      filterstring: type eq "EXTERNALDATADOMAIN" and name eq "{{ ddve_fqdn }}"
   - name: Add Datadomain to Inventory
     vars:
-      retries: 20
-      delay: 60
+      add_ppdm_inventory_retries: 20
+      add_ppdm_inventory_delay: 60
       data:
         name: "{{ ddve_fqdn }}"
         type: "EXTERNALDATADOMAIN"
         address: "{{ ddve_fqdn }}"
         port: 3009
-        credentials: 
-            id: "{{ credentials.id }}"
+        credentials:
+            id: "{{ get_ppdm_credentials_credentials[0].id }}"
     include_role:
       name: add_ppdm_inventory
-    when: inventorysources[0].id is not defined
+    when: get_ppdm_inventory_sources_inventorysources[0].id is not defined
   - name: sucess
     debug:
       msg: "{{ inventory }}"

@@ -30,63 +30,63 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: Get vcenter Host Certificate for  {{ vcenter_fqdn }}
     include_role:
       name: get_ppdm_host_certificate
-    vars: 
-      host: "{{ vcenter_fqdn }}"
-      port: 443
+    vars:
+      get_ppdm_host_certificate_host: "{{ vcenter_fqdn }}"
+      get_ppdm_host_certificate_port: 443
   - name: Accept VCenter Host Certificate for {{ vcenter_fqdn }}
     include_role:
-      name: accept_ppdm_host_certificate  
-    vars: 
-      old_certificate: "{{ certificate }}" 
+      name: accept_ppdm_host_certificate
+    vars:
+      old_certificate: "{{ get_ppdm_host_certificate_certificate }}"
 
   - name: Get vCenter Credentials from PPDM
     vars:
-      filter: name eq "{{ vcenter_username }}" and type eq "VCENTER"
+      get_ppdm_credentials_filter: name eq "{{ vcenter_username }}" and type eq "VCENTER"
     include_role:
       name: get_ppdm_credentials
   - set_fact:
-     credentials: "{{ credentials[0] }}"
-    when: credentials[0].id is defined       
+     credentials: "{{ get_ppdm_credentials_credentials[0] }}"
+    when: get_ppdm_credentials_credentials[0].id is defined
 
 
   - name: Create vCenter Credentials
     vars:
-      data: 
+      data:
         type: "VCENTER"
         name: "{{ vcenter_username }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
     include_role:
       name: create_ppdm_credentials
-    when: credentials.id is not defined
-         
+    when: get_ppdm_credentials_credentials[0].id is not defined
+
   - name: Get vCenter Inventory Sources
-    include_role: 
+    include_role:
       name: get_ppdm_inventory_sources
     vars:
-      filter: type eq "VCENTER" and name eq "{{ vcenter_fqdn }}"     
+      get_ppdm_inventory_sources_filter: type eq "VCENTER" and name eq "{{ vcenter_fqdn }}"
 
   - name: Add VCENTER {{ vcenter_fqdn }} to Inventory
-    vars:        
-      retries: 10
-      delay: 60
+    vars:
+      add_ppdm_inventory_retries: 10
+      add_ppdm_inventory_delay: 60
       data:
         name: "{{ vcenter_fqdn }}"
         type: "VCENTER"
         address: "{{ vcenter_fqdn }}"
         port: 443
-        credentials: 
-            id: "{{ credentials.id }}"
+        credentials:
+            id: "{{ get_ppdm_credentials_credentials[0].id }}"
     include_role:
       name: add_ppdm_inventory
-    when: inventorysources[0].id is not defined
+    when: get_ppdm_inventory_sources_inventorysources[0].id is not defined
 
 
      
