@@ -1,34 +1,34 @@
 - name: Define uri with Credential ID
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/credentials/{{ id }}"
-  when: id  | default('', true) | trim != ''
+  set_fact:
+    get_ppdm_credentials_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/credentials/{{ get_ppdm_credentials_id }}"
+  when: get_ppdm_credentials_id | default('', true) | trim != ''
 - name: Define uri without Credential id
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/credentials"
-  when: id  | default('', false) | trim == ''
+  set_fact:
+    get_ppdm_credentials_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/credentials"
+  when: get_ppdm_credentials_id | default('', false) | trim == ''
 - name: Rewrite uri with filter
   set_fact:
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
-  when: filter | default('', true) | trim != ''   
-- name: Get PPDM Credentials with filter {{ filter }}
+    get_ppdm_credentials_uri: "{{ get_ppdm_credentials_uri }}?filter={{ get_ppdm_credentials_filter | string | urlencode }}"
+  when: get_ppdm_credentials_filter | default('', true) | trim != ''
+- name: Get PPDM Credentials with filter {{ get_ppdm_credentials_filter }}
   uri:
     method: GET
-    url: "{{ uri }}"
-    body_format: json 
+    url: "{{ get_ppdm_credentials_uri }}"
+    body_format: json
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ access_token }}"
     status_code: 200,500,503
     validate_certs: false
-  register: result
-  when: not ansible_check_mode 
+  register: get_ppdm_credentials_result
+  when: not ansible_check_mode
 - set_fact:
-    credentials: "{{ result.json.content }}"
-  when: result.json.content[0].id is defined and result.status == 200  
+    get_ppdm_credentials_credentials: "{{ get_ppdm_credentials_result.json.content }}"
+  when: get_ppdm_credentials_result.json.content[0].id is defined and get_ppdm_credentials_result.status == 200
 #- set_fact:
-#    credentials: "{{ result.json }}"
-#  when: result.json.consumersCount is defined and result.status == 200    
+#    get_ppdm_credentials_credentials: "{{ get_ppdm_credentials_result.json }}"
+#  when: get_ppdm_credentials_result.json.consumersCount is defined and get_ppdm_credentials_result.status == 200
 - debug:
-    msg: "{{ credentials }}"     
-    verbosity: 1     
-  when: credentials is defined  
+    msg: "{{ get_ppdm_credentials_credentials }}"
+    verbosity: 1
+  when: get_ppdm_credentials_credentials is defined  
