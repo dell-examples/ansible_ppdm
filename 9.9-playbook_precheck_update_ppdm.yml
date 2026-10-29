@@ -18,44 +18,44 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: get Update Package prior precheck
-    include_role: 
+    include_role:
       name: get_ppdm_update_package
     vars:
-      filter: 'category eq "ACTIVE"' 
+      get_ppdm_update_package_filter: 'category eq "ACTIVE"'
   - name: display upgrade package failure prior precheck
     debug:
-      msg: "{{ update_package[0].upgradeError }}"
-    when: update_package[0] is defined and update_package[0].upgradeError is defined
-#    include_role: 
+      msg: "{{ get_ppdm_update_package_update_package[0].upgradeError }}"
+    when: get_ppdm_update_package_update_package[0] is defined and get_ppdm_update_package_update_package[0].upgradeError is defined
+#    include_role:
 #      name: delete_ppdm_update_package
 #    vars:
-#      id: "{{ update_package[0].id }}"
+#      id: "{{ get_ppdm_update_package_update_package[0].id }}"
   - name: precheck_ppdm_upgrade
-    when: update_package[0] is defined # and update_package[0].upgradeError is not defined
-    include_role: 
+    when: get_ppdm_update_package_update_package[0] is defined # and get_ppdm_update_package_update_package[0].upgradeError is not defined
+    include_role:
       name: precheck_ppdm_update_package
     vars:
-      id: "{{ update_package[0].id }}"
+      id: "{{ get_ppdm_update_package_update_package[0].id }}"
   - debug:
       msg: "{{ validation_details }}"
       verbosity: 0
     when: validation_details is defined
 
   - name: get Update Package State After Precheck
-    include_role: 
+    include_role:
       name: get_ppdm_update_package
     vars:
-      filter: 'category eq "ACTIVE"' 
-    when: update_package[0] is defined and update_package[0].upgradeError is defined
-     
+      get_ppdm_update_package_filter: 'category eq "ACTIVE"'
+    when: get_ppdm_update_package_update_package[0] is defined and get_ppdm_update_package_update_package[0].upgradeError is defined
+
   - name: display Failure with exit
     debug:
-      msg: "{{ update_package[0].upgradeError }}"
-    when: update_package[0] is defined and update_package[0].upgradeError is defined
-    failed_when: update_package[0] is defined and update_package[0].upgradeError is defined
+      msg: "{{ get_ppdm_update_package_update_package[0].upgradeError }}"
+    when: get_ppdm_update_package_update_package[0] is defined and get_ppdm_update_package_update_package[0].upgradeError is defined
+    failed_when: get_ppdm_update_package_update_package[0] is defined and get_ppdm_update_package_update_package[0].upgradeError is defined
      

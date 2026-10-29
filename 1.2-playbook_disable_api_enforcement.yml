@@ -24,15 +24,15 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: our do we have a token ?  
-  - name: Get PPDM Configuration 
-    include_role: 
+    name: our do we have a token ?
+  - name: Get PPDM Configuration
+    include_role:
       name: set_ppdm_common_settings
-    vars: 
-      data: 
+    vars:
+      data:
         id: REST_API_SETTING
         properties:
           - name: enableStrictValidation
