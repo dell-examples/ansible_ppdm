@@ -1,38 +1,38 @@
 - name: Define uri with  ID
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/agent-registration-status/{{ id }}"
-  when: id  | default('', true) | trim != ''
+  set_fact:
+    get_ppdm_agent_registration_status_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/agent-registration-status/{{ get_ppdm_agent_registration_status_id }}"
+  when: get_ppdm_agent_registration_status_id | default('', true) | trim != ''
 - name: Define uri without  id
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/agent-registration-status"
-  when: id  | default('', false) | trim == ''
+  set_fact:
+    get_ppdm_agent_registration_status_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/agent-registration-status"
+  when: get_ppdm_agent_registration_status_id | default('', false) | trim == ''
 - name: Rewrite uri with filter
-  set_fact: 
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
-  when: (filter | default('') | trim) != ''
+  set_fact:
+    get_ppdm_agent_registration_status_uri: "{{ get_ppdm_agent_registration_status_uri }}?filter={{ get_ppdm_agent_registration_status_filter | string | urlencode }}"
+  when: (get_ppdm_agent_registration_status_filter | default('') | trim) != ''
 
-- name: Get PPDM Agent registration Status with status {{ condition }}
+- name: Get PPDM Agent registration Status with status {{ get_ppdm_agent_registration_status_condition }}
   uri:
     method: GET
-    url: "{{ uri }}"
-    body_format: json 
+    url: "{{ get_ppdm_agent_registration_status_uri }}"
+    body_format: json
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ access_token }}"
     status_code: 200,500
     validate_certs: false
-  register: result
-  until: "{{ condition }}"    
-  retries: "{{ retries }}"
-  delay: "{{ delay }}"
-  when: not ansible_check_mode 
+  register: get_ppdm_agent_registration_status_result
+  until: "{{ get_ppdm_agent_registration_status_condition }}"
+  retries: "{{ get_ppdm_agent_registration_status_retries }}"
+  delay: "{{ get_ppdm_agent_registration_status_delay }}"
+  when: not ansible_check_mode
 - set_fact:
-    agent_registration_status: "{{ result.json.content }}"
-  when: result.json.content is defined
+    get_ppdm_agent_registration_status_agent_registration_status: "{{ get_ppdm_agent_registration_status_result.json.content }}"
+  when: get_ppdm_agent_registration_status_result.json.content is defined
 - set_fact:
-    agent_registration_status: "{{ result.json }}"
-  when: id is defined and result.json is defined     
+    get_ppdm_agent_registration_status_agent_registration_status: "{{ get_ppdm_agent_registration_status_result.json }}"
+  when: get_ppdm_agent_registration_status_id is defined and get_ppdm_agent_registration_status_result.json is defined
 - debug:
-    msg: "{{ agent_registration_status }}"
+    msg: "{{ get_ppdm_agent_registration_status_agent_registration_status }}"
     verbosity: 1
-  when: agent_registration_status is defined      
+  when: get_ppdm_agent_registration_status_agent_registration_status is defined      

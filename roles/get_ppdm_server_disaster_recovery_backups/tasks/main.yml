@@ -1,36 +1,36 @@
 - name: Define uri with id
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/server-disaster-recovery-backups/{{ id }}"
-  when: id  | default('', true) | trim != ''
+  set_fact:
+    get_ppdm_server_disaster_recovery_backups_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/server-disaster-recovery-backups/{{ get_ppdm_server_disaster_recovery_backups_id }}"
+  when: get_ppdm_server_disaster_recovery_backups_id | default('', true) | trim != ''
 - name: Define uri without id
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/server-disaster-recovery-backups"
-  when: id  | default('', false) | trim == ''
+  set_fact:
+    get_ppdm_server_disaster_recovery_backups_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/server-disaster-recovery-backups"
+  when: get_ppdm_server_disaster_recovery_backups_id | default('', false) | trim == ''
 - name: Rewrite uri with filter
   set_fact:
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}" #&{{ query | string | urlencode }}"
-  when: filter | default('', true) | trim != ''   
-- name: Get PPDM Server Disaster Recovery Backups with filter {{ filter }}
+    get_ppdm_server_disaster_recovery_backups_uri: "{{ get_ppdm_server_disaster_recovery_backups_uri }}?filter={{ get_ppdm_server_disaster_recovery_backups_filter | string | urlencode }}" #&{{ query | string | urlencode }}"
+  when: get_ppdm_server_disaster_recovery_backups_filter | default('', true) | trim != ''
+- name: Get PPDM Server Disaster Recovery Backups with filter {{ get_ppdm_server_disaster_recovery_backups_filter }}
   uri:
     method: GET
-    url: "{{ uri }}"
+    url: "{{ get_ppdm_server_disaster_recovery_backups_uri }}"
     body_format: json
     body:
-      full: TRUE  
+      full: TRUE
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"   
+      authorization: "Bearer {{ access_token }}"
     status_code: 200,500,503
     validate_certs: false
-  register: result
-  when: not ansible_check_mode 
+  register: get_ppdm_server_disaster_recovery_backups_result
+  when: not ansible_check_mode
 - set_fact:
-    server_disaster_recovery_backups: "{{ result.json.content }}"
-  when: result.json.content[0].id is defined and result.status == 200  
+    get_ppdm_server_disaster_recovery_backups_server_disaster_recovery_backups: "{{ get_ppdm_server_disaster_recovery_backups_result.json.content }}"
+  when: get_ppdm_server_disaster_recovery_backups_result.json.content[0].id is defined and get_ppdm_server_disaster_recovery_backups_result.status == 200
 - set_fact:
-    server_disaster_recovery_backups: "{{ result.json }}"
-  when: result.json is defined and result.status == 200 and id is defined   
+    get_ppdm_server_disaster_recovery_backups_server_disaster_recovery_backups: "{{ get_ppdm_server_disaster_recovery_backups_result.json }}"
+  when: get_ppdm_server_disaster_recovery_backups_result.json is defined and get_ppdm_server_disaster_recovery_backups_result.status == 200 and get_ppdm_server_disaster_recovery_backups_id is defined
 - debug:
-    msg: "{{ server_disaster_recovery_backups }}"     
-    verbosity: 1     
-  when: server_disaster_recovery_backups is defined  
+    msg: "{{ get_ppdm_server_disaster_recovery_backups_server_disaster_recovery_backups }}"
+    verbosity: 1
+  when: get_ppdm_server_disaster_recovery_backups_server_disaster_recovery_backups is defined  
