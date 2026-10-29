@@ -33,10 +33,10 @@
       name: get_ppdm_token
     vars: 
       ppdm_password: "{{ ppdm_setup_password }}"
-  - debug: 
-      msg: "{{ access_token }}"
+  - debug:
+      msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: our do we have a token ?  
+    name: our do we have a token ?
   - name: Accept PPDM EULA
     include_role:
       name: accept_ppdm_eula  
