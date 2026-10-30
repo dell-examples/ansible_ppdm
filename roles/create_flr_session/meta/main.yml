@@ -1,0 +1,88 @@
+galaxy_info:
+  role_name: create_flr_session
+  author: Karsten Bott, Dell Technologies
+  description: Create FLR session in PowerProtect Data Manager (PPDM) using the REST API
+  company: Dell Technologies
+  license: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: EL
+      versions:
+        - 7
+        - 8
+        - 9
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+        - jammy
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+    - name: GenericLinux
+      versions:
+        - any
+  galaxy_tags:
+    - ppdm
+    - powerprotect
+    - dell
+    - backup
+    - recovery
+    - storage
+    - protection
+    - flr
+
+dependencies: []
+
+description: |
+  This role creates an FLR session in PowerProtect Data Manager (PPDM) via the REST API.
+
+ppdm_api:
+  version: "20.3.0"
+  endpoint: /api/v2/flr-session
+  method: POST
+
+variables:
+  required:
+    - name: ppdm_baseurl
+      type: string
+      description: The base URL of the PPDM server
+      default: null
+    - name: ppdm_port
+      type: integer
+      description: The port number for the PPDM API
+      default: 8443
+    - name: ppdm_api_ver
+      type: string
+      description: The API version path
+      default: /api/v2
+    - name: access_token
+      type: string
+      description: The PPDM access token for authentication
+      default: null
+    - name: data
+      type: dictionary
+      description: The FLR session data
+      default: null
+
+output_variables:
+  - name: create_flr_session_flr_session
+    type: object
+    description: The created FLR session
+  - name: result
+    type: object
+    description: The full API response
+
+examples:
+  - name: Create FLR session
+    code: |
+      - name: Create FLR session
+        include_role:
+          name: create_flr_session
+        vars:
+          ppdm_baseurl: "https://ppdm.example.com"
+          access_token: "{{ ppdm_token }}"
+          data:
+            copyId: "12345678-1234-1234-1234-123456789012"
+            targetVmAssetId: "87654321-4321-4321-4321-210987654321"
