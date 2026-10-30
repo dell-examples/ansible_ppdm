@@ -1,0 +1,86 @@
+galaxy_info:
+  role_name: set_ppdm_smtp_configuration
+  author: Karsten Bott, Dell Technologies
+  description: Set SMTP configuration in PowerProtect Data Manager (PPDM) using the REST API
+  company: Dell Technologies
+  license: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: EL
+      versions:
+        - 7
+        - 8
+        - 9
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+        - jammy
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+    - name: GenericLinux
+      versions:
+        - any
+  galaxy_tags:
+    - ppdm
+    - powerprotect
+    - dell
+    - backup
+    - recovery
+    - storage
+    - protection
+    - smtp
+    - email
+
+dependencies: []
+
+description: |
+  This role sets SMTP configuration in PowerProtect Data Manager (PPDM) via the REST API.
+
+ppdm_api:
+  version: "20.3.0"
+  endpoint: /api/v2/smtp-configuration
+  method: POST
+
+variables:
+  required:
+    - name: ppdm_baseurl
+      type: string
+      description: The base URL of the PPDM server
+      default: null
+    - name: ppdm_port
+      type: integer
+      description: The port number for the PPDM API
+      default: 8443
+    - name: ppdm_api_ver
+      type: string
+      description: The API version path
+      default: /api/v2
+    - name: access_token
+      type: string
+      description: The PPDM access token for authentication
+      default: null
+    - name: data
+      type: dictionary
+      description: The SMTP configuration data
+      default: null
+
+output_variables:
+  - name: result
+    type: object
+    description: The full API response
+
+examples:
+  - name: Set SMTP configuration
+    code: |
+      - name: Set SMTP configuration
+        include_role:
+          name: set_ppdm_smtp_configuration
+        vars:
+          ppdm_baseurl: "https://ppdm.example.com"
+          access_token: "{{ ppdm_token }}"
+          data:
+            host: "smtp.example.com"
+            port: 25
