@@ -1,0 +1,98 @@
+galaxy_info:
+  role_name: get_ppdm_activities
+  author: Karsten Bott, Dell Technologies
+  description: Retrieve activities from PowerProtect Data Manager (PPDM) using the REST API
+  company: Dell Technologies
+  license: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: EL
+      versions:
+        - 7
+        - 8
+        - 9
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+        - jammy
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+    - name: GenericLinux
+      versions:
+        - any
+  galaxy_tags:
+    - ppdm
+    - powerprotect
+    - dell
+    - backup
+    - recovery
+    - storage
+    - protection
+    - activities
+
+dependencies: []
+
+description: |
+  This role retrieves activities from PowerProtect Data Manager (PPDM) via the REST API.
+
+ppdm_api:
+  version: "20.3.0"
+  endpoint: /api/v2/activities
+  method: GET
+
+variables:
+  required:
+    - name: ppdm_baseurl
+      type: string
+      description: The base URL of the PPDM server
+      default: null
+    - name: ppdm_port
+      type: integer
+      description: The port number for the PPDM API
+      default: 8443
+    - name: ppdm_api_ver
+      type: string
+      description: The API version path
+      default: /api/v2
+    - name: access_token
+      type: string
+      description: The PPDM access token for authentication
+      default: null
+  optional:
+    - name: get_ppdm_activities_filter
+      type: string
+      description: Filter query to narrow down results
+      default: ""
+    - name: get_ppdm_activities_delay
+      type: integer
+      description: Delay between retries in seconds
+      default: 1
+    - name: get_ppdm_activities_retries
+      type: integer
+      description: Number of retries for the API call
+      default: 1
+    - name: get_ppdm_activities_condition
+      type: string
+      description: Condition for the until loop
+      default: "get_ppdm_activities_result is defined"
+
+output_variables:
+  - name: get_ppdm_activities_activities
+    type: list
+    description: List of activities retrieved from PPDM
+  - name: get_ppdm_activities_result
+    type: object
+    description: The full API response
+
+examples:
+  - name: Get PPDM activities
+    code: |
+      - name: Get PPDM activities
+        include_role:
+          name: get_ppdm_activities
+        vars:
+          ppdm_baseurl: "https://ppdm.example.com"
+          access_token: "{{ ppdm_token }}"

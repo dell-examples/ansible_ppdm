@@ -1,0 +1,109 @@
+galaxy_info:
+  role_name: add_ppdm_inventory
+  author: Karsten Bott, Dell Technologies
+  description: Add or update inventory sources in PowerProtect Data Manager (PPDM) using the REST API
+  company: Dell Technologies
+  license: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: EL
+      versions:
+        - 7
+        - 8
+        - 9
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+        - jammy
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+    - name: GenericLinux
+      versions:
+        - any
+  galaxy_tags:
+    - ppdm
+    - powerprotect
+    - dell
+    - backup
+    - recovery
+    - storage
+    - protection
+    - inventory
+
+dependencies:
+  - get_ppdm_inventory_sources
+  - set_ppdm_inventory
+
+description: |
+  This role adds or updates inventory sources in PowerProtect Data Manager (PPDM) via the REST API.
+  It first checks if an inventory source with the same address exists, and if so, updates it.
+  Otherwise, it creates a new inventory source.
+
+ppdm_api:
+  version: "20.3.0"
+  endpoint: /api/v2/inventory-sources
+  method: POST
+
+variables:
+  required:
+    - name: ppdm_baseurl
+      type: string
+      description: The base URL of the PPDM server
+      default: null
+    - name: ppdm_port
+      type: integer
+      description: The port number for the PPDM API
+      default: 8443
+    - name: ppdm_api_ver
+      type: string
+      description: The API version path
+      default: /api/v2
+    - name: access_token
+      type: string
+      description: The PPDM access token for authentication
+      default: null
+    - name: data
+      type: dictionary
+      description: The inventory source data including name, type, address, and credentials
+      default: null
+  optional:
+    - name: filterstring
+      type: string
+      description: Filter string to check for existing inventory sources
+      default: null
+    - name: retries
+      type: integer
+      description: Number of retries for the API call
+      default: 10
+    - name: delay
+      type: integer
+      description: Delay between retries in seconds
+      default: 30
+
+output_variables:
+  - name: inventory
+    type: object
+    description: The created or updated inventory source object
+  - name: result
+    type: object
+    description: The full API response
+
+examples:
+  - name: Add vCenter inventory source
+    code: |
+      - name: Add vCenter to inventory
+        include_role:
+          name: add_ppdm_inventory
+        vars:
+          ppdm_baseurl: "https://ppdm.example.com"
+          access_token: "{{ ppdm_token }}"
+          data:
+            name: "my-vcenter"
+            type: "VCENTER"
+            address: "vcenter.example.com"
+            port: 443
+            credentials:
+              id: "{{ credential_id }}"

@@ -1,0 +1,137 @@
+galaxy_info:
+  role_name: get_ppdm_credentials
+  author: Karsten Bott, Dell Technologies
+  description: Retrieve credentials from PowerProtect Data Manager (PPDM) using the REST API
+  company: Dell Technologies
+  license: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: EL
+      versions:
+        - 7
+        - 8
+        - 9
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+        - jammy
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+    - name: GenericLinux
+      versions:
+        - any
+  galaxy_tags:
+    - ppdm
+    - powerprotect
+    - dell
+    - backup
+    - recovery
+    - storage
+    - protection
+    - credentials
+    - authentication
+
+dependencies: []
+
+description: |
+  This role retrieves credentials from PowerProtect Data Manager (PPDM) via the REST API.
+  It can retrieve credentials by ID or by using a filter query. The role returns the
+  credentials in a namespaced variable for use in subsequent tasks.
+
+ppdm_api:
+  version: "20.3.0"
+  endpoint: /api/v2/credentials
+  method: GET
+
+variables:
+  required:
+    - name: ppdm_baseurl
+      type: string
+      description: The base URL of the PPDM server (e.g., https://ppdm.example.com)
+      default: null
+    - name: ppdm_port
+      type: integer
+      description: The port number for the PPDM API
+      default: 8443
+    - name: ppdm_api_ver
+      type: string
+      description: The API version path
+      default: /api/v2
+    - name: access_token
+      type: string
+      description: The PPDM access token for authentication
+      default: null
+  optional:
+    - name: get_ppdm_credentials_id
+      type: string
+      description: The specific credential ID to retrieve (if not set, retrieves all credentials)
+      default: ""
+    - name: get_ppdm_credentials_filter
+      type: string
+      description: Filter query to narrow down results (e.g., 'name eq "my-credential" and type eq "VCENTER"')
+      default: ""
+    - name: get_ppdm_credentials_delay
+      type: integer
+      description: Delay between retries in seconds
+      default: 1
+    - name: get_ppdm_credentials_retries
+      type: integer
+      description: Number of retries for the API call
+      default: 1
+    - name: get_ppdm_credentials_condition
+      type: string
+      description: Condition for the until loop
+      default: "get_ppdm_credentials_result is defined"
+
+output_variables:
+  - name: get_ppdm_credentials_credentials
+    type: list
+    description: List of credentials retrieved from PPDM. Each credential contains id, name, type, and other properties.
+  - name: get_ppdm_credentials_result
+    type: object
+    description: The full API response including status code and JSON content
+
+examples:
+  - name: Get all credentials
+    code: |
+      - name: Get all PPDM credentials
+        include_role:
+          name: get_ppdm_credentials
+        vars:
+          ppdm_baseurl: "https://ppdm.example.com"
+          access_token: "{{ ppdm_token }}"
+  
+  - name: Get specific credential by ID
+    code: |
+      - name: Get credential by ID
+        include_role:
+          name: get_ppdm_credentials
+        vars:
+          ppdm_baseurl: "https://ppdm.example.com"
+          access_token: "{{ ppdm_token }}"
+          get_ppdm_credentials_id: "12345678-1234-1234-1234-123456789012"
+  
+  - name: Get credentials with filter
+    code: |
+      - name: Get vCenter credentials
+        include_role:
+          name: get_ppdm_credentials
+        vars:
+          ppdm_baseurl: "https://ppdm.example.com"
+          access_token: "{{ ppdm_token }}"
+          get_ppdm_credentials_filter: 'type eq "VCENTER" and name eq "my-vcenter"'
+  
+  - name: Use retrieved credentials
+    code: |
+      - name: Get credentials
+        include_role:
+          name: get_ppdm_credentials
+        vars:
+          get_ppdm_credentials_filter: 'type eq "VCENTER"'
+      
+      - name: Display credential ID
+        debug:
+          msg: "Credential ID: {{ get_ppdm_credentials_credentials[0].id }}"
