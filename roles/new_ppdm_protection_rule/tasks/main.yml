@@ -9,7 +9,7 @@
     body: "{{ new_protection_rule }}"
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ get_ppdm_token_access_token }}"    
     status_code: 200,201,202,403
     validate_certs: false
   register: result  

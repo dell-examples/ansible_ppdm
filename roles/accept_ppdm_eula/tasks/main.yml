@@ -8,7 +8,7 @@
     status_code: 200,500
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"       
+      authorization: "Bearer {{ get_ppdm_token_access_token }}"       
     validate_certs: false
   register: result  
   when: not ansible_check_mode 

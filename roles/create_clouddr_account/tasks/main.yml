@@ -6,7 +6,7 @@
     body: "{{ data }}"
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"    
+      authorization: "Bearer {{ get_ppdm_token_access_token }}"    
     status_code: "{{ status_codes }}"
     validate_certs: false
   register: result  

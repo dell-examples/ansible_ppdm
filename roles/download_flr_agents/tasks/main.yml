@@ -6,7 +6,7 @@
   get_url:
     url: "{{ ppdm_baseurl }}/agent-download?filename={{ agent_filename }}" 
     headers:
-      authorization: "Bearer {{ access_token }}"  
+      authorization: "Bearer {{ get_ppdm_token_access_token }}"  
     dest: "{{ agent_destination }}/{{ agent_filename | dirname }}"  
     validate_certs: false
     mode: 01777

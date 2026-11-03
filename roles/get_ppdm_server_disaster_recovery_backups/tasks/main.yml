@@ -19,7 +19,7 @@
       full: TRUE
     headers:
       accept: application/json
-      authorization: "Bearer {{ access_token }}"
+      authorization: "Bearer {{ get_ppdm_token_access_token }}"
     status_code: 200,500,503
     validate_certs: false
   register: get_ppdm_server_disaster_recovery_backups_result

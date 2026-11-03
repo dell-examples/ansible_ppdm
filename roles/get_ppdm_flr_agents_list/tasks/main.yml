@@ -9,7 +9,7 @@
       connection_encoding: br
       content_type: application/json
       accept: "application/json, text/plain, */*"
-      # authorization: "Bearer {{ access_token }}"
+      # authorization: "Bearer {{ get_ppdm_token_access_token }}"
       Cookie: "_csfr={{ login.cookies_string }}"
     status_code: 200,500
     validate_certs: false
