@@ -207,7 +207,7 @@
     include_role:
       name: accept_ppdm_host_certificate  
     vars: 
-      accept_ppdm_host_certificate_old_certificate: "{{ get_ppdm_host_certificate_certificate }}"  
+      old_certificate: "{{ get_ppdm_host_certificate_certificate }}"  
   - name: "Ensure K8S Credentials ppdm-discovery-{{ k8s_fqdn }}"
     vars:
       data:
