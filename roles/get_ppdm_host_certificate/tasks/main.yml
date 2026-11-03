@@ -15,4 +15,4 @@
     verbosity: 1
 - name: return certificate
   set_fact:
-    get_ppdm_host_certificate_certificate: "{{ get_ppdm_host_certificate_result.json }}"
+    get_ppdm_host_certificate_certificate: "{{ get_ppdm_host_certificate_result.json[0] if get_ppdm_host_certificate_result.json is iterable and get_ppdm_host_certificate_result.json is not string else get_ppdm_host_certificate_result.json }}"
