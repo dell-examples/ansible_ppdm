@@ -35,9 +35,6 @@ galaxy_info:
 
 dependencies: []
 
-description: |
-  This role retrieves agent registration status from PowerProtect Data Manager (PPDM) via the REST API.
-
 ppdm_api:
   version: "20.3.0"
   endpoint: /api/v2/agent-registration-status

@@ -36,9 +36,6 @@ galaxy_info:
 
 dependencies: []
 
-description: |
-  This role accepts a host certificate in PowerProtect Data Manager (PPDM) via the REST API.
-
 ppdm_api:
   version: "20.3.0"
   endpoint: /api/v2/host-certificate

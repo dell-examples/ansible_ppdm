@@ -36,11 +36,6 @@ galaxy_info:
 
 dependencies: []
 
-description: |
-  This role retrieves an authentication token from PowerProtect Data Manager (PPDM) via the REST API.
-  The token is required for all subsequent API calls to PPDM. The role authenticates using
-  username and password credentials and returns an access token.
-
 ppdm_api:
   version: "20.3.0"
   endpoint: /api/v2/login

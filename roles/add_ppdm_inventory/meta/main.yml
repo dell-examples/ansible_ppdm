@@ -37,11 +37,6 @@ dependencies:
   - get_ppdm_inventory_sources
   - set_ppdm_inventory
 
-description: |
-  This role adds or updates inventory sources in PowerProtect Data Manager (PPDM) via the REST API.
-  It first checks if an inventory source with the same address exists, and if so, updates it.
-  Otherwise, it creates a new inventory source.
-
 ppdm_api:
   version: "20.3.0"
   endpoint: /api/v2/inventory-sources

@@ -36,10 +36,6 @@ galaxy_info:
 
 dependencies: []
 
-description: |
-  This role updates existing credentials in PowerProtect Data Manager (PPDM) via the REST API.
-  It requires the credential ID and the updated data dictionary.
-
 ppdm_api:
   version: "20.3.0"
   endpoint: /api/v2/credentials/{id}

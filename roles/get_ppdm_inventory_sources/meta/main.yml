@@ -35,10 +35,6 @@ galaxy_info:
 
 dependencies: []
 
-description: |
-  This role retrieves inventory sources from PowerProtect Data Manager (PPDM) via the REST API.
-  It can retrieve inventory sources by ID or by using a filter query.
-
 ppdm_api:
   version: "20.3.0"
   endpoint: /api/v2/inventory-sources

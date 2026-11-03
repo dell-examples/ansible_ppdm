@@ -36,11 +36,6 @@ galaxy_info:
 
 dependencies: []
 
-description: |
-  This role retrieves credentials from PowerProtect Data Manager (PPDM) via the REST API.
-  It can retrieve credentials by ID or by using a filter query. The role returns the
-  credentials in a namespaced variable for use in subsequent tasks.
-
 ppdm_api:
   version: "20.3.0"
   endpoint: /api/v2/credentials

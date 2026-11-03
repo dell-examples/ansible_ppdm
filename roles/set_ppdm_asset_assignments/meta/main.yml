@@ -35,9 +35,6 @@ galaxy_info:
 
 dependencies: []
 
-description: |
-  This role sets asset assignments in PowerProtect Data Manager (PPDM) via the REST API.
-
 ppdm_api:
   version: "20.3.0"
   endpoint: /api/v2/asset-assignments

@@ -36,9 +36,6 @@ galaxy_info:
 
 dependencies: []
 
-description: |
-  This role accepts the PPDM EULA via the REST API.
-
 ppdm_api:
   version: "20.3.0"
   endpoint: /api/v2/eula
