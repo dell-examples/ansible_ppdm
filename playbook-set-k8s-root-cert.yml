@@ -46,11 +46,11 @@
     include_role:
       name: add_ppdm_certificate_chain
     vars:
-      chain: "{{ certificateChain }}"
-      host: "{{ k8s_fqdn }}"
-      port: "{{ k8s_port }}"
-      type: ROOT
-      verify: true
+      add_ppdm_certificate_chain_chain: "{{ certificateChain }}"
+      add_ppdm_certificate_chain_host: "{{ k8s_fqdn }}"
+      add_ppdm_certificate_chain_port: "{{ k8s_port }}"
+      add_ppdm_certificate_chain_type: ROOT
+      add_ppdm_certificate_chain_verify: true
   - debug: 
       msg: "{{ certificate }}"
       verbosity: 1
