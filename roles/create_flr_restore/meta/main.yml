@@ -1,7 +1,7 @@
 galaxy_info:
   role_name: create_flr_restore
   author: Karsten Bott, Dell Technologies
-  description: Create FLR restore in PowerProtect Data Manager (PPDM) using the REST API
+  description: Ansible role for create_flr_restore
   company: Dell Technologies
   license: MIT
   min_ansible_version: 2.9
@@ -31,56 +31,5 @@ galaxy_info:
     - recovery
     - storage
     - protection
-    - flr
-    - restore
 
 dependencies: []
-
-ppdm_api:
-  version: "20.3.0"
-  endpoint: /api/v2/flr-restore
-  method: POST
-
-variables:
-  required:
-    - name: ppdm_baseurl
-      type: string
-      description: The base URL of the PPDM server
-      default: null
-    - name: ppdm_port
-      type: integer
-      description: The port number for the PPDM API
-      default: 8443
-    - name: ppdm_api_ver
-      type: string
-      description: The API version path
-      default: /api/v2
-    - name: access_token
-      type: string
-      description: The PPDM access token for authentication
-      default: null
-    - name: id
-      type: string
-      description: The FLR session ID
-    - name: data
-      type: dictionary
-      description: The FLR restore data
-      default: null
-
-output_variables:
-  - name: result
-    type: object
-    description: The full API response
-
-examples:
-  - name: Create FLR restore
-    code: |
-      - name: Create FLR restore
-        include_role:
-          name: create_flr_restore
-        vars:
-          ppdm_baseurl: "https://ppdm.example.com"
-          access_token: "{{ ppdm_token }}"
-          id: "{{ flr_session_id }}"
-          data:
-            targetDirectory: "/tmp"

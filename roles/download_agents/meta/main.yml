@@ -1,7 +1,7 @@
 galaxy_info:
   role_name: download_agents
   author: Karsten Bott, Dell Technologies
-  description: Download agents from PowerProtect Data Manager (PPDM) using the REST API
+  description: Ansible role for download_agents
   company: Dell Technologies
   license: MIT
   min_ansible_version: 2.9
@@ -31,46 +31,5 @@ galaxy_info:
     - recovery
     - storage
     - protection
-    - agents
-    - download
 
 dependencies: []
-
-ppdm_api:
-  version: "20.3.0"
-  endpoint: /api/v2/agents/download
-  method: GET
-
-variables:
-  required:
-    - name: ppdm_baseurl
-      type: string
-      description: The base URL of the PPDM server
-      default: null
-    - name: ppdm_port
-      type: integer
-      description: The port number for the PPDM API
-      default: 8443
-    - name: ppdm_api_ver
-      type: string
-      description: The API version path
-      default: /api/v2
-    - name: access_token
-      type: string
-      description: The PPDM access token for authentication
-      default: null
-
-output_variables:
-  - name: result
-    type: object
-    description: The full API response
-
-examples:
-  - name: Download agents
-    code: |
-      - name: Download PPDM agents
-        include_role:
-          name: download_agents
-        vars:
-          ppdm_baseurl: "https://ppdm.example.com"
-          access_token: "{{ ppdm_token }}"

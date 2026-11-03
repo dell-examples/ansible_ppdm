@@ -1,7 +1,7 @@
 galaxy_info:
   role_name: create_ppdm_credentials
   author: Karsten Bott, Dell Technologies
-  description: Create or update credentials in PowerProtect Data Manager (PPDM) using the REST API
+  description: Ansible role for create_ppdm_credentials
   company: Dell Technologies
   license: MIT
   min_ansible_version: 2.9
@@ -31,60 +31,5 @@ galaxy_info:
     - recovery
     - storage
     - protection
-    - credentials
-    - authentication
 
-dependencies:
-  - get_ppdm_credentials
-  - set_ppdm_credentials
-
-ppdm_api:
-  version: "20.3.0"
-  endpoint: /api/v2/credentials
-  method: POST
-
-variables:
-  required:
-    - name: ppdm_baseurl
-      type: string
-      description: The base URL of the PPDM server
-      default: null
-    - name: ppdm_port
-      type: integer
-      description: The port number for the PPDM API
-      default: 8443
-    - name: ppdm_api_ver
-      type: string
-      description: The API version path
-      default: /api/v2
-    - name: access_token
-      type: string
-      description: The PPDM access token for authentication
-      default: null
-    - name: data
-      type: dictionary
-      description: The credential data including name, type, username, password, and other properties
-      default: null
-
-output_variables:
-  - name: credentials
-    type: object
-    description: The created or updated credential object
-  - name: result
-    type: object
-    description: The full API response
-
-examples:
-  - name: Create vCenter credentials
-    code: |
-      - name: Create vCenter credentials
-        include_role:
-          name: create_ppdm_credentials
-        vars:
-          ppdm_baseurl: "https://ppdm.example.com"
-          access_token: "{{ ppdm_token }}"
-          data:
-            type: "VCENTER"
-            name: "my-vcenter"
-            username: "administrator@vsphere.local"
-            password: "{{ vcenter_password }}"
+dependencies: []

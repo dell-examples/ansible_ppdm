@@ -1,7 +1,7 @@
 galaxy_info:
   role_name: get_ppdm_configuration
   author: Karsten Bott, Dell Technologies
-  description: Retrieve PPDM configuration from PowerProtect Data Manager (PPDM) using the REST API
+  description: Ansible role for get_ppdm_configuration
   company: Dell Technologies
   license: MIT
   min_ansible_version: 2.9
@@ -31,48 +31,5 @@ galaxy_info:
     - recovery
     - storage
     - protection
-    - configuration
 
 dependencies: []
-
-ppdm_api:
-  version: "20.3.0"
-  endpoint: /api/v2/configuration
-  method: GET
-
-variables:
-  required:
-    - name: ppdm_baseurl
-      type: string
-      description: The base URL of the PPDM server
-      default: null
-    - name: ppdm_port
-      type: integer
-      description: The port number for the PPDM API
-      default: 8443
-    - name: ppdm_api_ver
-      type: string
-      description: The API version path
-      default: /api/v2
-    - name: access_token
-      type: string
-      description: The PPDM access token for authentication
-      default: null
-
-output_variables:
-  - name: get_ppdm_configuration_configuration
-    type: object
-    description: The PPDM configuration retrieved
-  - name: get_ppdm_configuration_result
-    type: object
-    description: The full API response
-
-examples:
-  - name: Get PPDM configuration
-    code: |
-      - name: Get PPDM configuration
-        include_role:
-          name: get_ppdm_configuration
-        vars:
-          ppdm_baseurl: "https://ppdm.example.com"
-          access_token: "{{ ppdm_token }}"

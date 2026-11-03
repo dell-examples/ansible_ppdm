@@ -1,7 +1,7 @@
 galaxy_info:
   role_name: get_ppdm_server_disaster_recovery_hosts
   author: Karsten Bott, Dell Technologies
-  description: Retrieve server disaster recovery hosts from PowerProtect Data Manager (PPDM) using the REST API
+  description: Ansible role for get_ppdm_server_disaster_recovery_hosts
   company: Dell Technologies
   license: MIT
   min_ansible_version: 2.9
@@ -31,66 +31,5 @@ galaxy_info:
     - recovery
     - storage
     - protection
-    - disaster-recovery
-    - sdr
 
 dependencies: []
-
-ppdm_api:
-  version: "20.3.0"
-  endpoint: /api/v2/server-disaster-recovery-hosts
-  method: GET
-
-variables:
-  required:
-    - name: ppdm_baseurl
-      type: string
-      description: The base URL of the PPDM server
-      default: null
-    - name: ppdm_port
-      type: integer
-      description: The port number for the PPDM API
-      default: 8443
-    - name: ppdm_api_ver
-      type: string
-      description: The API version path
-      default: /api/v2
-    - name: access_token
-      type: string
-      description: The PPDM access token for authentication
-      default: null
-  optional:
-    - name: get_ppdm_server_disaster_recovery_hosts_filter
-      type: string
-      description: Filter query to narrow down results
-      default: ""
-    - name: get_ppdm_server_disaster_recovery_hosts_delay
-      type: integer
-      description: Delay between retries in seconds
-      default: 1
-    - name: get_ppdm_server_disaster_recovery_hosts_retries
-      type: integer
-      description: Number of retries for the API call
-      default: 1
-    - name: get_ppdm_server_disaster_recovery_hosts_condition
-      type: string
-      description: Condition for the until loop
-      default: "get_ppdm_server_disaster_recovery_hosts_result is defined"
-
-output_variables:
-  - name: get_ppdm_server_disaster_recovery_hosts_server_disaster_recovery_hosts
-    type: list
-    description: List of server disaster recovery hosts retrieved from PPDM
-  - name: get_ppdm_server_disaster_recovery_hosts_result
-    type: object
-    description: The full API response
-
-examples:
-  - name: Get server disaster recovery hosts
-    code: |
-      - name: Get server disaster recovery hosts
-        include_role:
-          name: get_ppdm_server_disaster_recovery_hosts
-        vars:
-          ppdm_baseurl: "https://ppdm.example.com"
-          access_token: "{{ ppdm_token }}"

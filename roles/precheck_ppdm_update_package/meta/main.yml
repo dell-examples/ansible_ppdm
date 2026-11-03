@@ -1,7 +1,7 @@
 galaxy_info:
   role_name: precheck_ppdm_update_package
   author: Karsten Bott, Dell Technologies
-  description: Precheck PPDM update package using the REST API
+  description: Ansible role for precheck_ppdm_update_package
   company: Dell Technologies
   license: MIT
   min_ansible_version: 2.9
@@ -31,51 +31,5 @@ galaxy_info:
     - recovery
     - storage
     - protection
-    - update
-    - upgrade
 
 dependencies: []
-
-ppdm_api:
-  version: "20.3.0"
-  endpoint: /api/v2/update-packages/{id}/precheck
-  method: POST
-
-variables:
-  required:
-    - name: ppdm_baseurl
-      type: string
-      description: The base URL of the PPDM server
-      default: null
-    - name: ppdm_port
-      type: integer
-      description: The port number for the PPDM API
-      default: 8443
-    - name: ppdm_api_ver
-      type: string
-      description: The API version path
-      default: /api/v2
-    - name: access_token
-      type: string
-      description: The PPDM access token for authentication
-      default: null
-    - name: id
-      type: string
-      description: The update package ID to precheck
-      default: null
-
-output_variables:
-  - name: result
-    type: object
-    description: The full API response
-
-examples:
-  - name: Precheck update package
-    code: |
-      - name: Precheck PPDM update package
-        include_role:
-          name: precheck_ppdm_update_package
-        vars:
-          ppdm_baseurl: "https://ppdm.example.com"
-          access_token: "{{ ppdm_token }}"
-          id: "{{ package_id }}"

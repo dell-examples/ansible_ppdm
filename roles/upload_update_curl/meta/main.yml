@@ -1,7 +1,7 @@
 galaxy_info:
   role_name: upload_update_curl
   author: Karsten Bott, Dell Technologies
-  description: Upload PPDM update package using curl
+  description: Ansible role for upload_update_curl
   company: Dell Technologies
   license: MIT
   min_ansible_version: 2.9
@@ -31,51 +31,5 @@ galaxy_info:
     - recovery
     - storage
     - protection
-    - update
-    - upgrade
 
 dependencies: []
-
-ppdm_api:
-  version: "20.3.0"
-  endpoint: /api/v2/update-packages
-  method: POST
-
-variables:
-  required:
-    - name: ppdm_baseurl
-      type: string
-      description: The base URL of the PPDM server
-      default: null
-    - name: ppdm_port
-      type: integer
-      description: The port number for the PPDM API
-      default: 8443
-    - name: ppdm_api_ver
-      type: string
-      description: The API version path
-      default: /api/v2
-    - name: access_token
-      type: string
-      description: The PPDM access token for authentication
-      default: null
-    - name: update_file
-      type: string
-      description: The path to the update package file
-      default: null
-
-output_variables:
-  - name: result
-    type: object
-    description: The full API response
-
-examples:
-  - name: Upload update package with curl
-    code: |
-      - name: Upload PPDM update package
-        include_role:
-          name: upload_update_curl
-        vars:
-          ppdm_baseurl: "https://ppdm.example.com"
-          access_token: "{{ ppdm_token }}"
-          update_file: "/path/to/update-package.iso"

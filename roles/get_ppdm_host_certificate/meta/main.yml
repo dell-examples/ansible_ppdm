@@ -1,7 +1,7 @@
 galaxy_info:
   role_name: get_ppdm_host_certificate
   author: Karsten Bott, Dell Technologies
-  description: Retrieve host certificate from PowerProtect Data Manager (PPDM) using the REST API
+  description: Ansible role for get_ppdm_host_certificate
   company: Dell Technologies
   license: MIT
   min_ansible_version: 2.9
@@ -31,59 +31,5 @@ galaxy_info:
     - recovery
     - storage
     - protection
-    - certificates
-    - ssl
 
 dependencies: []
-
-ppdm_api:
-  version: "20.3.0"
-  endpoint: /api/v2/host-certificate
-  method: GET
-
-variables:
-  required:
-    - name: ppdm_baseurl
-      type: string
-      description: The base URL of the PPDM server
-      default: null
-    - name: ppdm_port
-      type: integer
-      description: The port number for the PPDM API
-      default: 8443
-    - name: ppdm_api_ver
-      type: string
-      description: The API version path
-      default: /api/v2
-    - name: access_token
-      type: string
-      description: The PPDM access token for authentication
-      default: null
-    - name: get_ppdm_host_certificate_host
-      type: string
-      description: The hostname to retrieve certificate for
-      default: null
-    - name: get_ppdm_host_certificate_port
-      type: integer
-      description: The port number for the host
-      default: 443
-
-output_variables:
-  - name: get_ppdm_host_certificate_certificate
-    type: string
-    description: The host certificate retrieved from PPDM
-  - name: get_ppdm_host_certificate_result
-    type: object
-    description: The full API response
-
-examples:
-  - name: Get host certificate
-    code: |
-      - name: Get host certificate
-        include_role:
-          name: get_ppdm_host_certificate
-        vars:
-          ppdm_baseurl: "https://ppdm.example.com"
-          access_token: "{{ ppdm_token }}"
-          get_ppdm_host_certificate_host: "vcenter.example.com"
-          get_ppdm_host_certificate_port: 443

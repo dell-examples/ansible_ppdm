@@ -1,7 +1,7 @@
 galaxy_info:
   role_name: run_ppdm_protection_rule
   author: Karsten Bott, Dell Technologies
-  description: Run protection rule in PowerProtect Data Manager (PPDM) using the REST API
+  description: Ansible role for run_ppdm_protection_rule
   company: Dell Technologies
   license: MIT
   min_ansible_version: 2.9
@@ -31,50 +31,5 @@ galaxy_info:
     - recovery
     - storage
     - protection
-    - protection-rules
 
 dependencies: []
-
-ppdm_api:
-  version: "20.3.0"
-  endpoint: /api/v2/protection-rules/{id}/run
-  method: POST
-
-variables:
-  required:
-    - name: ppdm_baseurl
-      type: string
-      description: The base URL of the PPDM server
-      default: null
-    - name: ppdm_port
-      type: integer
-      description: The port number for the PPDM API
-      default: 8443
-    - name: ppdm_api_ver
-      type: string
-      description: The API version path
-      default: /api/v2
-    - name: access_token
-      type: string
-      description: The PPDM access token for authentication
-      default: null
-    - name: id
-      type: string
-      description: The protection rule ID to run
-      default: null
-
-output_variables:
-  - name: result
-    type: object
-    description: The full API response
-
-examples:
-  - name: Run protection rule
-    code: |
-      - name: Run protection rule
-        include_role:
-          name: run_ppdm_protection_rule
-        vars:
-          ppdm_baseurl: "https://ppdm.example.com"
-          access_token: "{{ ppdm_token }}"
-          id: "{{ rule_id }}"

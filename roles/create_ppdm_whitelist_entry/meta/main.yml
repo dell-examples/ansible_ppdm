@@ -1,7 +1,7 @@
 galaxy_info:
   role_name: create_ppdm_whitelist_entry
   author: Karsten Bott, Dell Technologies
-  description: Create whitelist entry in PowerProtect Data Manager (PPDM) using the REST API
+  description: Ansible role for create_ppdm_whitelist_entry
   company: Dell Technologies
   license: MIT
   min_ansible_version: 2.9
@@ -31,53 +31,5 @@ galaxy_info:
     - recovery
     - storage
     - protection
-    - whitelist
-    - security
 
 dependencies: []
-
-ppdm_api:
-  version: "20.3.0"
-  endpoint: /api/v2/whitelist
-  method: POST
-
-variables:
-  required:
-    - name: ppdm_baseurl
-      type: string
-      description: The base URL of the PPDM server
-      default: null
-    - name: ppdm_port
-      type: integer
-      description: The port number for the PPDM API
-      default: 8443
-    - name: ppdm_api_ver
-      type: string
-      description: The API version path
-      default: /api/v2
-    - name: access_token
-      type: string
-      description: The PPDM access token for authentication
-      default: null
-    - name: data
-      type: dictionary
-      description: The whitelist entry data
-      default: null
-
-output_variables:
-  - name: result
-    type: object
-    description: The full API response
-
-examples:
-  - name: Create whitelist entry
-    code: |
-      - name: Create whitelist entry
-        include_role:
-          name: create_ppdm_whitelist_entry
-        vars:
-          ppdm_baseurl: "https://ppdm.example.com"
-          access_token: "{{ ppdm_token }}"
-          data:
-            ipAddress: "192.168.1.100"
-            description: "Test server"

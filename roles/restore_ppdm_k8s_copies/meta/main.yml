@@ -1,7 +1,7 @@
 galaxy_info:
   role_name: restore_ppdm_k8s_copies
   author: Karsten Bott, Dell Technologies
-  description: Restore Kubernetes asset copies using PowerProtect Data Manager (PPDM) REST API
+  description: Ansible role for restore_ppdm_k8s_copies
   company: Dell Technologies
   license: MIT
   min_ansible_version: 2.9
@@ -31,57 +31,5 @@ galaxy_info:
     - recovery
     - storage
     - protection
-    - kubernetes
-    - restore
 
 dependencies: []
-
-ppdm_api:
-  version: "20.3.0"
-  endpoint: /api/v2/k8s-asset-copies/{id}/restore
-  method: POST
-
-variables:
-  required:
-    - name: ppdm_baseurl
-      type: string
-      description: The base URL of the PPDM server
-      default: null
-    - name: ppdm_port
-      type: integer
-      description: The port number for the PPDM API
-      default: 8443
-    - name: ppdm_api_ver
-      type: string
-      description: The API version path
-      default: /api/v2
-    - name: access_token
-      type: string
-      description: The PPDM access token for authentication
-      default: null
-    - name: id
-      type: string
-      description: The K8s asset copy ID to restore
-      default: null
-    - name: data
-      type: dictionary
-      description: The restore data
-      default: null
-
-output_variables:
-  - name: result
-    type: object
-    description: The full API response
-
-examples:
-  - name: Restore K8s asset copies
-    code: |
-      - name: Restore K8s asset copies
-        include_role:
-          name: restore_ppdm_k8s_copies
-        vars:
-          ppdm_baseurl: "https://ppdm.example.com"
-          access_token: "{{ ppdm_token }}"
-          id: "{{ asset_copy_id }}"
-          data:
-            targetClusterId: "87654321-4321-4321-4321-210987654321"

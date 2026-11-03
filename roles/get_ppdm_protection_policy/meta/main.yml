@@ -1,7 +1,7 @@
 galaxy_info:
   role_name: get_ppdm_protection_policy
   author: Karsten Bott, Dell Technologies
-  description: Retrieve protection policies from PowerProtect Data Manager (PPDM) using the REST API
+  description: Ansible role for get_ppdm_protection_policy
   company: Dell Technologies
   license: MIT
   min_ansible_version: 2.9
@@ -31,65 +31,5 @@ galaxy_info:
     - recovery
     - storage
     - protection
-    - protection-policy
 
 dependencies: []
-
-ppdm_api:
-  version: "20.3.0"
-  endpoint: /api/v2/protection-policies
-  method: GET
-
-variables:
-  required:
-    - name: ppdm_baseurl
-      type: string
-      description: The base URL of the PPDM server
-      default: null
-    - name: ppdm_port
-      type: integer
-      description: The port number for the PPDM API
-      default: 8443
-    - name: ppdm_api_ver
-      type: string
-      description: The API version path
-      default: /api/v2
-    - name: access_token
-      type: string
-      description: The PPDM access token for authentication
-      default: null
-  optional:
-    - name: get_ppdm_protection_policy_filter
-      type: string
-      description: Filter query to narrow down results
-      default: ""
-    - name: get_ppdm_protection_policy_delay
-      type: integer
-      description: Delay between retries in seconds
-      default: 1
-    - name: get_ppdm_protection_policy_retries
-      type: integer
-      description: Number of retries for the API call
-      default: 1
-    - name: get_ppdm_protection_policy_condition
-      type: string
-      description: Condition for the until loop
-      default: "get_ppdm_protection_policy_result is defined"
-
-output_variables:
-  - name: get_ppdm_protection_policy_protection_policy
-    type: object
-    description: The protection policy retrieved from PPDM
-  - name: get_ppdm_protection_policy_result
-    type: object
-    description: The full API response
-
-examples:
-  - name: Get protection policy
-    code: |
-      - name: Get PPDM protection policy
-        include_role:
-          name: get_ppdm_protection_policy
-        vars:
-          ppdm_baseurl: "https://ppdm.example.com"
-          access_token: "{{ ppdm_token }}"

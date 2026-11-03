@@ -1,7 +1,7 @@
 galaxy_info:
   role_name: get_ppdm_token
   author: Karsten Bott, Dell Technologies
-  description: Retrieve authentication token from PowerProtect Data Manager (PPDM) using the REST API
+  description: Ansible role for get_ppdm_token
   company: Dell Technologies
   license: MIT
   min_ansible_version: 2.9
@@ -31,58 +31,5 @@ galaxy_info:
     - recovery
     - storage
     - protection
-    - authentication
-    - token
 
 dependencies: []
-
-ppdm_api:
-  version: "20.3.0"
-  endpoint: /api/v2/login
-  method: POST
-
-variables:
-  required:
-    - name: ppdm_baseurl
-      type: string
-      description: The base URL of the PPDM server (e.g., https://ppdm.example.com)
-      default: null
-    - name: ppdm_port
-      type: integer
-      description: The port number for the PPDM API
-      default: 8443
-    - name: ppdm_api_ver
-      type: string
-      description: The API version path
-      default: /api/v2
-    - name: ppdm_username
-      type: string
-      description: The PPDM username for authentication
-      default: admin
-    - name: ppdm_password
-      type: string
-      description: The PPDM password for authentication
-      default: null
-
-output_variables:
-  - name: get_ppdm_token_access_token
-    type: string
-    description: The access token retrieved from PPDM, used for authenticating subsequent API calls
-  - name: get_ppdm_token_result
-    type: object
-    description: The full API response including the access token and other authentication details
-
-examples:
-  - name: Get PPDM authentication token
-    code: |
-      - name: Get PPDM token
-        include_role:
-          name: get_ppdm_token
-        vars:
-          ppdm_baseurl: "https://ppdm.example.com"
-          ppdm_username: "admin"
-          ppdm_password: "{{ ppdm_password }}"
-      
-      - name: Use token for subsequent calls
-        debug:
-          msg: "Token: {{ get_ppdm_token_access_token }}"
