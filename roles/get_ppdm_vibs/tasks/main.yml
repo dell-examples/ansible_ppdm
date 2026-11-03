@@ -4,7 +4,7 @@
 #  when: get_ppdm_vibs_id | default('', true) | trim != ''
 
 - name: Get PPDM vib-details with status {{ get_ppdm_vibs_condition }}
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_ppdm_vibs_uri }}"
     body_format: json
@@ -22,4 +22,4 @@
     get_ppdm_vibs_vibdetails: "{{ get_ppdm_vibs_result.json.content }}"
 - debug:
     msg: "{{ get_ppdm_vibs_vibdetails }}"
-    verbosity: 0    
+    verbosity: 0

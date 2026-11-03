@@ -3,38 +3,38 @@
   hosts: localhost
   gather_facts: no
   connection: local
-  vars_files: 
+  vars_files:
     - ./vars/main.yml
-  tasks:  
+  tasks:
   - name: Setting Base URL
-    set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"     
+  ansible.builtin.set_fact:
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"
   - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
-    include_role: 
+  ansible.builtin.include_role:
       name: get_ppdm_token
-    vars: 
+    vars:
       ppdm_password: "{{ ppdm_new_password }}"
   - debug:
       msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
     name: do we have a token ?
   - name: Get PPDM inventory-sources
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_inventory_sources
     vars:
       get_ppdm_inventory_sources_filter: "{{ inventory_filter | default('') }}"
       get_ppdm_inventory_sources_id: "{{ inventory_id | default('') }}"
   - debug:
       msg: "{{ get_ppdm_inventory_sources_inventorysources  | json_query('[*].{name: name,id: id,type: type}') }}"
-      verbosity: 0   
+      verbosity: 0
 
   - name: inventorysources Result summary
-    debug: 
+  ansible.builtin.debug:
       msg: "{{ inventorysources | json_query('[*].{name: name,id: id,type: type}') }}"
-      verbosity: 0   
+      verbosity: 0
     when: inventorysources is defined
   - name: inventorysource Result
-    debug: 
+  ansible.builtin.debug:
       msg: "{{ inventorysources }}"
-      verbosity: 0   
+      verbosity: 0
     when: inventorysources is defined and inventory_id is defined

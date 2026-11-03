@@ -7,7 +7,7 @@
   when: get_ppdm_assetcopies_filter | default('', true) | trim != ''
 
 - name: Get PPDM assetcopies with status {{ get_ppdm_assetcopies_condition }}
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_ppdm_assetcopies_uri }}"
     body_format: json
@@ -25,4 +25,4 @@
     get_ppdm_assetcopies_copies: "{{ get_ppdm_assetcopies_result.json.content }}"
 - debug:
     msg: "{{ get_ppdm_assetcopies_copies }}"
-    verbosity: 1    
+    verbosity: 1

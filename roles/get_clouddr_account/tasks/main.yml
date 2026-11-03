@@ -13,7 +13,7 @@
 
 
 - name: GET PPDM CloudDR Accounts
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_clouddr_account_uri }}"
     body_format: json
@@ -32,4 +32,4 @@
     get_clouddr_account_clouddr_accounts: "{{ get_clouddr_account_result.json.content }}"
 - debug:
     msg: "{{ get_clouddr_account_clouddr_accounts }}"
-    verbosity: 0   
+    verbosity: 0

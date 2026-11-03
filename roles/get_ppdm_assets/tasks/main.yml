@@ -12,7 +12,7 @@
   when: get_ppdm_assets_filter | default('', true) | trim != ''
 
 - name: Get PPDM assets with status {{ get_ppdm_assets_condition }}
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_ppdm_assets_uri }}"
     body_format: json
@@ -34,4 +34,4 @@
   when: get_ppdm_assets_id | default('', true) | trim != '' and get_ppdm_assets_result.json is defined
 - debug:
     msg: "{{ get_ppdm_assets_assets }}"
-    verbosity: 1    
+    verbosity: 1

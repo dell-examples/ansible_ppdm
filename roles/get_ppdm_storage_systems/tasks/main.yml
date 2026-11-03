@@ -11,7 +11,7 @@
     get_ppdm_storage_systems_uri: "{{ get_ppdm_storage_systems_uri }}?filter={{ get_ppdm_storage_systems_filter | string | urlencode }}"
   when: get_ppdm_storage_systems_filter | default('', true) | trim != ''
 - name: Get PPDM storage-systems with status
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_ppdm_storage_systems_uri }}"
     body_format: json
@@ -29,4 +29,4 @@
     get_ppdm_storage_systems_storagesystems: "{{ get_ppdm_storage_systems_result.json.content }}"
 - debug:
     msg: "{{ get_ppdm_storage_systems_storagesystems }}"
-    verbosity: 0    
+    verbosity: 0

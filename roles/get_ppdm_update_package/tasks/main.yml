@@ -11,7 +11,7 @@
     get_ppdm_update_package_uri: "{{ get_ppdm_update_package_uri }}?filter={{ get_ppdm_update_package_filter | string | urlencode }}"
   when: get_ppdm_update_package_filter | default('', true) | trim != ''
 - name: Getting Upgrade Package State
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_ppdm_update_package_uri }}"
     body_format: json

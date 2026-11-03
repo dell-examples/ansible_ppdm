@@ -11,7 +11,7 @@
     get_ppdm_nodes_uri: "{{ get_ppdm_nodes_uri }}?filter={{ get_ppdm_nodes_filter | string | urlencode }}"
   when: get_ppdm_nodes_filter | default('', true) | trim != ''
 - name: Get PPDM nodes with filter {{ get_ppdm_nodes_filter }}
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_ppdm_nodes_uri }}"
     body_format: json
@@ -31,4 +31,4 @@
 - debug:
     msg: "{{ get_ppdm_nodes_nodes }}"
     verbosity: 1
-  when: get_ppdm_nodes_nodes is defined  
+  when: get_ppdm_nodes_nodes is defined

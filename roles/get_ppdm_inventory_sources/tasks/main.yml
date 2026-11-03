@@ -15,7 +15,7 @@
     get_ppdm_inventory_sources_uri: "{{ get_ppdm_inventory_sources_uri }}?filter={{ get_ppdm_inventory_sources_filter | string | urlencode }}"
   when: get_ppdm_inventory_sources_filter is defined
 - name: Get PPDM inventory-sources with status {{ get_ppdm_inventory_sources_condition }}
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_ppdm_inventory_sources_uri }}"
     body_format: json
@@ -42,4 +42,4 @@
   when: get_ppdm_inventory_sources_id | default('', true) | trim != '' and get_ppdm_inventory_sources_result.json.content is not defined and get_ppdm_inventory_sources_result.json is defined
 - debug:
     msg: "{{ get_ppdm_inventory_sources_inventorysources }}"
-    verbosity: 1      
+    verbosity: 1

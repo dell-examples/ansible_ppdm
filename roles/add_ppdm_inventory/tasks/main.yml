@@ -1,12 +1,12 @@
-- name: Get PPDM inventory-sources 
-  include_role: 
+- name: Get PPDM inventory-sources
+  include_role:
     name: get_ppdm_inventory_sources
   vars:
     filter: address eq "{{ data.address }}" and type eq "{{ data.type }}"
-  when: data.address is defined  
+  when: data.address is defined
 
-- name: Get PPDM inventory-sources 
-  include_role: 
+- name: Get PPDM inventory-sources
+  include_role:
     name: get_ppdm_inventory_sources
   vars:
     filter: "{{ filterstring }}"
@@ -25,28 +25,28 @@
     id: "{{ inventory.id }}"
   include_role:
     name: set_ppdm_inventory
-  when: inventory is defined   
+  when: inventory is defined
 - debug:
     msg: "{{ inventory }}"
     verbosity: 1
-  when: inventory is defined  
+  when: inventory is defined
 
 - name: Add PPDM Inventory
-  uri:
+  ansible.builtin.uri:
     method: POST
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/inventory-sources"
     body_format: json
     body: "{{ data }}"
     headers:
       accept: application/json
-      authorization: "Bearer {{ get_ppdm_token_access_token }}"    
+      authorization: "Bearer {{ get_ppdm_token_access_token }}"
     status_code: -1,200,201,202,403,400,500,503,501
     validate_certs: false
     timeout: 60
-  register: result 
+  register: result
   retries: "{{ retries }}"
   delay: "{{ delay }}"
-  until: result.status <= 300 
+  until: result.status <= 300
   when: not ansible_check_mode and inventory.id is not defined
 - name: Setting Inventory Fact from Add Inventory
   set_fact:

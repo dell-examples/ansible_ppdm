@@ -1,5 +1,5 @@
 - name: Get PPDM Configuration
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/configurations"
     body_format: json

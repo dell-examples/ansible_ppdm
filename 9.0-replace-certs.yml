@@ -3,25 +3,25 @@
   hosts: localhost
   gather_facts: no
   connection: local
-  vars_files: 
+  vars_files:
     - ./vars/main.yml
   tasks:
   - name: Checking Required Variables - privateKey
-    fail: 
+    fail:
       msg: "We do not have privateKey !"
-    when: (privateKey is not defined) or (privateKey|length <= 5)  
+    when: (privateKey is not defined) or (privateKey|length <= 5)
 
   - name: Checking Required Variables - certificateChain
-    fail: 
+    fail:
       msg: "We do not have certificateChain !"
-    when: (certificateChain is not defined) or (certificateChain|length <= 5)  
+    when: (certificateChain is not defined) or (certificateChain|length <= 5)
   - name: Setting Base URL
-    set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"     
+  ansible.builtin.set_fact:
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"
   - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
-    include_role: 
+  ansible.builtin.include_role:
       name: get_ppdm_token
-    vars: 
+    vars:
       ppdm_password: "{{ ppdm_new_password }}"
   - debug:
       msg: "{{ get_ppdm_token_access_token }}"
@@ -29,8 +29,8 @@
     name: do we have a token ?
 
   - name: Set PPDM Certificates
-    include_role:
+  ansible.builtin.include_role:
       name: set_ppdm_certificates
     vars:
       newprivateKey: "{{ privateKey }}"
-      newcertificateChain: "{{ certificateChain }}"  
+      newcertificateChain: "{{ certificateChain }}"

@@ -1,15 +1,15 @@
 - name: Set PPDM ASSET Configuration
-  uri:
+  ansible.builtin.uri:
     method: PUT
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/common-settings/ASSET_SETTING"
-    body_format: json 
+    body_format: json
     body: "{{ data }}"
     headers:
       accept: application/json
-      authorization: "Bearer {{ get_ppdm_token_access_token }}"    
+      authorization: "Bearer {{ get_ppdm_token_access_token }}"
     status_code: 200,500
     validate_certs: false
-  register: result  
-  when: not ansible_check_mode 
+  register: result
+  when: not ansible_check_mode
 - set_fact:
     asset_setting: "{{ result.json }}"

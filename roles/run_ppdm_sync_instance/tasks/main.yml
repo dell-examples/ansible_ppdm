@@ -1,9 +1,9 @@
 - name: Run PPDM sync
-  uri:
+  ansible.builtin.uri:
     method: POST
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/sync-instance"
     body_format: json
-    body: 
+    body:
       directions:
       - src:
           id: "{{ srcSystemId }}"
@@ -17,10 +17,10 @@
       since: "{{ since }}"
     headers:
       accept: application/json
-      authorization: "Bearer {{ get_ppdm_token_access_token }}"    
+      authorization: "Bearer {{ get_ppdm_token_access_token }}"
     status_code: 200,201,202
     validate_certs: false
-  register: result  
-  when: not ansible_check_mode 
+  register: result
+  when: not ansible_check_mode
 - set_fact:
     sync_instance_run: "{{ result.json }}"

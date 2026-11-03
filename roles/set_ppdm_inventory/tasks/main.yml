@@ -1,20 +1,20 @@
 - name: "Update PPDM Inventory {{ data.address }}"
-  uri:
+  ansible.builtin.uri:
     method: PUT
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/inventory-sources/{{ id }}"
     body_format: json
     body: "{{ data }}"
     headers:
       accept: application/json
-      authorization: "Bearer {{ get_ppdm_token_access_token }}"    
+      authorization: "Bearer {{ get_ppdm_token_access_token }}"
     status_code: -1,200,201,202,403,400
     validate_certs: false
     timeout: 60
-  register: result 
+  register: result
   retries: "{{ retries }}"
   delay: "{{ delay }}"
-  until: result.status <= 300 
-  when: not ansible_check_mode 
+  until: result.status <= 300
+  when: not ansible_check_mode
 - name: Setting Inventory fact from Role
   set_fact:
     inventory: "{% set copy=result.json.copy() %}{% set removed=copy.pop('_links') %}{{ copy }}"

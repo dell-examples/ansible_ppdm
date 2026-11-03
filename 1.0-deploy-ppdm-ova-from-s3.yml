@@ -3,7 +3,7 @@
   hosts: localhost
   gather_facts: no
   connection: local
-  vars_files: 
+  vars_files:
     - ./vars/main.yml
   vars:
     s3_bucket: dps-products
@@ -33,7 +33,7 @@
       mode: get
       encrypt: false
       endpoint_url: "{{ s3_host }}"
-      access_key: "{{ access_key }}"      
+      access_key: "{{ access_key }}"
       secret_key: "{{ secret_key }}"
 
   - name: deploy PPDM OVA
@@ -49,13 +49,13 @@
       name: "{{ ppdm_fqdn.split('.')[0] }}"
       networks: "{{ networks }}"
       power_on: "{{ power_on }}"
-      wait_for_ip_address : "{{ power_on }}"      
+      wait_for_ip_address : "{{ power_on }}"
       inject_ovf_env: true
-      properties: 
-        vami.ip0.brs: "{{ ppdm_ip }}" 
+      properties:
+        vami.ip0.brs: "{{ ppdm_ip }}"
         vami.gateway.brs: "{{ ppdm_gateway }}"
         vami.netmask0.brs: "{{ ppdm_netmask }}"
         vami.DNS.brs:  "{{ ppdm_dns }}"
         vami.fqdn.brs: "{{ ppdm_fqdn }}"
-      ovf: "{{ local_directory }}/{{ package }}" 
+      ovf: "{{ local_directory }}/{{ package }}"
     delegate_to: localhost

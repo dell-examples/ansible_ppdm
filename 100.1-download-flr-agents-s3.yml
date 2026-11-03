@@ -3,30 +3,30 @@
   hosts: localhost
   gather_facts: no
   connection: local
-  vars_files: 
+  vars_files:
     - ./vars/main.yml
     - ./vars/agents_vars.yaml
     - ./vars/flr_agents_vars.yaml
-  vars: 
+  vars:
     download_destination: /tmp
     s3_bucket: dps-products
     s3_host: http://ansible.demo.local:9000
     access_key: minioadmin
     secret_key: Password123!
-    s3_container: powerprotect 
+    s3_container: powerprotect
   tasks:
   - name: Checking Required Variable ppdm_fqdn
-    fail: 
+    fail:
       msg: "We do not have ppdm fqdn set !"
     when: (ppdm_fqdn is not defined) or (ppdm_fqdn|length <= 8)
   - name: Checking Required Variable ppdm_new_password
-    fail: 
+    fail:
       msg: "We do not have ppdm_new_password  set !"
-    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)  
- 
+    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)
+
   - name: Setting Base URL
-    set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"  
+  ansible.builtin.set_fact:
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"
   - name: Login to the PPDM
     uri:
       url: "{{ ppdm_baseurl }}/#/login"
@@ -35,28 +35,28 @@
       status_code: 200
       follow_redirects: true
       validate_certs: false
-    register: login       
+    register: login
 #  - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
-#    include_role: 
+#    include_role:
 #      name: get_ppdm_token
-#    vars: 
+#    vars:
 #      ppdm_password: "{{ ppdm_new_password }}"
-  - debug: 
+  - debug:
       msg: "{{ login }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
   - name: get current flr agents list from PPDM Server
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_flr_agents_list
-  - name: Setting Agent Vars 
-    vars: 
+  - name: Setting Agent Vars
+    vars:
       semver_list: "{{ flr_agents_list[0] | regex_search('([0-9]{1,2}).([0-9]{1,2}).([0-9]{1,2}).([0-9]{1,2})--(\\d+(?:_\\d+)?)\\.', '\\1', '\\2', '\\3' ,'\\4', '\\5')}}"
       flr_agent_major: "{{semver_list[0]}}"
       flr_agent_minor: "{{semver_list[1]}}"
       flr_agent_service: "{{semver_list[2]}}"
       flr_agent_patch: "{{semver_list[3]}}"
-      flr_agent_build: "{{semver_list[4]}}"     
-    set_fact:
+      flr_agent_build: "{{semver_list[4]}}"
+  ansible.builtin.set_fact:
       flr_agents:
         ver: "{{ flr_agent_major }}{{ flr_agent_minor }}{{ flr_agent_service }}{{ flr_agent_patch }}"
         branch: "{{ flr_agent_major }}.{{ flr_agent_minor }}.{{ flr_agent_service }}.{{ flr_agent_patch }}-{{ flr_agent_build}}"
@@ -64,15 +64,15 @@
       flr_agent_ver: "{{ flr_agent_major }}{{ flr_agent_minor }}{{ flr_agent_service }}{{ flr_agent_patch }}"
       flr_agent_branch: "{{ flr_agent_major }}.{{ flr_agent_minor }}.{{ flr_agent_service }}.{{ flr_agent_patch }}-{{ flr_agent_build}}"
       flr_agent_release: "{{ flr_agent_major }}.{{ flr_agent_minor }}.{{ flr_agent_service }}.{{ flr_agent_patch }}"
-      release: "{{ flr_agent_major }}.{{ flr_agent_minor }}.{{ flr_agent_service }}.{{ flr_agent_patch }}"    
-  - local_action: 
-      module: copy 
+      release: "{{ flr_agent_major }}.{{ flr_agent_minor }}.{{ flr_agent_service }}.{{ flr_agent_patch }}"
+  - local_action:
+      module: copy
       content: "{{ flr_agents }}"
       dest: "{{ download_destination }}/flr-agents-{{ flr_agents.branch }}.yaml"
-  - local_action: 
-      module: copy 
+  - local_action:
+      module: copy
       content: "{{ agents }}"
-      dest: "{{ download_destination }}/flr-agents.yaml"      
+      dest: "{{ download_destination }}/flr-agents.yaml"
 #  - name: Download FS Agents Windows
 #    vars:
 #      flr_agent_filename: "{{ fs_agent_windows }}"
@@ -94,20 +94,20 @@
     amazon.aws.aws_s3:
       bucket: "{{ s3_bucket}}"
       mode: list
-      endpoint_url: "{{ s3_host }}"      
+      endpoint_url: "{{ s3_host }}"
       prefix: "{{ s3_container }}"
       access_key: "{{ access_key }}"
-      secret_key: "{{ secret_key }}"      
+      secret_key: "{{ secret_key }}"
     register: s3_prefix_check
 
 
   - name: Debug result
-    debug:
+  ansible.builtin.debug:
       msg: "Prefix {{ s3_container }} exists"
     when: s3_prefix_check.s3_keys | length > 0
 
   - name: Debug not exists
-    debug:
+  ansible.builtin.debug:
       msg: "Prefix does NOT exist"
     when: s3_prefix_check.s3_keys | length == 0
 
@@ -119,7 +119,7 @@
       mode: create
       encrypt: false
       endpoint_url: "{{ s3_host }}"
-      access_key: "{{ access_key }}"      
+      access_key: "{{ access_key }}"
       secret_key: "{{ secret_key }}"
     when: s3_prefix_check.s3_keys | length == 0
 
@@ -130,36 +130,35 @@
       key_prefix: "{{ s3_container }}/{{ release }}/flr-agents/{{ flr_agent_branch }}/"
       file_root: "{{ download_destination }}/{{ flr_agent_branch }}"
       endpoint_url: "{{ s3_host }}"
-      access_key: "{{ access_key }}"      
+      access_key: "{{ access_key }}"
       secret_key: "{{ secret_key }}"
-    when: not ansible_check_mode  
+    when: not ansible_check_mode
 
   - name: Copy Agent Version to S3
     amazon.aws.aws_s3:
       bucket: "{{ s3_bucket}}"
       object: "{{ s3_container }}/{{ release }}/flr-agents/flr-agents-{{ flr_agents.branch }}.yaml"
-      src: "{{ download_destination }}/flr-agents-{{ flr_agents.branch }}.yaml" 
+      src: "{{ download_destination }}/flr-agents-{{ flr_agents.branch }}.yaml"
       mode: put
       encrypt: false
       endpoint_url: "{{ s3_host }}"
-      access_key: "{{ access_key }}"      
+      access_key: "{{ access_key }}"
       secret_key: "{{ secret_key }}"
-    when: not ansible_check_mode  
+    when: not ansible_check_mode
     delegate_to: localhost
   - name: Copy Latest Agent Version to S3
     amazon.aws.aws_s3:
       bucket: "{{ s3_bucket}}"
       object: "{{ s3_container }}/{{ release }}/flr-agents/flr-agents.yaml"
-      src: "{{ download_destination }}/flr-agents.yaml" 
+      src: "{{ download_destination }}/flr-agents.yaml"
       mode: put
       encrypt: false
       endpoint_url: "{{ s3_host }}"
-      access_key: "{{ access_key }}"      
+      access_key: "{{ access_key }}"
       secret_key: "{{ secret_key }}"
-    when: not ansible_check_mode  
-    delegate_to: localhost         
+    when: not ansible_check_mode
+    delegate_to: localhost
 
 
-          
 
-     
+

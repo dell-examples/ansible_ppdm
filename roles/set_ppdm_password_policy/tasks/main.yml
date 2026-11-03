@@ -8,7 +8,7 @@
     set_ppdm_password_policy_uri: "{{ set_ppdm_password_policy_uri }}?filter={{ set_ppdm_password_policy_filter | string | urlencode }}"
   when: set_ppdm_password_policy_filter | default('', true) | trim != ''
 - name: SET PPDM Password Policy
-  uri:
+  ansible.builtin.uri:
     method: PUT
     url: "{{ set_ppdm_password_policy_uri }}"
     body_format: json
@@ -19,4 +19,4 @@
     validate_certs: false
     body: "{{ body }}"
   register: set_ppdm_password_policy_result
-  when: not ansible_check_mode 
+  when: not ansible_check_mode

@@ -1,5 +1,5 @@
 - name: Get PPDM FLR Agents List
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}/ppdm/vm-flr-agents"
     body_format: json
@@ -18,5 +18,5 @@
     get_ppdm_flr_agents_list_flr_agents_list: "{{ get_ppdm_flr_agents_list_result.content }}"
 - debug:
     msg: "{{ get_ppdm_flr_agents_list_flr_agents_list }}"
-    verbosity: 0    
+    verbosity: 0
 

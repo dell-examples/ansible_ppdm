@@ -2,24 +2,24 @@
 - name: Create New PPDM whitelist for {{ whitelist.ip }}
   vars:
       isoformat: '%Y-%m-%dT%H:%M:%S.%fZ'
-  uri:
+  ansible.builtin.uri:
     method: POST
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/whitelist"
     body_format: json
-    body: 
+    body:
       ip: "{{ whitelist.ip }}"
       state: "{{ whitelist.state }}"
       expiresAt: "{{ '%Y-%m-%dT%H:%M:%S.0000Z' | strftime((ansible_date_time.epoch | int)  + ( 86400 ))  }}"
     headers:
       accept: application/json
-      authorization: "Bearer {{ get_ppdm_token_access_token }}"    
+      authorization: "Bearer {{ get_ppdm_token_access_token }}"
     status_code: 200,201,202,409,503
     validate_certs: false
-  register: result  
+  register: result
   when: not ansible_check_mode and whitelist.id is not defined
 - set_fact:
     whitelist_result: "{{ result.json }}"
-#   when: whitelist.id is not defined   
+#   when: whitelist.id is not defined
 - debug:
     msg: "{{ whitelist_result }}"
     verbosity: 0

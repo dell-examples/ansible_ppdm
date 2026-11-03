@@ -3,32 +3,32 @@
   hosts: localhost
   gather_facts: no
   connection: local
-  vars_files: 
+  vars_files:
     - ./vars/main.yml
   tasks:
 #  - name: Checking Required Variables - licenseKey
-#    fail: 
+#    fail:
 #      msg: "We do not have licenseKey !"
-#    when: (licenseKey is not defined) or (licenseKey|length <= 5)  
+#    when: (licenseKey is not defined) or (licenseKey|length <= 5)
   - name: Setting Base URL
-    set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"     
+  ansible.builtin.set_fact:
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"
   - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
-    include_role: 
+  ansible.builtin.include_role:
       name: get_ppdm_token
-    vars: 
+    vars:
       ppdm_password: "{{ ppdm_new_password }}"
   - debug:
       msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
     name: do we have a token ?
   - name: Get PPDM inventory-sources
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_inventory_sources
     vars:
       get_ppdm_inventory_sources_filter: address eq "api.ocs1.home.labbuildr.com" and type eq "KUBERNETES"
   - name: creating configurations
-    set_fact:
+  ansible.builtin.set_fact:
 ## prior 19.7, we published _links ....      new_config: "{% set copy=configuration.content[0].copy() %}{% set removed=copy.pop('_links') %}{{ copy }}"
      new_inventorysources: "{% set copy=get_ppdm_inventory_sources_inventorysources[0].copy() %}{% set removed=copy.pop('_links') %}{{ copy }}"
 #    name: Generating K8S Configuration
@@ -45,7 +45,7 @@
         - key: k8s.velero.exclude.resources
           type: CONTROLLER_CONFIG
           value: secrets, operators.operator.openshift.io, cloudcredentials.operator.openshift.io, clusteroperators.config.openshift.io, rolebindings,events, events.events.k8s.io,customresourcedefinitions.apiextensions.k8s.io, build.openshift.io, prometheusrules.monitoring.coreos.com
-    set_fact:
+  ansible.builtin.set_fact:
       new_config: "{{ old_config | default([]) | combine(my_new_config, list_merge='append',recursive=True, ) }}"
   - debug:
       msg: "{{ new_config }}"
@@ -55,7 +55,7 @@
       new_details:
         details:
           k8s: "{{ new_config }}"
-    set_fact:
+  ansible.builtin.set_fact:
      new_inventorysources: "{{ new_inventorysources | default([]) | combine(new_details, recursive=True, ) }}"
 
   - debug:
@@ -66,5 +66,5 @@
     vars:
       data:  "{{ new_inventorysources }}"
       id: "{{ new_inventorysources.id }}"
-    include_role:
-      name: set_ppdm_inventory      
+  ansible.builtin.include_role:
+      name: set_ppdm_inventory

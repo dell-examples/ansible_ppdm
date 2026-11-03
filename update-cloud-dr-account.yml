@@ -3,31 +3,31 @@
   hosts: localhost
   gather_facts: no
   connection: local
-  vars_files: 
+  vars_files:
     - ./vars/main.yml
   tasks:
   - name: Checking Required Variables
-    fail: 
+    fail:
       msg: "We do not have ppdm fqdn set !"
     when: (ppdm_fqdn is not defined) or (ppdm_fqdn|length <= 8)
   - name: Checking Required Variables
-    fail: 
+    fail:
       msg: "We do not have ppdm_new_password  set !"
-    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)  
+    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)
   - name: Setting Base URL
-    set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"   
+  ansible.builtin.set_fact:
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"
   - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
-    include_role: 
+  ansible.builtin.include_role:
       name: get_ppdm_token
-    vars: 
+    vars:
       ppdm_password: "{{ ppdm_new_password }}"
   - debug:
       msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
     name: do we have a token ?
   - name: GET CRA Component ID
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_components
   - debug:
       msg: "{{ get_ppdm_components_components.content   | json_query(jmesquery) }}"
@@ -40,7 +40,7 @@
       jmesquery: "[? componentServiceName=='cdr'].id | [0]"
 
   - name: GET CRA Component status
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_components
     vars:
       get_ppdm_components_id: "{{ component_id }}"
@@ -49,17 +49,17 @@
       get_ppdm_components_condition: get_ppdm_components_result.json.status == "UP"
 
   - name: Get Cloud DR Account
-    include_role:
+  ansible.builtin.include_role:
       name: get_clouddr_account
     vars:
       get_clouddr_account_filter: providerName eq "AZURE"
   - name: set cdra component
-    include_role:
+  ansible.builtin.include_role:
       name: update_clouddr_account
     vars:
       account_id: "{{ get_clouddr_account_clouddr_accounts[0].id }}"
       status_codes: 200,201,202,503 ,400
-      data: 
+      data:
         providerName: AZURE
         providerParameters:
           - name: subscriptionId
@@ -68,5 +68,4 @@
             value: "{{ domain }}"
         userKey: "{{ userKey }}"
         secretKey: "{{ secretKey }}"
-    when: clouddr_accounts[0].id is  defined          
-     
+    when: clouddr_accounts[0].id is  defined

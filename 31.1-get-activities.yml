@@ -5,34 +5,34 @@
   connection: local
   vars:
     vm_name: 2019.52
-  vars_files: 
+  vars_files:
     - ./vars/main.yml
   tasks:
   - name: Setting Base URL
-    set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"     
+  ansible.builtin.set_fact:
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"
   - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
-    include_role: 
+  ansible.builtin.include_role:
       name: get_ppdm_token
-    vars: 
+    vars:
       ppdm_password: "{{ ppdm_new_password }}"
   - debug:
       msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
     name: do we have a token ?
   - name: Get PPDM Assets
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_activities
     vars:
         get_ppdm_activities_filter: "{{ activity_filter | default('') }}"
         get_ppdm_activities_id: "{{ activity_id | default('') }}"
   - name: Activities Result Short, full result in fact activities
-    debug:
+  ansible.builtin.debug:
       msg: "{{ get_ppdm_activities_activities | json_query('[*].{name: name,id: id,type: type}') }}"
       verbosity: 0
     when: get_ppdm_activities_activities is defined
   - name: Activities Result
-    debug:
+  ansible.builtin.debug:
       msg: "{{ get_ppdm_activities_activities }}"
       verbosity: 0
     when: get_ppdm_activities_activities is defined and activity_id is defined

@@ -1,5 +1,5 @@
 - name: Get PPDM Host Certificate for {{ get_ppdm_host_certificate_host }}
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/certificates?host={{ get_ppdm_host_certificate_host }}&port={{ get_ppdm_host_certificate_port }}&type=Host"
     body_format: json

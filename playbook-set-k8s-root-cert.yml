@@ -3,47 +3,47 @@
   hosts: localhost
   gather_facts: no
   connection: local
-  vars_files: 
+  vars_files:
     - ./vars/main.yml
   collections:
-   - kubernetes.core     
+   - kubernetes.core
   tasks:
   - name: Checking Required Variable ppdm_fqdn
-    fail: 
+    fail:
       msg: "We do not have ppdm_fqdn set !"
     when: (ppdm_fqdn is not defined) or (ppdm_fqdn|length <= 8)
   - name: Checking Required Variables
-    fail: 
+    fail:
       msg: "We do not have ppdm_new_password  set !"
-    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)  
+    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)
   - name: Setting Base URL
-    ansible.builtin.set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"   
+    ansible.builtin.set_fact:
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"
   - name: Get Cluster information
     kubernetes.core.k8s_cluster_info:
     register: api_status
-  - debug: 
+  - debug:
       msg: "Connected to {{ api_status.connection.host }}"
       verbosity: 0
   - name: Setting Connection Parameters from api api_status
-    set_fact: 
-      k8s_fqdn: "{{ api_status.connection.host | regex_replace('^https://') | regex_replace('\\:\\d+') }}" 
+  ansible.builtin.set_fact:
+      k8s_fqdn: "{{ api_status.connection.host | regex_replace('^https://') | regex_replace('\\:\\d+') }}"
       k8s_port: "{{ api_status.connection.host.split(':').2 | default('443')}}"
       k8s_name: "{{ api_status.connection.host.split('.').1 }}"
   - name: Setting Base URL
-    set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"   
+  ansible.builtin.set_fact:
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"
   - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://')  }}
-    include_role: 
+  ansible.builtin.include_role:
       name: get_ppdm_token
-    vars: 
+    vars:
       ppdm_password: "{{ ppdm_new_password }}"
   - debug:
       msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
     name: do we have a token ?
   - name: Set certificateChain
-    include_role:
+  ansible.builtin.include_role:
       name: add_ppdm_certificate_chain
     vars:
       chain: "{{ certificateChain }}"
@@ -51,6 +51,6 @@
       port: "{{ k8s_port }}"
       type: ROOT
       verify: true
-  - debug: 
+  - debug:
       msg: "{{ certificate }}"
       verbosity: 1

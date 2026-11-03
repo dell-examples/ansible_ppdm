@@ -1,13 +1,13 @@
 - name: Define uri with assets ID
-  set_fact: 
-    uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/restored-copies"
+  set_fact:
+  ansible.builtin.uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/restored-copies"
 - name: Rewrite uri with filter
-  set_fact: 
-    uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
+  set_fact:
+  ansible.builtin.uri: "{{ uri }}?filter={{ filter | string | urlencode }}"
   when: filter  | default('', true) | trim != ''
 
 - name: restore asset copies to a vm
-  uri:
+  ansible.builtin.uri:
     method: POST
     url: "{{ uri }}"
     body_format: json
@@ -22,19 +22,19 @@
         targetVmInfo:
           tagRestoreDirective: 'OFF'
           spbmRestoreDirective: FROM_COPY
-          recoverConfig: true 
+          recoverConfig: true
     headers:
       accept: application/json
-      authorization: "Bearer {{ get_ppdm_token_access_token }}"    
+      authorization: "Bearer {{ get_ppdm_token_access_token }}"
     status_code: 201,200,500
     validate_certs: false
   register: result
-  until: "{{ condition }}"    
+  until: "{{ condition }}"
   retries: "{{ retries }}"
   delay: "{{ delay }}"
-  when: not ansible_check_mode 
+  when: not ansible_check_mode
 - set_fact:
     restore: "{{ result.json }}"
 - debug:
     msg: "{{ restore }}"
-    verbosity: 1    
+    verbosity: 1

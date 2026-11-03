@@ -3,45 +3,45 @@
   hosts: localhost
   gather_facts: no
   connection: local
-  vars_files: 
+  vars_files:
     - ./vars/main.yml
   tasks:
   - name: Checking Required Variables
-    fail: 
+    fail:
       msg: "We do not have ppdm fqdn set !"
     when: (ppdm_fqdn is not defined) or (ppdm_fqdn|length <= 8)
   - name: Checking Required Variables
-    fail: 
+    fail:
       msg: "We do not have ppdm_new_password  set !"
-    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)  
+    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)
   - name: Checking Required Variables
-    fail: 
+    fail:
       msg: "We do not have vcenter fqdn set !"
     when: (vcenter_fqdn is not defined) or (vcenter_fqdn|length <= 8)
   - name: Checking Required Variables
-    fail: 
+    fail:
       msg: "We do not have vcenter_password  set !"
-    when: (vcenter_password is not defined) or (vcenter_password|length == 0)          
+    when: (vcenter_password is not defined) or (vcenter_password|length == 0)
   - name: Setting Base URL
-    set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"   
+  ansible.builtin.set_fact:
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"
   - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
-    include_role: 
+  ansible.builtin.include_role:
       name: get_ppdm_token
-    vars: 
+    vars:
       ppdm_password: "{{ ppdm_new_password }}"
   - debug:
       msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
     name: do we have a token ?
   - name: Get vcenter Host Certificate for  {{ vcenter_fqdn }}
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_host_certificate
     vars:
       get_ppdm_host_certificate_host: "{{ vcenter_fqdn }}"
       get_ppdm_host_certificate_port: 443
   - name: Accept VCenter Host Certificate for {{ vcenter_fqdn }}
-    include_role:
+  ansible.builtin.include_role:
       name: accept_ppdm_host_certificate
     vars:
       old_certificate: "{{ get_ppdm_host_certificate_certificate }}"
@@ -49,7 +49,7 @@
   - name: Get vCenter Credentials from PPDM
     vars:
       get_ppdm_credentials_filter: name eq "{{ vcenter_username }}" and type eq "VCENTER"
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_credentials
   - set_fact:
      get_ppdm_credentials_credentials: "{{ get_ppdm_credentials_credentials[0] }}"
@@ -63,12 +63,12 @@
         name: "{{ vcenter_username }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-    include_role:
+  ansible.builtin.include_role:
       name: create_ppdm_credentials
     when: get_ppdm_credentials_credentials[0].id is not defined
 
   - name: Get vCenter Inventory Sources
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_inventory_sources
     vars:
       get_ppdm_inventory_sources_filter: type eq "VCENTER" and name eq "{{ vcenter_fqdn }}"
@@ -84,9 +84,8 @@
         port: 443
         credentials:
             id: "{{ get_ppdm_credentials_credentials[0].id }}"
-    include_role:
+  ansible.builtin.include_role:
       name: add_ppdm_inventory
     when: get_ppdm_inventory_sources_inventorysources[0].id is not defined
 
 
-     

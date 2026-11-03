@@ -12,7 +12,7 @@
   when: get_ppdm_agents_update_sessions_filter | default('', true) | trim != ''
 
 - name: Get PPDM agents-update-sessions
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_ppdm_agents_update_sessions_uri }}"
     body_format: json
@@ -31,4 +31,4 @@
   when: get_ppdm_agents_update_sessions_id | default('', true) | trim != '' and get_ppdm_agents_update_sessions_result.json is defined
 - debug:
     msg: "{{ get_ppdm_agents_update_sessions_agents_update_sessions }}"
-    verbosity: 1    
+    verbosity: 1

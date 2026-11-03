@@ -3,22 +3,22 @@
   hosts: localhost
   gather_facts: no
   connection: local
-  vars_files: 
+  vars_files:
     - ./vars/main.yml
   vars:
-    full_output: false  
+    full_output: false
   tasks:
   - name: Checking Required Variables
-    fail: 
+    fail:
       msg: "We ned either a valid asset_filter or asset_id"
     when: (asset_filter is not defined) and (asset_id is not defined)
   - name: Setting Base URL
-    set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"     
+  ansible.builtin.set_fact:
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"
   - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
-    include_role: 
+  ansible.builtin.include_role:
       name: get_ppdm_token
-    vars: 
+    vars:
       ppdm_password: "{{ ppdm_new_password }}"
   - debug:
       msg: "{{ get_ppdm_token_access_token }}"
@@ -28,29 +28,29 @@
     vars:
       get_ppdm_assets_filter: "{{ asset_filter | regex_replace(\"'\", '\"') | default('') }}"
       get_ppdm_assets_id: "{{ asset_id | default('')}}"
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_assets
   - name: Assets Result
-    debug:
+  ansible.builtin.debug:
       msg: "{{ get_ppdm_assets_assets | json_query('[*].{name: name,id: id,type: type,protectionStatus: protectionStatus }') }}"
       verbosity: 0
     when: get_ppdm_assets_assets is defined
   - name: Assets Result
-    debug:
+  ansible.builtin.debug:
       msg: "{{ get_ppdm_assets_assets }}"
       verbosity: 0
     when: get_ppdm_assets_assets is defined and full_output == 'true'
   - name: Get Protection Policy for '{{ get_ppdm_assets_assets[0].id }}'
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_protection_policy
     vars:
       get_ppdm_protection_policy_id:  "{{ get_ppdm_assets_assets[0].protectionPolicyId }}"
       ppdm_api_ver: /api/v3
   - name: start AdHoc Protection
-    include_role: 
+  ansible.builtin.include_role:
       name: start_adhoc_ppdm_protections
-    vars: 
-        assetIds: 
+    vars:
+        assetIds:
           - '{{ assets[0].id }}'
         policy_id: '{{ assets[0].protectionPolicyId }}'
-        objective_id: '{{ protection_policy.objectives[0].id }}'     
+        objective_id: '{{ protection_policy.objectives[0].id }}'

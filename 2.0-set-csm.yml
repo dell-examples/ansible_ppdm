@@ -3,34 +3,34 @@
   hosts: localhost
   gather_facts: no
   connection: local
-  vars_files: 
+  vars_files:
     - ./vars/main.yml
   tasks:
   - name: Checking Required Variable ppdm_fqdn
-    fail: 
+    fail:
       msg: "We do not have ppdm fqdn set !"
     when: (ppdm_fqdn is not defined) or (ppdm_fqdn|length <= 8)
   - name: Checking Required Variable ppdm_new_password
-    fail: 
+    fail:
       msg: "We do not have ppdm_new_password  set !"
-    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)  
+    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)
   - name: Checking Required Variable csm_credentials
-    fail: 
+    fail:
       msg: "We do not have csm_credentials  set !"
-    when: (csm_credentials is not defined) or (csm_credentials|length == 0)          
+    when: (csm_credentials is not defined) or (csm_credentials|length == 0)
   - name: Checking Required Variable csm_tenant
-    fail: 
+    fail:
       msg: "We do not have csm_tenant  set !"
-    when: (csm_tenant is not defined) or (csm_tenant|length == 0)  
-  
-  
+    when: (csm_tenant is not defined) or (csm_tenant|length == 0)
+
+
   - name: Setting Base URL
-    set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"   
+  ansible.builtin.set_fact:
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"
   - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
-    include_role: 
+  ansible.builtin.include_role:
       name: get_ppdm_token
-    vars: 
+    vars:
       ppdm_password: "{{ ppdm_new_password }}"
   - debug:
       msg: "{{ get_ppdm_token_access_token }}"
@@ -39,7 +39,7 @@
   - name: Get CSM Credentials from PPDM
     vars:
       get_ppdm_credentials_filter: name eq "{{ csm_tenant }}" and type eq "CLOUD_SNAPSHOT_MANAGER"
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_credentials
   - set_fact:
      get_ppdm_credentials_credentials: "{{ get_ppdm_credentials_credentials[0] }}"
@@ -51,11 +51,11 @@
         name: "{{ csm_tenant }}"
         username: "{{ csm_tenant }}"
         password: "{{ csm_credentials }}"
-    include_role:
+  ansible.builtin.include_role:
       name: create_ppdm_credentials
     when: get_ppdm_credentials_credentials[0].id is not defined
   - name: Get CLOUD_SNAPSHOT_MANAGER Inventory Sources
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_inventory_sources
     vars:
       get_ppdm_inventory_sources_filter: type eq "CLOUD_SNAPSHOT_MANAGER" and name eq "CLOUD_SNAPSHOT_MANAGER"
@@ -71,9 +71,8 @@
           id: "{{ csm_tenant }}"
         credentials:
           id: "{{ get_ppdm_credentials_credentials[0].id }}"
-    include_role:
+  ansible.builtin.include_role:
       name: add_ppdm_inventory
     when: get_ppdm_inventory_sources_inventorysources[0].id is not defined
 
 
-     

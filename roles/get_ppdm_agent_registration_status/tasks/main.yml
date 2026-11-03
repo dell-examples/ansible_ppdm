@@ -12,7 +12,7 @@
   when: (get_ppdm_agent_registration_status_filter | default('') | trim) != ''
 
 - name: Get PPDM Agent registration Status with status {{ get_ppdm_agent_registration_status_condition }}
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_ppdm_agent_registration_status_uri }}"
     body_format: json
@@ -35,4 +35,4 @@
 - debug:
     msg: "{{ get_ppdm_agent_registration_status_agent_registration_status }}"
     verbosity: 1
-  when: get_ppdm_agent_registration_status_agent_registration_status is defined      
+  when: get_ppdm_agent_registration_status_agent_registration_status is defined

@@ -4,52 +4,52 @@
   hosts: localhost
   gather_facts: no
   connection: local
-  vars_files: 
+  vars_files:
     - ./vars/main.yml
   tasks:
   - name: Checking Required Variables
-    fail: 
+    fail:
       msg: "We do not have ddve_repository_path set !"
-    when: (ddve_repository_path is not defined) or (ddve_repository_path|length <= 5)  
+    when: (ddve_repository_path is not defined) or (ddve_repository_path|length <= 5)
   - name: Setting Base URL
-    set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"     
+  ansible.builtin.set_fact:
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"
   - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
-    include_role: 
+  ansible.builtin.include_role:
       name: get_ppdm_token
-    vars: 
+    vars:
       ppdm_password: "{{ ppdm_new_password }}"
   - debug:
       msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
     name: do we have a token ?
   - name: Get SDR Configuration Template
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_sdr_configuration
   - debug:
       msg: "{{ get_ppdm_sdr_configuration_sdr_configuration }}"
       verbosity: 1
     name: show me your config
   - name: Get DataDomain Inventory Sources
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_storage_systems
     vars:
       get_ppdm_storage_systems_filter: type eq "DATA_DOMAIN_SYSTEM" and name eq "{{ ddve_fqdn }}"
   - name: Extract SDR Config ID
-    set_fact:
+  ansible.builtin.set_fact:
       sdr_configuration_id: "{{ item.value }}"
     with_items:
         - "{{ get_ppdm_sdr_configuration_sdr_configuration.properties }}"
     when: item.name == 'configId'
   - name: Extract SDR Repository ID for existing Repository
-    set_fact:
+  ansible.builtin.set_fact:
       ddve_repository_path: "{{ item.value }}"
     with_items:
         - "{{ get_ppdm_sdr_configuration_sdr_configuration.properties }}"
     when: item.name == 'repositoryPath'
 
   - name: Extract Credential ID for existing Repository
-    set_fact:
+  ansible.builtin.set_fact:
       get_ppdm_credentials_credentials:
         id: "{{ item.value }}"
     with_items:
@@ -58,10 +58,10 @@
 
 
   - name: generating shortname for {{ ddve_fqdn }}
-    set_fact:
+  ansible.builtin.set_fact:
       sysdr: "{{ (ppdm_fqdn | urlsplit('hostname')).split('.')[0] }}"
   - name: Define credentialUsername
-    set_fact:
+  ansible.builtin.set_fact:
       credentialUsername: "SysDR_{{ sysdr }}"
 
 #  - name: get existing DDBoost User for SDR
@@ -91,7 +91,7 @@
 #    when: get_ppdm_credentials_credentials[0].id  | default('', false) | trim == ''
 
   - name: Set SDR Configuration
-    include_role:
+  ansible.builtin.include_role:
       name: set_ppdm_sdr_configuration
     vars:
       data:
@@ -104,5 +104,4 @@
 #        credentialUsername: "credentialUsername"
 #        credentialPassword: "{{ ppdm_new_password }}"
         type: "DATA_DOMAIN_SYSTEM"
-        credentialType: "DDBOOST"        
-       
+        credentialType: "DDBOOST"

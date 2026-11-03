@@ -1,5 +1,5 @@
 - name: Get PPDM Agents List
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}/agents-list"
     body_format: raw
@@ -7,13 +7,13 @@
     headers:
       content_type: application/json
       accept: "application/json, text/plain, */*"
-      authorization: "Bearer {{ get_ppdm_token_access_token }}" 
+      authorization: "Bearer {{ get_ppdm_token_access_token }}"
     status_code: 200,500
     validate_certs: false
-  register: result  
+  register: result
 - set_fact:
     agents_list: "{{ result.content }}"
 - debug:
     msg: "{{ agents_list }}"
-    verbosity: 0    
+    verbosity: 0
 

@@ -11,7 +11,7 @@
     get_ppdm_protection_policy_uri: "{{ get_ppdm_protection_policy_uri }}?filter={{ get_ppdm_protection_policy_filter | string | urlencode }}"
   when: get_ppdm_protection_policy_filter is defined
 - name: Get PPDM protection-policies with status {{ get_ppdm_protection_policy_condition }}
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_ppdm_protection_policy_uri }}"
     body_format: json
@@ -34,4 +34,4 @@
   when: get_ppdm_protection_policy_id | default('', true) | trim != '' and get_ppdm_protection_policy_result.json is defined
 - debug:
     msg: "{{ get_ppdm_protection_policy_protection_policy }}"
-    verbosity: 1    
+    verbosity: 1

@@ -11,7 +11,7 @@
     get_ppdm_protection_rules_uri: "{{ get_ppdm_protection_rules_uri }}?filter={{ get_ppdm_protection_rules_filter | string | urlencode }}"
   when: get_ppdm_protection_rules_filter is defined
 - name: Get PPDM protection-rules with status {{ get_ppdm_protection_rules_condition }}
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_ppdm_protection_rules_uri }}"
     body_format: json
@@ -29,4 +29,4 @@
     get_ppdm_protection_rules_protection_rule: "{{ get_ppdm_protection_rules_result.json.content }}"
 - debug:
     msg: "{{ get_ppdm_protection_rules_protection_rule }}"
-    verbosity: 0    
+    verbosity: 0

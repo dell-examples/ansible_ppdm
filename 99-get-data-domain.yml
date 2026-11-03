@@ -3,16 +3,16 @@
   hosts: localhost
   gather_facts: no
   connection: local
-  vars_files: 
+  vars_files:
     - ./vars/main.yml
-  tasks:  
+  tasks:
   - name: Setting Base URL
-    set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"     
+  ansible.builtin.set_fact:
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"
   - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
-    include_role: 
+  ansible.builtin.include_role:
       name: get_ppdm_token
-    vars: 
+    vars:
       ppdm_password: "{{ ppdm_new_password }}"
   - debug:
       msg: "{{ get_ppdm_token_access_token }}"
@@ -20,21 +20,20 @@
     name: do we have a token ?
 
   - name: Get PPDM inventory-sources
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_inventory_sources
     vars:
       get_ppdm_inventory_sources_filter: name eq "{{ ddve_fqdn }}"
 
 
   - name: Get DataDomain Storage Systems via Inventory
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_inventory_sources
     vars:
       get_ppdm_inventory_sources_id: "{{ get_ppdm_inventory_sources_inventorysources[0].id }}"
       get_ppdm_inventory_sources_storagesystems: "true"
   - name: inventorysource Result
-    debug:
+  ansible.builtin.debug:
       msg: "{{ get_ppdm_inventory_sources_inventorysources[0] }}"
       verbosity: 0
-    when: get_ppdm_inventory_sources_inventorysources is defined  
-    
+    when: get_ppdm_inventory_sources_inventorysources is defined

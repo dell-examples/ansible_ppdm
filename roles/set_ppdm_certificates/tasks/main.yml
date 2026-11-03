@@ -1,7 +1,7 @@
 
 #
 - name: Replace this PPDM Certificates
-  uri:
+  ansible.builtin.uri:
     method: POST
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/certificates-replacement"
     body_format: json
@@ -10,10 +10,10 @@
       certificateChain: "{{ newcertificateChain }}"
     headers:
       accept: application/json
-      authorization: "Bearer {{ get_ppdm_token_access_token }}"    
+      authorization: "Bearer {{ get_ppdm_token_access_token }}"
     status_code: 200,201
     validate_certs: false
-  register: result  
+  register: result
   when: not ansible_check_mode
 
 - debug:

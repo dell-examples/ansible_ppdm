@@ -3,20 +3,20 @@
   hosts: localhost
   gather_facts: no
   connection: local
-  vars_files: 
+  vars_files:
     - ./vars/main.yml
   tasks:
   - name: Checking Required Variables - licenseKey
-    fail: 
+    fail:
       msg: "We do not have licenseKey !"
-    when: (licenseKey is not defined) or (licenseKey|length <= 5)  
+    when: (licenseKey is not defined) or (licenseKey|length <= 5)
   - name: Setting Base URL
-    set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"     
+  ansible.builtin.set_fact:
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"
   - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
-    include_role: 
+  ansible.builtin.include_role:
       name: get_ppdm_token
-    vars: 
+    vars:
       ppdm_password: "{{ ppdm_new_password }}"
   - debug:
       msg: "{{ get_ppdm_token_access_token }}"
@@ -24,12 +24,12 @@
     name: do we have a token ?
 
   - name: Get PPDM License ID
-    include_role:
+  ansible.builtin.include_role:
       name: get_ppdm_licenses
   - name: Set PPDM License {{ get_ppdm_licenses_licenses[0].id }}
-    include_role:
+  ansible.builtin.include_role:
       name: set_ppdm_licenses
     vars:
       id: "{{ get_ppdm_licenses_licenses[0].id }}"
       body:
-        key: "{{ licenseKey }}"    
+        key: "{{ licenseKey }}"

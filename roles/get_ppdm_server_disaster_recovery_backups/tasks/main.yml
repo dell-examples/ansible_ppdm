@@ -11,7 +11,7 @@
     get_ppdm_server_disaster_recovery_backups_uri: "{{ get_ppdm_server_disaster_recovery_backups_uri }}?filter={{ get_ppdm_server_disaster_recovery_backups_filter | string | urlencode }}" #&{{ query | string | urlencode }}"
   when: get_ppdm_server_disaster_recovery_backups_filter | default('', true) | trim != ''
 - name: Get PPDM Server Disaster Recovery Backups with filter {{ get_ppdm_server_disaster_recovery_backups_filter }}
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_ppdm_server_disaster_recovery_backups_uri }}"
     body_format: json
@@ -33,4 +33,4 @@
 - debug:
     msg: "{{ get_ppdm_server_disaster_recovery_backups_server_disaster_recovery_backups }}"
     verbosity: 1
-  when: get_ppdm_server_disaster_recovery_backups_server_disaster_recovery_backups is defined  
+  when: get_ppdm_server_disaster_recovery_backups_server_disaster_recovery_backups is defined

@@ -12,7 +12,7 @@
   when: get_ppdm_whitelist_filter | default('', true) | trim != ''
 
 - name: "Get PPDM Whitelist with status {{ get_ppdm_whitelist_condition }}"
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_ppdm_whitelist_uri }}"
     body_format: json
@@ -30,4 +30,4 @@
     get_ppdm_whitelist_whitelist: "{{ get_ppdm_whitelist_result.json.content }}"
 - debug:
     msg: "{{ get_ppdm_whitelist_whitelist }}"
-    verbosity: 1    
+    verbosity: 1

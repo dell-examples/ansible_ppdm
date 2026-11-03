@@ -4,4 +4,4 @@ ppdm_port: 8443
 get_ppdm_password_policy_delay: 1
 get_ppdm_password_policy_retries: 1
 get_ppdm_password_policy_condition: get_ppdm_password_policy_result is defined
-get_ppdm_password_policy_filter: 
+get_ppdm_password_policy_filter:

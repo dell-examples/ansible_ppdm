@@ -1,50 +1,50 @@
 # This example Playbook adds a Kubernetes Cluster to PPDM
 # Kubernetes Information will be read from k8s core cluster_info module
 # it is expected that Environment Variables are set for core K8S Modules
-# e.g. export K8S_AUTH_KUBECONFIG= 
+# e.g. export K8S_AUTH_KUBECONFIG=
 - name: Add K8S to PPDM
   hosts: localhost
   gather_facts: no
   connection: local
-  vars_files: 
+  vars_files:
     - ./vars/main.yml
   collections:
-   - kubernetes.core     
+   - kubernetes.core
   tasks:
 #  - name: install pre-requisites
 #    pip:
  #     name:
 #        - openshift
 #        - pyyaml
-#        - kubernetes 
+#        - kubernetes
   - name: Checking Required Variable ppdm_fqdn
-    fail: 
+    fail:
       msg: "We do not have ppdm_fqdn set !"
     when: (ppdm_fqdn is not defined) or (ppdm_fqdn|length <= 8)
   - name: Checking Required Variables
-    fail: 
+    fail:
       msg: "We do not have ppdm_new_password  set !"
-    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)  
+    when: (ppdm_new_password is not defined) or (ppdm_new_password|length == 0)
   - name: Setting Base URL
-    ansible.builtin.set_fact: 
-      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"   
+    ansible.builtin.set_fact:
+      ppdm_baseurl: "https://{{ ppdm_fqdn | regex_replace('^https://') }}"
   - name: Get Cluster information
     kubernetes.core.k8s_cluster_info:
 #      verify_ssl: no
     register: api_status
-  - debug: 
+  - debug:
       msg: "Connected to {{ api_status.connection.host }}"
       verbosity: 0
   - name: Setting Connection Parameters from api api_status
-    set_fact: 
-      k8s_fqdn: "{{ api_status.connection.host | regex_replace('^https://') | regex_replace('\\:\\d+') }}" 
+  ansible.builtin.set_fact:
+      k8s_fqdn: "{{ api_status.connection.host | regex_replace('^https://') | regex_replace('\\:\\d+') }}"
       k8s_port: "{{ api_status.connection.host.split(':').2 | default('443')}}"
       k8s_name: "{{ api_status.connection.host.split('.').1 }}"
   - name: apply PPDM RBAC from {{ rbac_source }}
     k8s:
       verify_ssl: no
       state: present
-      src: "{{ rbac_source }}/ppdm-controller-rbac.yaml"    
+      src: "{{ rbac_source }}/ppdm-controller-rbac.yaml"
   - name: apply PPDM discovery from {{ rbac_source }}
     k8s:
       verify_ssl: no
@@ -55,7 +55,7 @@
   # apply
     kubernetes.core.k8s:
       verify_ssl: no
-      state: present      
+      state: present
       definition:
         apiVersion: v1
         kind: Secret
@@ -65,33 +65,33 @@
             annotations:
               kubernetes.io/service-account.name: ppdm-discovery-serviceaccount
         type: kubernetes.io/service-account-token
-        
+
     register: token
     retries: "4"
     delay: "2"
     until: token.result.data.token is defined
-  - debug: 
+  - debug:
       msg: "{{ token.result.data.token | b64decode }}"
       verbosity: 1
   - name: register token
     ansible.builtin.set_fact:
-      k8s_token: "{{ token.result.data.token | b64decode }}"     
-  - debug: 
+      k8s_token: "{{ token.result.data.token | b64decode }}"
+  - debug:
       msg: "{{ k8s_fqdn }} {{ k8s_name }} {{ k8s_port }}"
       verbosity: 1
   - name: Get PPDM Token for https://{{ ppdm_fqdn | regex_replace('^https://') }}
-    include_role: 
+  ansible.builtin.include_role:
       name: get_ppdm_token
-    vars: 
+    vars:
       ppdm_password: "{{ ppdm_new_password }}"
   - debug:
       msg: "{{ get_ppdm_token_access_token }}"
       verbosity: 1
-    name: do we have a token ?  
+    name: do we have a token ?
  # - name: enable Kubernetes Asset Source
- #   include_role: 
+ #   include_role:
  #     name: set_ppdm_asset_setting
- #   vars: 
+ #   vars:
  #     data:
  #       id: ASSET_SETTING
  #       properties:
@@ -99,26 +99,26 @@
  #         type: LIST
 #        value: KUBERNETES
   - name: Get Kubernetes Host Certificate for {{ k8s_fqdn }}
-    include_role:
-      name: get_ppdm_host_certificate  
-    vars:  
+  ansible.builtin.include_role:
+      name: get_ppdm_host_certificate
+    vars:
       get_ppdm_host_certificate_host: "{{ k8s_fqdn }}"
       get_ppdm_host_certificate_port: "{{ k8s_port }}"
   - name: Accept K8S Host Certificate
-    include_role:
-      name: accept_ppdm_host_certificate  
-    vars: 
-      accept_ppdm_host_certificate_old_certificate: "{{ get_ppdm_host_certificate_certificate }}"  
+  ansible.builtin.include_role:
+      name: accept_ppdm_host_certificate
+    vars:
+      accept_ppdm_host_certificate_old_certificate: "{{ get_ppdm_host_certificate_certificate }}"
   - name: "Ensure K8S Credentials ppdm-discovery-{{ k8s_fqdn }}"
     vars:
       data:
-        method: "TOKEN" 
+        method: "TOKEN"
         name: "ppdm-discovery-{{ k8s_fqdn }}"
-        type: "KUBERNETES"        
+        type: "KUBERNETES"
         password: "{{ k8s_token }}"
         username: "ppdm-discovery-{{ k8s_fqdn }}"
-    include_role:
-      name: create_ppdm_credentials    
+  ansible.builtin.include_role:
+      name: create_ppdm_credentials
   - name: Ensure K8S Cluster {{ k8s_fqdn }} in Inventory
     when: details is defined
     vars:
@@ -129,11 +129,11 @@
         address: "{{ k8s_fqdn }}"
         port: "{{ k8s_port | int }}"
         details: "{{ details }}"
-        credentials: 
+        credentials:
             id: "{{ credentials.id }}"
       retries: 2
-      delay: 30      
-    include_role:
+      delay: 30
+  ansible.builtin.include_role:
       name: add_ppdm_inventory
   - name: Ensure K8S Cluster {{ k8s_fqdn }} in Inventory
     when: details is not defined
@@ -144,12 +144,12 @@
         vendor: KUBERNETES
         address: "{{ k8s_fqdn }}"
         port: "{{ k8s_port | int }}"
-        credentials: 
+        credentials:
             id: "{{ credentials.id }}"
       retries: 2
-      delay: 30      
-    include_role:
-      name: add_ppdm_inventory      
-  - debug: 
+      delay: 30
+  ansible.builtin.include_role:
+      name: add_ppdm_inventory
+  - debug:
       msg: "{{ inventory }}"
-      verbosity: 0        
+      verbosity: 0

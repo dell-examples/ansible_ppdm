@@ -1,16 +1,16 @@
 - name: GET PPDM CloudDR Server Configuration
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/cloud-dr-server-configuration"
     body_format: json
     headers:
       accept: application/json
-      authorization: "Bearer {{ get_ppdm_token_access_token }}"    
+      authorization: "Bearer {{ get_ppdm_token_access_token }}"
     status_code: 200,201,202,503,400
     validate_certs: false
-  register: result  
+  register: result
 - set_fact:
     clouddr_server_configuration: "{{ result.json }}"
 - debug:
-    msg: "{{ clouddr_server_configuration }}"     
-    verbosity: 0   
+    msg: "{{ clouddr_server_configuration }}"
+    verbosity: 0

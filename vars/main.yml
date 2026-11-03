@@ -1,4 +1,4 @@
-ppdm_fqdn: "https://{{ lookup('env','PPDM_FQDN') }}" 
+ppdm_fqdn: "https://{{ lookup('env','PPDM_FQDN') }}"
 ppdm_new_password: "{{ lookup('env','PPDM_INITIAL_PASSWORD') }}"
 ppdm_ntp_server: "{{ lookup('env','PPDM_NTP_SERVERS') }}"
 ppdm_setup_password: "{{ lookup('env','PPDM_SETUP_PASSWORD') }}" # "admin"

@@ -4,4 +4,4 @@ ppdm_port: 8443
 get_ppdm_nodes_delay: 1
 get_ppdm_nodes_retries: 1
 get_ppdm_nodes_condition: get_ppdm_nodes_result is defined
-get_ppdm_nodes_filter: 
+get_ppdm_nodes_filter:

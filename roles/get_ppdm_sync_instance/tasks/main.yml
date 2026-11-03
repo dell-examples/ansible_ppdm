@@ -11,7 +11,7 @@
     get_ppdm_sync_instance_uri: "{{ get_ppdm_sync_instance_uri }}?filter={{ get_ppdm_sync_instance_filter | string | urlencode }}"
   when: get_ppdm_sync_instance_filter is defined
 - name: Get PPDM sync-instance with status
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_ppdm_sync_instance_uri }}"
     body_format: json
@@ -30,4 +30,4 @@
 - debug:
     msg: "{{ get_ppdm_sync_instance_syncinstance }}"
     verbosity: 0
-  when: get_ppdm_sync_instance_syncinstance is defined       
+  when: get_ppdm_sync_instance_syncinstance is defined

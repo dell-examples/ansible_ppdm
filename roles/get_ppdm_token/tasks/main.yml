@@ -1,5 +1,5 @@
 - name: Get PPDM Token
-  uri:
+  ansible.builtin.uri:
     method: POST
     url: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/login"
     body:

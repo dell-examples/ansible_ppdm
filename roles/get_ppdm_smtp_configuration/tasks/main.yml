@@ -7,7 +7,7 @@
     get_ppdm_smtp_configuration_uri: "{{ ppdm_baseurl }}:{{ ppdm_port }}{{ ppdm_api_ver }}/smtp"
   when: get_ppdm_smtp_configuration_id | default('', false) | trim == ''
 - name: Get PPDM SMTP Configuration
-  uri:
+  ansible.builtin.uri:
     method: GET
     url: "{{ get_ppdm_smtp_configuration_uri }}"
     body_format: json

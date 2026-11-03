@@ -2,15 +2,15 @@
   ansible.builtin.file:
     path: "{{ agent_destination }}/{{ agent_filename | dirname }}"
     state: directory
-- name: "Download Agent {{ agent_filename }}" 
+- name: "Download Agent {{ agent_filename }}"
   get_url:
-    url: "{{ ppdm_baseurl }}/agent-download?filename={{ agent_filename }}" 
+    url: "{{ ppdm_baseurl }}/agent-download?filename={{ agent_filename }}"
     headers:
-      authorization: "Bearer {{ get_ppdm_token_access_token }}"  
-    dest: "{{ agent_destination }}/{{ agent_filename | dirname }}"  
+      authorization: "Bearer {{ get_ppdm_token_access_token }}"
+    dest: "{{ agent_destination }}/{{ agent_filename | dirname }}"
     validate_certs: false
     mode: 01777
     force: yes
-  when: not ansible_check_mode 
+  when: not ansible_check_mode
 - set_fact:
     download_result: "{{ result }}"
